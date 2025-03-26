@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 症狀檢測</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 整體容器調整 */
+        .symptom-container {
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+        
+        /* 視力輔助工具 */
+        .visual-aid-tools {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        
+        .visual-aid-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            margin-left: 10px;
+            font-size: 20px;
+        }
+        
+        /* 頁面標題 */
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--ios-text-primary);
+        }
+        
+        /* 介紹區塊 */
+        .intro-section {
+            margin-bottom: 24px;
+        }
+        
+        .intro-text {
+            font-size: 18px;
+            color: var(--ios-text-primary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        /* 警告區塊 */
+        .warning-box {
+            background-color: rgba(255, 149, 0, 0.1);
+            border-left: 4px solid var(--ios-warning);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .warning-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--ios-warning);
+            display: flex;
+            align-items: center;
+        }
+        
+        .warning-title i {
+            margin-right: 8px;
+        }
+        
+        .warning-text {
+            font-size: 16px;
+            color: var(--ios-text-primary);
+            line-height: 1.5;
+        }
+        
+        /* 症狀卡片 */
+        .symptom-card {
+            background-color: white;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 2px solid var(--ios-separator);
+        }
+        
+        .card-header {
+            background-color: var(--ios-primary);
+            color: white;
+            padding: 20px;
+            font-weight: 700;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-header i {
+            margin-right: 12px;
+            font-size: 24px;
+        }
+        
+        .card-content {
+            padding: 24px;
+        }
+        
+        /* 症狀選擇區域 */
+        .symptom-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--ios-text-primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            color: var(--ios-primary);
+            margin-right: 10px;
+            font-size: 22px;
+        }
+        
+        /* 症狀選擇項 */
+        .symptom-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .symptom-option {
+            background-color: var(--ios-gray6);
+            border: 2px solid var(--ios-separator);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .symptom-option.selected {
+            background-color: rgba(0, 122, 255, 0.1);
+            border-color: var(--ios-primary);
+        }
+        
+        .symptom-checkbox {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 2px solid var(--ios-separator);
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            background-color: white;
+        }
+        
+        .symptom-option.selected .symptom-checkbox {
+            color: white;
+            background-color: var(--ios-primary);
+            border-color: var(--ios-primary);
+        }
+        
+        .symptom-label {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            flex: 1;
+        }
+        
+        /* 嚴重程度選擇 */
+        .severity-options {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .severity-option {
+            background-color: var(--ios-gray6);
+            border: 2px solid var(--ios-separator);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .severity-option.selected {
+            background-color: rgba(0, 122, 255, 0.1);
+            border-color: var(--ios-primary);
+        }
+        
+        .severity-radio {
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+            border: 2px solid var(--ios-separator);
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-color: white;
+        }
+        
+        .severity-option.selected .severity-radio:after {
+            content: "";
+            width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            background-color: var(--ios-primary);
+            position: absolute;
+        }
+        
+        .severity-label {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            flex: 1;
+        }
+        
+        /* 輸入框區域 */
+        .notes-input {
+            width: 100%;
+            min-height: 120px;
+            border: 2px solid var(--ios-separator);
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 18px;
+            color: var(--ios-text-primary);
+            background-color: var(--ios-gray6);
+            resize: none;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            margin-bottom: 16px;
+        }
+        
+        /* 分析按鈕 */
+        .analyze-btn {
+            background-color: var(--ios-primary);
+            color: white;
+            border-radius: 16px;
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
+        }
+        
+        .analyze-btn i {
+            margin-right: 10px;
+            font-size: 22px;
+        }
+        
+        /* 輔助提示 */
+        .help-tip {
+            background-color: rgba(0, 122, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--ios-text-secondary);
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .help-tip i {
+            color: var(--ios-primary);
+            font-size: 20px;
+            margin-right: 10px;
+            margin-top: 2px;
+        }
+        
+        /* 底部導航欄調整 */
+        .tab-bar {
+            height: 70px;
+        }
+        
+        .tab-item {
+            padding: 12px 0;
+        }
+        
+        .tab-item i {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+        
+        .tab-item span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div id="status-time" class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">返回</div>
+            <div class="nav-title">症狀檢測</div>
+            <div></div>
+        </div>
+        
+        <!-- 滾動內容區 -->
+        <div class="content-container">
+            <div class="symptom-container">
+                <!-- 視力輔助工具 -->
+                <div class="visual-aid-tools">
+                    <div class="visual-aid-btn" id="increase-text">
+                        <i class="fas fa-text-height"></i>
+                    </div>
+                    <div class="visual-aid-btn" id="high-contrast">
+                        <i class="fas fa-adjust"></i>
+                    </div>
+                </div>
+                
+                <h1 class="page-title">症狀檢測工具</h1>
+                
+                <div class="intro-section">
+                    <p class="intro-text">這個工具可以幫助您記錄和分析洗腎相關的症狀。請選擇您目前正在經歷的症狀，並標示其嚴重程度。</p>
+                    
+                    <div class="warning-box">
+                        <div class="warning-title">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            重要提醒
+                        </div>
+                        <p class="warning-text">此工具僅作為輔助參考，並不能取代專業醫療建議。如果您感到身體不適，請立即聯繫您的醫療團隊或撥打緊急救護電話。</p>
+                    </div>
+                    
+                    <div class="help-tip">
+                        <i class="fas fa-lightbulb"></i>
+                        <div>點擊下方的症狀選項可以選擇您目前有的症狀，您可以選擇多個症狀。完成後點擊「分析症狀」按鈕。</div>
+                    </div>
+                </div>
+                
+                <div class="symptom-card">
+                    <div class="card-header">
+                        <i class="fas fa-clipboard-list"></i>
+                        症狀選擇
+                    </div>
+                    
+                    <div class="card-content">
+                        <div class="symptom-section">
+                            <div class="section-title">
+                                <i class="fas fa-check-square"></i>
+                                選擇您的症狀
+                            </div>
+                            
+                            <div class="symptom-options">
+                                <div class="symptom-option" onclick="toggleSymptom(this)">
+                                    <div class="symptom-checkbox">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="symptom-label">疲勞無力</div>
+                                </div>
+                                
+                                <div class="symptom-option" onclick="toggleSymptom(this)">
+                                    <div class="symptom-checkbox">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="symptom-label">頭痛</div>
+                                </div>
+                                
+                                <div class="symptom-option" onclick="toggleSymptom(this)">
+                                    <div class="symptom-checkbox">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="symptom-label">頭暈</div>
+                                </div>
+                                
+                                <div class="symptom-option" onclick="toggleSymptom(this)">
+                                    <div class="symptom-checkbox">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="symptom-label">噁心</div>
+                                </div>
+                                
+                                <div class="symptom-option" onclick="toggleSymptom(this)">
+                                    <div class="symptom-checkbox">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="symptom-label">水腫</div>
+                                </div>
+                                
+                                <div class="symptom-option" onclick="toggleSymptom(this)">
+                                    <div class="symptom-checkbox">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="symptom-label">呼吸困難</div>
+                                </div>
+                                
+                                <div class="symptom-option" onclick="toggleSymptom(this)">
+                                    <div class="symptom-checkbox">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="symptom-label">肌肉痙攣</div>
+                                </div>
+                                
+                                <div class="symptom-option" onclick="toggleSymptom(this)">
+                                    <div class="symptom-checkbox">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="symptom-label">皮膚發癢</div>
+                                </div>
+                                
+                                <div class="symptom-option" onclick="toggleSymptom(this)">
+                                    <div class="symptom-checkbox">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="symptom-label">胸痛</div>
+                                </div>
+                                
+                                <div class="symptom-option" onclick="toggleSymptom(this)">
+                                    <div class="symptom-checkbox">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="symptom-label">發燒</div>
+                                </div>
+                            </div>
+                            
+                            <div class="help-tip" style="margin-top: 16px;">
+                                <i class="fas fa-info-circle"></i>
+                                <div>點擊方塊可勾選或取消勾選該症狀，藍色表示已選擇的症狀。</div>
+                            </div>
+                        </div>
+                        
+                        <div class="symptom-section">
+                            <div class="section-title">
+                                <i class="fas fa-thermometer-half"></i>
+                                症狀嚴重程度
+                            </div>
+                            
+                            <div class="severity-options">
+                                <div class="severity-option" onclick="selectSeverity(this, 'mild')">
+                                    <div class="severity-radio"></div>
+                                    <div class="severity-label">輕微 - 能感覺到但不影響日常活動</div>
+                                </div>
+                                
+                                <div class="severity-option" onclick="selectSeverity(this, 'moderate')">
+                                    <div class="severity-radio"></div>
+                                    <div class="severity-label">中度 - 影響部分日常活動</div>
+                                </div>
+                                
+                                <div class="severity-option" onclick="selectSeverity(this, 'severe')">
+                                    <div class="severity-radio"></div>
+                                    <div class="severity-label">嚴重 - 嚴重影響日常活動</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="symptom-section">
+                            <div class="section-title">
+                                <i class="fas fa-edit"></i>
+                                其他症狀或備註
+                            </div>
+                            
+                            <textarea class="notes-input" placeholder="請描述任何其他症狀或提供更多細節..."></textarea>
+                            
+                            <div class="help-tip">
+                                <i class="fas fa-lightbulb"></i>
+                                <div>您可以在這裡記錄症狀的開始時間、可能的原因，或是其他任何相關資訊。</div>
+                            </div>
+                        </div>
+                        
+                        <div class="analyze-btn" onclick="analyzeSymptoms()">
+                            <i class="fas fa-stethoscope"></i>
+                            分析症狀
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <a href="main.html" class="tab-item">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </a>
+            <a href="quiz-selector.html" class="tab-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span>測驗</span>
+            </a>
+            <a href="learning-resources.html" class="tab-item">
+                <i class="fas fa-book-open"></i>
+                <span>學習</span>
+            </a>
+            <a href="dialysis-schedule.html" class="tab-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>排程</span>
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // 更新狀態欄時間
+        function updateStatusBarTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('status-time').textContent = `${hours}:${minutes}`;
+        }
+        
+        // 切換症狀選擇
+        function toggleSymptom(element) {
+            element.classList.toggle('selected');
+        }
+        
+        // 選擇嚴重程度
+        function selectSeverity(element, level) {
+            // 移除所有其他選項的選中狀態
+            const options = document.querySelectorAll('.severity-option');
+            options.forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // 選中當前選項
+            element.classList.add('selected');
+        }
+        
+        // 分析症狀
+        function analyzeSymptoms() {
+            // 獲取選擇的症狀
+            const selectedSymptoms = [];
+            const symptomOptions = document.querySelectorAll('.symptom-option.selected');
+            
+            symptomOptions.forEach(option => {
+                selectedSymptoms.push(option.querySelector('.symptom-label').textContent);
+            });
+            
+            // 獲取嚴重程度
+            let severity = "未選擇";
+            const selectedSeverity = document.querySelector('.severity-option.selected');
+            if (selectedSeverity) {
+                severity = selectedSeverity.getAttribute('onclick').split("'")[1];
+            }
+            
+            // 獲取備註
+            const notes = document.querySelector('.notes-input').value;
+            
+            // 在實際應用中，這裡會發送數據到後端進行分析
+            // 在這個原型中，我們只顯示一個警告
+            if (selectedSymptoms.length > 0) {
+                alert(`已記錄您的症狀：\n${selectedSymptoms.join(', ')}\n嚴重程度：${severity}\n我們建議您聯絡您的醫護團隊討論這些症狀。`);
+            } else {
+                alert('請選擇至少一個症狀進行分析。');
+            }
+        }
+        
+        // 初始化頁面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新時間
+            updateStatusBarTime();
+            setInterval(updateStatusBarTime, 60000);
+            
+            // 增加文字大小功能
+            document.getElementById('increase-text').addEventListener('click', function() {
+                document.body.classList.toggle('large-text');
+                
+                // 如果有large-text類，則放大所有文字
+                if (document.body.classList.contains('large-text')) {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1.2');
+                } else {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1');
+                }
+            });
+            
+            // 高對比度模式
+            document.getElementById('high-contrast').addEventListener('click', function() {
+                document.body.classList.toggle('high-contrast');
+                
+                if (document.body.classList.contains('high-contrast')) {
+                    document.documentElement.style.setProperty('--ios-text-primary', '#000000');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '#222222');
+                    document.documentElement.style.setProperty('--ios-primary', '#0056b3');
+                    document.documentElement.style.setProperty('--ios-background', '#ffffff');
+                } else {
+                    document.documentElement.style.setProperty('--ios-text-primary', '');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '');
+                    document.documentElement.style.setProperty('--ios-primary', '');
+                    document.documentElement.style.setProperty('--ios-background', '');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 測驗選擇</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .quiz-type-container {
+            padding: 20px 16px;
+            flex: 1;
+            overflow: auto;
+        }
+        
+        .section-title {
+            font-size: 26px; /* 增大標題字體 */
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .quiz-type-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 28px 24px; /* 增大內邊距 */
+            margin-bottom: 30px; /* 增大卡片間距 */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 增強陰影 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--ios-gray5); /* 添加邊框增強可見性 */
+        }
+        
+        .quiz-type-card:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        .quiz-icon {
+            font-size: 42px; /* 增大圖標大小 */
+            margin-bottom: 20px;
+            color: var(--ios-primary);
+            width: 110px; /* 增大圖標容器 */
+            height: 110px;
+            background-color: rgba(0, 122, 255, 0.15); /* 加深背景色 */
+            border-radius: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 122, 255, 0.25); /* 添加陰影 */
+        }
+        
+        .quiz-title {
+            font-size: 26px; /* 增大標題字體 */
+            font-weight: 700; /* 加粗 */
+            margin-bottom: 16px;
+            color: var(--ios-text-primary);
+        }
+        
+        .quiz-description {
+            font-size: 18px; /* 增大描述文字 */
+            color: var(--ios-text-secondary); /* 提高對比度 */
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            background-color: var(--ios-primary);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 16px 30px; /* 增大內邊距 */
+            font-size: 20px; /* 增大按鈕字體 */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3); /* 增強陰影 */
+            width: 80%; /* 設定寬度 */
+            justify-content: center;
+        }
+        
+        .btn i {
+            margin-left: 10px;
+            font-size: 20px;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 6px rgba(0, 122, 255, 0.2);
+        }
+        
+        .sub-categories {
+            display: none;
+            flex-direction: column;
+            margin-top: 24px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .sub-categories.show {
+            display: flex;
+            animation: fadeInUp 0.3s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .sub-category-btn {
+            background-color: rgba(0, 0, 0, 0.06); /* 加深背景色 */
+            color: var(--ios-text-primary);
+            border-radius: 16px;
+            padding: 20px 24px; /* 增大內邊距 */
+            margin-bottom: 16px; /* 增大間距 */
+            font-size: 20px; /* 增大字體 */
+            font-weight: 600; /* 加粗 */
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* 添加陰影 */
+            border: 1px solid var(--ios-gray4); /* 添加邊框 */
+        }
+        
+        .sub-category-btn:active {
+            transform: scale(0.98);
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .sub-category-btn.active {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+
+        /* 輔助說明提示 */
+        .help-tip {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--ios-text-tertiary);
+            font-style: italic;
+            text-align: center;
+        }
+        
+        /* 底部標籤欄調整 */
+        .tab-bar {
+            height: 70px;
+        }
+        
+        .tab-item {
+            padding: 12px 0;
+        }
+        
+        .tab-item i {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+        
+        .tab-item span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* 返回按鈕增大 */
+        .nav-back {
+            font-size: 18px;
+            padding: 12px;
+        }
+        
+        /* 導航標題增大 */
+        .nav-title {
+            font-size: 22px;
+        }
+        
+        /* 視力輔助工具 */
+        .visual-aid-tools {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        
+        .visual-aid-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            margin-left: 10px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">返回</div>
+            <div class="nav-title">選擇測驗</div>
+            <div></div>
+        </div>
+        
+        <!-- 滾動內容區 -->
+        <div class="content-container">
+            <!-- 測驗選擇容器 -->
+            <div class="quiz-type-container">
+                <!-- 視力輔助工具 -->
+                <div class="visual-aid-tools">
+                    <div class="visual-aid-btn" id="increase-text">
+                        <i class="fas fa-text-height"></i>
+                    </div>
+                    <div class="visual-aid-btn" id="high-contrast">
+                        <i class="fas fa-adjust"></i>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">請選擇測驗類型</h2>
+                
+                <!-- 一般大眾測驗選項 -->
+                <div class="quiz-type-card" id="public-quiz">
+                    <div class="quiz-icon public-icon">👨‍👩‍👧‍👦</div>
+                    <h3 class="quiz-title">一般大眾版</h3>
+                    <p class="quiz-description">適合了解基本洗腎知識的一般大眾，包含洗腎原理、飲食注意事項和日常保健等簡單題目。</p>
+                    <div class="btn btn-primary" id="start-public-quiz">
+                        開始測驗
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="help-tip">* 點擊「開始測驗」按鈕直接進入問答測驗</div>
+                </div>
+                
+                <!-- 護理人員測驗選項 -->
+                <div class="quiz-type-card" id="nursing-quiz">
+                    <div class="quiz-icon">👩‍⚕️</div>
+                    <h3 class="quiz-title">護理人員版</h3>
+                    <p class="quiz-description">專為洗腎護理人員設計的題庫，包含專業醫學知識和照護技巧等較難題目。</p>
+                    
+                    <div class="btn btn-primary" id="show-nursing-options">
+                        選擇測驗類型
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    
+                    <div class="sub-categories">
+                        <div class="sub-category-btn" id="hd-quiz">血液透析</div>
+                        <div class="sub-category-btn" id="pd-quiz">腹膜透析</div>
+                    </div>
+                    
+                    <div class="help-tip">* 點擊「選擇測驗類型」後可選擇具體的透析類型</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底部標籤欄 -->
+    <div class="tab-bar">
+        <a href="main.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>首頁</span>
+        </a>
+        <a href="quiz-selector.html" class="tab-item active">
+            <i class="fas fa-clipboard-list"></i>
+            <span>測驗</span>
+        </a>
+        <a href="learning-resources.html" class="tab-item">
+            <i class="fas fa-book-open"></i>
+            <span>學習</span>
+        </a>
+        <a href="dialysis-schedule.html" class="tab-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>排程</span>
+        </a>
+    </div>
+    
+    <script src="js/fontawesome.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 一般大眾測驗按鈕點擊事件
+            document.getElementById('start-public-quiz').addEventListener('click', function() {
+                localStorage.setItem('quizType', 'public');
+                window.location.href = 'quiz-page.html';
+            });
+            
+            // 護理人員版卡片點擊事件 - 顯示子類別
+            document.getElementById('nursing-quiz').addEventListener('click', function() {
+                const subCategories = this.querySelector('.sub-categories');
+                subCategories.classList.toggle('show');
+            });
+            
+            // 護理人員版按鈕點擊事件 - 顯示子類別
+            document.getElementById('show-nursing-options').addEventListener('click', function(event) {
+                event.stopPropagation(); // 阻止事件冒泡到父元素
+                const subCategories = document.querySelector('.sub-categories');
+                subCategories.classList.toggle('show');
+                
+                // 切換箭頭方向
+                const icon = this.querySelector('i');
+                if (subCategories.classList.contains('show')) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                } else {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+            });
+            
+            // 血液透析測驗按鈕點擊事件
+            document.getElementById('hd-quiz').addEventListener('click', function(event) {
+                event.stopPropagation(); // 阻止事件冒泡到父元素
+                localStorage.setItem('quizType', 'hd');
+                window.location.href = 'quiz-page.html';
+            });
+            
+            // 腹膜透析測驗按鈕點擊事件
+            document.getElementById('pd-quiz').addEventListener('click', function(event) {
+                event.stopPropagation(); // 阻止事件冒泡到父元素
+                localStorage.setItem('quizType', 'pd');
+                window.location.href = 'quiz-page.html';
+            });
+            
+            // 添加按鈕點擊效果
+            const subCategoryBtns = document.querySelectorAll('.sub-category-btn');
+            subCategoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    subCategoryBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // 更新狀態欄時間
+            function updateStatusTime() {
+                const now = new Date();
+                let hours = now.getHours();
+                let minutes = now.getMinutes();
+                
+                // 格式化時間
+                hours = hours < 10 ? '0' + hours : hours;
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                
+                document.querySelector('.status-time').textContent = hours + ':' + minutes;
+            }
+            
+            // 初始更新時間並每分鐘更新一次
+            updateStatusTime();
+            setInterval(updateStatusTime, 60000);
+            
+            // 增加文字大小功能
+            document.getElementById('increase-text').addEventListener('click', function() {
+                document.body.classList.toggle('large-text');
+                
+                // 如果有large-text類，則放大所有文字
+                if (document.body.classList.contains('large-text')) {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1.2');
+                } else {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1');
+                }
+            });
+            
+            // 高對比度模式
+            document.getElementById('high-contrast').addEventListener('click', function() {
+                document.body.classList.toggle('high-contrast');
+                
+                if (document.body.classList.contains('high-contrast')) {
+                    document.documentElement.style.setProperty('--ios-text-primary', '#000000');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '#222222');
+                    document.documentElement.style.setProperty('--ios-primary', '#0056b3');
+                    document.documentElement.style.setProperty('--ios-background', '#ffffff');
+                } else {
+                    document.documentElement.style.setProperty('--ios-text-primary', '');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '');
+                    document.documentElement.style.setProperty('--ios-primary', '');
+                    document.documentElement.style.setProperty('--ios-background', '');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

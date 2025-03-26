@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 緊急聯絡</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <style>
+        /* 整體容器調整 */
+        .contacts-container {
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+        
+        /* 視力輔助工具 */
+        .visual-aid-tools {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        
+        .visual-aid-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            margin-left: 10px;
+            font-size: 20px;
+        }
+        
+        /* 頁面介紹區塊 */
+        .intro-section {
+            margin-bottom: 24px;
+        }
+        
+        .intro-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--ios-text-primary);
+        }
+        
+        .intro-text {
+            font-size: 18px;
+            color: var(--ios-text-primary);
+            line-height: 1.5;
+        }
+        
+        /* 緊急求救按鈕 */
+        .sos-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 20px 0;
+            background-color: var(--ios-error);
+            color: white;
+            border-radius: 16px;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 12px rgba(255, 59, 48, 0.4);
+            transition: all 0.2s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .sos-button i {
+            margin-right: 14px;
+            font-size: 28px;
+        }
+        
+        /* 聯絡人分組 */
+        .contact-group {
+            margin-bottom: 28px;
+        }
+        
+        .group-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--ios-text-primary);
+            display: flex;
+            align-items: center;
+            padding-left: 5px;
+        }
+        
+        .group-title i {
+            margin-right: 12px;
+            color: var(--ios-primary);
+            font-size: 22px;
+        }
+        
+        /* 聯絡人卡片 */
+        .contact-card {
+            background-color: white;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--ios-separator);
+        }
+        
+        .contact-content {
+            padding: 20px;
+        }
+        
+        .contact-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .contact-subtitle {
+            font-size: 18px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+        
+        .contact-info {
+            font-size: 18px;
+            color: var(--ios-text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .contact-info i {
+            width: 24px;
+            margin-right: 12px;
+            color: var(--ios-primary);
+            font-size: 20px;
+        }
+        
+        /* 聯絡人卡片操作按鈕 */
+        .contact-actions {
+            display: flex;
+            margin-top: 20px;
+            border-top: 2px solid var(--ios-gray6);
+            padding-top: 16px;
+        }
+        
+        .contact-action {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 12px;
+        }
+        
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background-color: var(--ios-primary-light);
+            color: var(--ios-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-size: 22px;
+        }
+        
+        .action-label {
+            font-size: 16px;
+            color: var(--ios-text-primary);
+            font-weight: 600;
+        }
+        
+        /* 標籤樣式 */
+        .contact-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 10px;
+            margin-top: 4px;
+        }
+        
+        /* 注意事項區塊 */
+        .note-section {
+            margin-top: 28px;
+            padding: 20px;
+            background-color: rgba(0, 122, 255, 0.08);
+            border-radius: 16px;
+            border: 2px solid rgba(0, 122, 255, 0.2);
+        }
+        
+        .note-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--ios-text-primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .note-title i {
+            margin-right: 10px;
+            color: var(--ios-primary);
+        }
+        
+        .note-text {
+            font-size: 18px;
+            color: var(--ios-text-primary);
+            line-height: 1.6;
+        }
+        
+        .note-text p {
+            margin-bottom: 12px;
+        }
+        
+        /* 輔助提示 */
+        .help-tip {
+            background-color: rgba(0, 122, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--ios-text-secondary);
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .help-tip i {
+            color: var(--ios-primary);
+            font-size: 20px;
+            margin-right: 10px;
+            margin-top: 2px;
+        }
+        
+        /* 底部導航欄調整 */
+        .tab-bar {
+            height: 70px;
+        }
+        
+        .tab-item {
+            padding: 12px 0;
+        }
+        
+        .tab-item i {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+        
+        .tab-item span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* 導航欄返回按鈕 */
+        .nav-back {
+            font-size: 18px;
+            padding: 10px 16px;
+        }
+        
+        .nav-title {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div id="status-time" class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">返回</div>
+            <div class="nav-title">緊急聯絡</div>
+            <div></div>
+        </div>
+        
+        <!-- 滾動內容區 -->
+        <div class="content-container">
+            <div class="contacts-container">
+                <!-- 視力輔助工具 -->
+                <div class="visual-aid-tools">
+                    <div class="visual-aid-btn" id="increase-text">
+                        <i class="fas fa-text-height"></i>
+                    </div>
+                    <div class="visual-aid-btn" id="high-contrast">
+                        <i class="fas fa-adjust"></i>
+                    </div>
+                </div>
+                
+                <div class="intro-section">
+                    <div class="intro-title">緊急聯絡方式</div>
+                    <p class="intro-text">以下是您的透析中心及醫療團隊的聯絡方式。如遇緊急情況，請立即撥打緊急求助電話。</p>
+                </div>
+                
+                <!-- 輔助提示 -->
+                <div class="help-tip">
+                    <i class="fas fa-info-circle"></i>
+                    <div>點擊紅色的「緊急救護車」按鈕可直接撥打119救護車。其他聯絡人下方有「撥打電話」、「發送簡訊」等功能按鈕。</div>
+                </div>
+                
+                <!-- 急救求助按鈕 -->
+                <a href="tel:119" class="sos-button">
+                    <i class="fas fa-ambulance"></i>
+                    緊急救護車 119
+                </a>
+                
+                <!-- 透析中心聯絡方式 -->
+                <div class="contact-group">
+                    <div class="group-title">
+                        <i class="fas fa-hospital"></i>
+                        透析中心聯絡方式
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-content">
+                            <div class="contact-title">
+                                台北仁愛醫院腎臟科
+                                <span class="contact-badge badge-primary">主要透析中心</span>
+                            </div>
+                            <div class="contact-subtitle">腎臟科透析室（週一、三、五 上午）</div>
+                            
+                            <div class="contact-info">
+                                <i class="fas fa-phone"></i>
+                                02-2709-3600 轉 3189
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-map-marker-alt"></i>
+                                台北市大安區仁愛路四段10號 B1
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-clock"></i>
+                                08:30 - 17:30（週一至週五）
+                            </div>
+                            
+                            <div class="contact-actions">
+                                <div class="contact-action" onclick="location.href='tel:0227093600'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-phone-alt"></i>
+                                    </div>
+                                    <div class="action-label">撥打電話</div>
+                                </div>
+                                
+                                <div class="contact-action" onclick="location.href='sms:0227093600'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-comment"></i>
+                                    </div>
+                                    <div class="action-label">發送簡訊</div>
+                                </div>
+                                
+                                <div class="contact-action" onclick="window.open('https://maps.google.com?q=台北市大安區仁愛路四段10號')">
+                                    <div class="action-icon">
+                                        <i class="fas fa-map-marked-alt"></i>
+                                    </div>
+                                    <div class="action-label">查看地圖</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-content">
+                            <div class="contact-title">
+                                台北榮民總醫院腎臟科
+                                <span class="contact-badge badge-warning">備用透析中心</span>
+                            </div>
+                            <div class="contact-subtitle">腎臟科透析室（緊急備用）</div>
+                            
+                            <div class="contact-info">
+                                <i class="fas fa-phone"></i>
+                                02-2871-2121 轉 2991
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-map-marker-alt"></i>
+                                台北市北投區石牌路二段201號
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-clock"></i>
+                                24小時急診服務
+                            </div>
+                            
+                            <div class="contact-actions">
+                                <div class="contact-action" onclick="location.href='tel:0228712121'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-phone-alt"></i>
+                                    </div>
+                                    <div class="action-label">撥打電話</div>
+                                </div>
+                                
+                                <div class="contact-action" onclick="location.href='sms:0228712121'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-comment"></i>
+                                    </div>
+                                    <div class="action-label">發送簡訊</div>
+                                </div>
+                                
+                                <div class="contact-action" onclick="window.open('https://maps.google.com?q=台北市北投區石牌路二段201號')">
+                                    <div class="action-icon">
+                                        <i class="fas fa-map-marked-alt"></i>
+                                    </div>
+                                    <div class="action-label">查看地圖</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 輔助提示 -->
+                <div class="help-tip">
+                    <i class="fas fa-lightbulb"></i>
+                    <div>主要透析中心是您平常進行透析的醫院，備用透析中心可在緊急情況時使用。點擊「查看地圖」可導航到醫院。</div>
+                </div>
+                
+                <!-- 醫護團隊聯絡方式 -->
+                <div class="contact-group">
+                    <div class="group-title">
+                        <i class="fas fa-user-md"></i>
+                        醫護團隊聯絡方式
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-content">
+                            <div class="contact-title">
+                                張醫師（主治醫師）
+                                <span class="contact-badge badge-success">腎臟科專科</span>
+                            </div>
+                            <div class="contact-subtitle">台北仁愛醫院腎臟科</div>
+                            
+                            <div class="contact-info">
+                                <i class="fas fa-phone"></i>
+                                02-2709-3600 轉 3201
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-envelope"></i>
+                                dr.chang@example.com
+                            </div>
+                            
+                            <div class="contact-actions">
+                                <div class="contact-action" onclick="location.href='tel:0227093600,3201'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-phone-alt"></i>
+                                    </div>
+                                    <div class="action-label">撥打電話</div>
+                                </div>
+                                
+                                <div class="contact-action" onclick="location.href='mailto:dr.chang@example.com'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="action-label">發送郵件</div>
+                                </div>
+                                
+                                <div class="contact-action" onclick="location.href='dialysis-schedule.html'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="action-label">預約看診</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-content">
+                            <div class="contact-title">
+                                李護理師（透析室）
+                                <span class="contact-badge badge-primary">洗腎專責</span>
+                            </div>
+                            <div class="contact-subtitle">台北仁愛醫院腎臟科透析室</div>
+                            
+                            <div class="contact-info">
+                                <i class="fas fa-phone"></i>
+                                02-2709-3600 轉 3190
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-envelope"></i>
+                                nurse.lee@example.com
+                            </div>
+                            
+                            <div class="contact-actions">
+                                <div class="contact-action" onclick="location.href='tel:0227093600,3190'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-phone-alt"></i>
+                                    </div>
+                                    <div class="action-label">撥打電話</div>
+                                </div>
+                                
+                                <div class="contact-action" onclick="location.href='mailto:nurse.lee@example.com'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="action-label">發送郵件</div>
+                                </div>
+                                
+                                <div class="contact-action" onclick="location.href='sms:0227093600'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-comment"></i>
+                                    </div>
+                                    <div class="action-label">發送簡訊</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 輔助提示 -->
+                <div class="help-tip">
+                    <i class="fas fa-info-circle"></i>
+                    <div>若有透析相關問題，可先聯絡透析室李護理師；若有健康狀況需諮詢，則可聯絡張醫師。</div>
+                </div>
+                
+                <!-- 家庭聯絡人 -->
+                <div class="contact-group">
+                    <div class="group-title">
+                        <i class="fas fa-home"></i>
+                        家庭緊急聯絡人
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-content">
+                            <div class="contact-title">
+                                王小明（配偶）
+                                <span class="contact-badge badge-success">主要照顧者</span>
+                            </div>
+                            
+                            <div class="contact-info">
+                                <i class="fas fa-phone"></i>
+                                0912-345-678
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-envelope"></i>
+                                wang@example.com
+                            </div>
+                            
+                            <div class="contact-actions">
+                                <div class="contact-action" onclick="location.href='tel:0912345678'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-phone-alt"></i>
+                                    </div>
+                                    <div class="action-label">撥打電話</div>
+                                </div>
+                                
+                                <div class="contact-action" onclick="location.href='sms:0912345678'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-comment"></i>
+                                    </div>
+                                    <div class="action-label">發送簡訊</div>
+                                </div>
+                                
+                                <div class="contact-action" onclick="location.href='mailto:wang@example.com'">
+                                    <div class="action-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="action-label">發送郵件</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 備註資訊 -->
+                <div class="note-section">
+                    <div class="note-title">
+                        <i class="fas fa-exclamation-circle"></i>
+                        重要備註
+                    </div>
+                    <div class="note-text">
+                        <p>1. 如遇透析通路問題（如廔管阻塞、出血等），請立即聯繫透析中心，嚴重情況請直接撥打119。</p>
+                        <p>2. 請隨身攜帶您的透析卡與醫療資訊卡，以便醫護人員了解您的透析需求。</p>
+                        <p>3. 如前往非主要透析中心就醫，請攜帶近3個月的透析記錄及最近一次的血液檢查報告。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <a href="main.html" class="tab-item">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </a>
+            <a href="quiz-selector.html" class="tab-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span>測驗</span>
+            </a>
+            <a href="learning-resources.html" class="tab-item">
+                <i class="fas fa-book-open"></i>
+                <span>學習</span>
+            </a>
+            <a href="dialysis-schedule.html" class="tab-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>排程</span>
+            </a>
+        </div>
+    </div>
+    
+    <script src="js/fontawesome.min.js"></script>
+    <script>
+        // 更新狀態欄時間
+        function updateStatusBarTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('status-time').textContent = `${hours}:${minutes}`;
+        }
+        
+        // 初始化頁面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新時間
+            updateStatusBarTime();
+            setInterval(updateStatusBarTime, 60000);
+            
+            // 增加文字大小功能
+            document.getElementById('increase-text').addEventListener('click', function() {
+                document.body.classList.toggle('large-text');
+                
+                // 如果有large-text類，則放大所有文字
+                if (document.body.classList.contains('large-text')) {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1.2');
+                } else {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1');
+                }
+            });
+            
+            // 高對比度模式
+            document.getElementById('high-contrast').addEventListener('click', function() {
+                document.body.classList.toggle('high-contrast');
+                
+                if (document.body.classList.contains('high-contrast')) {
+                    document.documentElement.style.setProperty('--ios-text-primary', '#000000');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '#222222');
+                    document.documentElement.style.setProperty('--ios-primary', '#0056b3');
+                    document.documentElement.style.setProperty('--ios-background', '#ffffff');
+                    document.documentElement.style.setProperty('--ios-error', '#cc0000');
+                } else {
+                    document.documentElement.style.setProperty('--ios-text-primary', '');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '');
+                    document.documentElement.style.setProperty('--ios-primary', '');
+                    document.documentElement.style.setProperty('--ios-background', '');
+                    document.documentElement.style.setProperty('--ios-error', '');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 首頁</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <style>
+        .main-container {
+            padding: 16px;
+            padding-bottom: 100px;
+        }
+        
+        .welcome-section {
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .welcome-text {
+            flex: 1;
+        }
+        
+        .welcome-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--ios-text-primary);
+        }
+        
+        .welcome-subtitle {
+            font-size: 18px;
+            color: var(--ios-text-secondary);
+            line-height: 1.4;
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            background-color: var(--ios-primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin-left: 15px;
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.2);
+        }
+        
+        .data-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-title i {
+            margin-right: 10px;
+            color: var(--ios-primary);
+            font-size: 22px;
+        }
+        
+        .card-action {
+            color: var(--ios-primary);
+            font-size: 18px;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: var(--ios-primary-light);
+        }
+        
+        /* 健康數據儀表板 */
+        .health-metrics {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .metric-item {
+            flex: 1;
+            text-align: center;
+            background-color: var(--ios-gray6);
+            padding: 16px 10px;
+            border-radius: 12px;
+            margin: 0 6px;
+        }
+        
+        .metric-item:first-child {
+            margin-left: 0;
+        }
+        
+        .metric-item:last-child {
+            margin-right: 0;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .metric-label {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            font-weight: 500;
+        }
+        
+        /* 透析記錄卡片 */
+        .record-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 2px solid var(--ios-gray6);
+            margin-bottom: 8px;
+        }
+        
+        .record-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+        
+        .record-date {
+            min-width: 60px;
+            text-align: center;
+            margin-right: 20px;
+        }
+        
+        .record-day {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+        }
+        
+        .record-month {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            font-weight: 500;
+        }
+        
+        .record-info {
+            flex: 1;
+        }
+        
+        .record-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            margin-bottom: 6px;
+        }
+        
+        .record-details {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            font-weight: 500;
+        }
+        
+        .record-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 16px;
+            background-color: var(--ios-success-light);
+            color: var(--ios-success);
+            margin-left: 12px;
+            font-size: 16px;
+        }
+        
+        /* 健康目標卡片 */
+        .goals-container {
+            margin-bottom: 20px;
+        }
+        
+        .goal-item {
+            margin-bottom: 20px;
+        }
+        
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .goal-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--ios-text-primary);
+        }
+        
+        .goal-value {
+            font-size: 18px;
+            color: var(--ios-primary);
+            font-weight: 600;
+        }
+        
+        .goal-progress-bg {
+            width: 100%;
+            height: 12px;
+            background-color: var(--ios-gray6);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .goal-progress-bar {
+            height: 100%;
+            background-color: var(--ios-primary);
+            border-radius: 6px;
+        }
+        
+        /* 藥物提醒卡片 */
+        .med-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 2px solid var(--ios-gray6);
+            margin-bottom: 8px;
+        }
+        
+        .med-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+        
+        .med-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background-color: var(--ios-primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 22px;
+            color: var(--ios-primary);
+        }
+        
+        .med-info {
+            flex: 1;
+        }
+        
+        .med-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            margin-bottom: 6px;
+        }
+        
+        .med-schedule {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            font-weight: 500;
+        }
+        
+        .med-action {
+            display: flex;
+            align-items: center;
+            padding: 8px 14px;
+            background-color: var(--ios-success-light);
+            color: var(--ios-success);
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        /* 快速工具卡片 */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .tool-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--ios-gray6);
+            border-radius: 12px;
+            padding: 20px 10px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--ios-gray4);
+        }
+        
+        .tool-icon {
+            font-size: 32px;
+            color: var(--ios-primary);
+            margin-bottom: 12px;
+        }
+        
+        .tool-name {
+            font-size: 18px;
+            color: var(--ios-text-primary);
+            font-weight: 600;
+        }
+
+        /* 增加輔助說明提示 */
+        .help-tip {
+            margin-top: 6px;
+            font-size: 14px;
+            color: var(--ios-text-tertiary);
+            font-style: italic;
+        }
+        
+        /* 底部導航欄調整 */
+        .tab-bar {
+            height: 70px;
+        }
+        
+        .tab-item {
+            padding: 12px 0;
+        }
+        
+        .tab-item i {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+        
+        .tab-item span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* 視力輔助工具 */
+        .visual-aid-tools {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 16px;
+        }
+        
+        .visual-aid-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            margin-left: 10px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div id="status-time" class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div></div>
+            <div class="nav-title">腎好康</div>
+            <div></div>
+        </div>
+        
+        <!-- 滾動內容區 -->
+        <div class="content-container">
+            <div class="main-container">
+                <!-- 視力輔助工具 -->
+                <div class="visual-aid-tools">
+                    <div class="visual-aid-btn" id="increase-text">
+                        <i class="fas fa-text-height"></i>
+                    </div>
+                    <div class="visual-aid-btn" id="high-contrast">
+                        <i class="fas fa-adjust"></i>
+                    </div>
+                </div>
+                
+                <div class="welcome-section">
+                    <div class="welcome-text">
+                        <div class="welcome-title">您好，陳先生</div>
+                        <p class="welcome-subtitle">今天感覺如何？</p>
+                    </div>
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+                
+                <!-- 健康數據儀表板 -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-chart-line"></i>
+                            健康數據
+                        </div>
+                        <div class="card-action" onclick="location.href='health-data.html'">詳細資料</div>
+                    </div>
+                    
+                    <div class="health-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">125/85</div>
+                            <div class="metric-label">血壓</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">98</div>
+                            <div class="metric-label">心率</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">79.2</div>
+                            <div class="metric-label">體重 (kg)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="health-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">5.8</div>
+                            <div class="metric-label">血鉀 (mEq/L)</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">4.2</div>
+                            <div class="metric-label">血磷 (mg/dL)</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">9.4</div>
+                            <div class="metric-label">血鈣 (mg/dL)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="help-tip">* 點擊「詳細資料」查看健康數據的完整歷史紀錄</div>
+                </div>
+                
+                <!-- 近期透析記錄 -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-history"></i>
+                            近期透析記錄
+                        </div>
+                        <div class="card-action" onclick="location.href='dialysis-history.html'">查看全部</div>
+                    </div>
+                    
+                    <div class="record-list">
+                        <div class="record-item">
+                            <div class="record-date">
+                                <div class="record-day">25</div>
+                                <div class="record-month">3月</div>
+                            </div>
+                            <div class="record-info">
+                                <div class="record-title">血液透析治療</div>
+                                <div class="record-details">時長: 4小時 | 體重增加: 2.1kg</div>
+                            </div>
+                            <div class="record-status">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="record-item">
+                            <div class="record-date">
+                                <div class="record-day">23</div>
+                                <div class="record-month">3月</div>
+                            </div>
+                            <div class="record-info">
+                                <div class="record-title">血液透析治療</div>
+                                <div class="record-details">時長: 4小時 | 體重增加: 1.8kg</div>
+                            </div>
+                            <div class="record-status">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="record-item">
+                            <div class="record-date">
+                                <div class="record-day">21</div>
+                                <div class="record-month">3月</div>
+                            </div>
+                            <div class="record-info">
+                                <div class="record-title">血液透析治療</div>
+                                <div class="record-details">時長: 4小時 | 體重增加: 2.3kg</div>
+                            </div>
+                            <div class="record-status">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="help-tip">* 綠色勾表示已完成的透析療程</div>
+                </div>
+                
+                <!-- 健康目標 -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-bullseye"></i>
+                            健康目標
+                        </div>
+                        <div class="card-action" onclick="location.href='health-goals.html'">設定目標</div>
+                    </div>
+                    
+                    <div class="goals-container">
+                        <div class="goal-item">
+                            <div class="goal-header">
+                                <div class="goal-title">每日飲水量控制</div>
+                                <div class="goal-value">800/1000 ml</div>
+                            </div>
+                            <div class="goal-progress-bg">
+                                <div class="goal-progress-bar" style="width: 80%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="goal-item">
+                            <div class="goal-header">
+                                <div class="goal-title">藥物按時服用</div>
+                                <div class="goal-value">6/6 次</div>
+                            </div>
+                            <div class="goal-progress-bg">
+                                <div class="goal-progress-bar" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="goal-item">
+                            <div class="goal-header">
+                                <div class="goal-title">低磷飲食遵守</div>
+                                <div class="goal-value">5/7 天</div>
+                            </div>
+                            <div class="goal-progress-bg">
+                                <div class="goal-progress-bar" style="width: 71%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="help-tip">* 藍色進度條顯示您的目標完成進度</div>
+                </div>
+                
+                <!-- 藥物提醒 -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-pills"></i>
+                            今日用藥提醒
+                        </div>
+                        <div class="card-action" onclick="location.href='medication-tracker.html'">管理藥物</div>
+                    </div>
+                    
+                    <div class="med-list">
+                        <div class="med-item">
+                            <div class="med-icon">
+                                <i class="fas fa-capsules"></i>
+                            </div>
+                            <div class="med-info">
+                                <div class="med-name">磷結合劑</div>
+                                <div class="med-schedule">用餐時服用 | 早餐、午餐、晚餐</div>
+                            </div>
+                            <div class="med-action">已服用</div>
+                        </div>
+                        
+                        <div class="med-item">
+                            <div class="med-icon">
+                                <i class="fas fa-tablets"></i>
+                            </div>
+                            <div class="med-info">
+                                <div class="med-name">降血壓藥物</div>
+                                <div class="med-schedule">每日一次 | 早上8:00</div>
+                            </div>
+                            <div class="med-action">已服用</div>
+                        </div>
+                        
+                        <div class="med-item">
+                            <div class="med-icon">
+                                <i class="fas fa-prescription-bottle"></i>
+                            </div>
+                            <div class="med-info">
+                                <div class="med-name">紅血球生成素</div>
+                                <div class="med-schedule">每週三次 | 透析時</div>
+                            </div>
+                            <div class="med-action">今日不需服用</div>
+                        </div>
+                    </div>
+                    
+                    <div class="help-tip">* 綠色標籤表示已完成服藥，點擊「管理藥物」可設置新提醒</div>
+                </div>
+                
+                <!-- 快速工具 -->
+                <div class="data-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-tools"></i>
+                            快速工具
+                        </div>
+                    </div>
+                    
+                    <div class="tools-grid">
+                        <div class="tool-item" onclick="location.href='water-calculator.html'">
+                            <div class="tool-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="tool-name">飲水計算器</div>
+                        </div>
+                        
+                        <div class="tool-item" onclick="location.href='diet-tracker.html'">
+                            <div class="tool-icon">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="tool-name">飲食記錄</div>
+                        </div>
+                        
+                        <div class="tool-item" onclick="location.href='symptom-checker.html'">
+                            <div class="tool-icon">
+                                <i class="fas fa-stethoscope"></i>
+                            </div>
+                            <div class="tool-name">症狀檢測</div>
+                        </div>
+                        
+                        <div class="tool-item" onclick="location.href='emergency-contacts.html'">
+                            <div class="tool-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="tool-name">緊急聯絡</div>
+                        </div>
+                    </div>
+                    
+                    <div class="help-tip">* 點擊任一工具圖標可直接前往該功能</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <a href="main.html" class="tab-item active">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </a>
+            <a href="quiz-selector.html" class="tab-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span>測驗</span>
+            </a>
+            <a href="learning-resources.html" class="tab-item">
+                <i class="fas fa-book-open"></i>
+                <span>學習</span>
+            </a>
+            <a href="dialysis-schedule.html" class="tab-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>排程</span>
+            </a>
+        </div>
+    </div>
+    
+    <script src="js/fontawesome.min.js"></script>
+    <script>
+        // 更新狀態欄時間
+        function updateStatusBarTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('status-time').textContent = `${hours}:${minutes}`;
+        }
+        
+        // 初始化頁面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新時間
+            updateStatusBarTime();
+            setInterval(updateStatusBarTime, 60000);
+            
+            // 增加文字大小功能
+            document.getElementById('increase-text').addEventListener('click', function() {
+                document.body.classList.toggle('large-text');
+                
+                // 如果有large-text類，則放大所有文字
+                if (document.body.classList.contains('large-text')) {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1.2');
+                } else {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1');
+                }
+            });
+            
+            // 高對比度模式
+            document.getElementById('high-contrast').addEventListener('click', function() {
+                document.body.classList.toggle('high-contrast');
+                
+                if (document.body.classList.contains('high-contrast')) {
+                    document.documentElement.style.setProperty('--ios-text-primary', '#000000');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '#222222');
+                    document.documentElement.style.setProperty('--ios-primary', '#0056b3');
+                    document.documentElement.style.setProperty('--ios-background', '#ffffff');
+                } else {
+                    document.documentElement.style.setProperty('--ios-text-primary', '');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '');
+                    document.documentElement.style.setProperty('--ios-primary', '');
+                    document.documentElement.style.setProperty('--ios-background', '');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

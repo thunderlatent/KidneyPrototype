@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 洗腎照護學習平台</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #f5f5f7;
+            font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .app-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .launch-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2D80FB, #1865DF);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 9999;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+        }
+        
+        .launch-logo {
+            width: 120px;
+            height: 120px;
+            background-color: white;
+            border-radius: 30px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(0);
+            transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+        }
+        
+        .launch-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s 0.3s forwards;
+        }
+        
+        .launch-slogan {
+            font-size: 18px;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s 0.5s forwards;
+        }
+        
+        .loading-indicator {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            opacity: 0;
+            animation: spin 1s linear infinite, fadeIn 0.4s 0.7s forwards;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hide-launch {
+            opacity: 0;
+            transform: scale(1.1);
+        }
+        
+        /* iPhone 頂部和底部標識 */
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background-color: #000;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            z-index: 1000;
+        }
+        
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 135px;
+            height: 5px;
+            background-color: #000;
+            border-radius: 3px;
+            z-index: 1000;
+        }
+        
+        /* 添加黑色邊框樣式 */
+        .iphone-container {
+            border: 12px solid #000;
+        }
+        
+        @media screen and (max-height: 932px), screen and (max-width: 430px) {
+            .iphone-container {
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- iPhone 模擬器 -->
+        <div class="iphone-container">
+            <!-- iPhone 頂部標識 -->
+            <div class="notch"></div>
+            
+            <!-- 啟動畫面 -->
+            <div class="launch-screen" id="launchScreen">
+                <div class="launch-logo">💊</div>
+                <div class="launch-title">腎好康</div>
+                <div class="launch-slogan">遊戲化洗腎照護學習平台</div>
+                <div class="loading-indicator"></div>
+            </div>
+            
+            <!-- 主應用框架 -->
+            <iframe id="mainFrame" src="main.html"></iframe>
+            
+            <!-- iPhone 底部標識 -->
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+    
+    <script>
+        // 2.5秒後以動畫方式隱藏啟動畫面
+        setTimeout(() => {
+            const launchScreen = document.getElementById('launchScreen');
+            launchScreen.classList.add('hide-launch');
+            setTimeout(() => {
+                launchScreen.style.display = 'none';
+            }, 800);
+        }, 2500);
+    </script>
+</body>
+</html> 

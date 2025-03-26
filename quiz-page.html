@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 測驗進行中</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 增大字體和間距 */
+        .quiz-container {
+            padding: 20px;
+        }
+        
+        /* 增大問題卡片 */
+        .question-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 增大問題標題 */
+        .question-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        /* 增大選項 */
+        .option-item {
+            background-color: var(--ios-gray6);
+            border-radius: 16px;
+            padding: 20px 18px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            border: 2px solid transparent; /* 增加邊框提高可見性 */
+        }
+        
+        /* 加強選項選中效果 */
+        .option-item.selected {
+            background-color: rgba(0, 122, 255, 0.2);
+            border: 2px solid var(--ios-primary);
+        }
+        
+        /* 加強正確答案效果 */
+        .option-item.correct {
+            background-color: rgba(52, 199, 89, 0.15);
+            border: 2px solid var(--ios-success);
+        }
+        
+        /* 加強錯誤答案效果 */
+        .option-item.incorrect {
+            background-color: rgba(255, 59, 48, 0.15);
+            border: 2px solid var(--ios-danger);
+        }
+        
+        /* 增大選項標籤 */
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 36px;
+            margin-right: 16px;
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--ios-text-secondary);
+            background-color: rgba(0, 0, 0, 0.08);
+            border-radius: 50%;
+        }
+        
+        /* 增大選項文字 */
+        .option-text {
+            font-size: 20px;
+            line-height: 1.5;
+            color: var(--ios-text-primary);
+            flex: 1;
+        }
+        
+        /* 更明顯的正確和錯誤圖標 */
+        .option-icon {
+            margin-left: auto;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+        }
+        
+        .option-icon.correct-icon {
+            color: white;
+            background-color: var(--ios-success);
+        }
+        
+        .option-icon.incorrect-icon {
+            color: white;
+            background-color: var(--ios-danger);
+            font-weight: bold;
+        }
+        
+        /* 增大解釋框 */
+        .explanation-box {
+            background-color: rgba(52, 199, 89, 0.08);
+            border-left: 6px solid var(--ios-success);
+            padding: 20px;
+            margin: 24px 0;
+            border-radius: 16px;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            animation: slideUp 0.4s ease-out forwards;
+        }
+        
+        .explanation-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ios-success);
+            display: flex;
+            align-items: center;
+        }
+        
+        .explanation-title i {
+            margin-right: 10px;
+            font-size: 22px;
+        }
+        
+        #explanation-text {
+            color: var(--ios-text-primary);
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        
+        /* 增大按鈕 */
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 28px;
+            padding: 0 2px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 18px 20px;
+            border: none;
+            border-radius: 16px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            margin: 0 8px;
+        }
+        
+        .action-btn i {
+            margin-right: 10px;
+            font-size: 22px;
+        }
+        
+        /* 輔助文字提示 */
+        .help-tip {
+            text-align: center;
+            font-size: 16px;
+            color: var(--ios-text-tertiary);
+            margin: 16px 0;
+            font-style: italic;
+        }
+        
+        /* 增大提示按鈕 */
+        .hint-btn {
+            background-color: #FFB74D;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 20px;
+            margin-top: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(255, 183, 77, 0.3);
+        }
+        
+        .hint-btn i {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+        
+        /* 視力輔助工具 */
+        .visual-aid-tools {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 16px;
+        }
+        
+        .visual-aid-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            margin-left: 10px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" id="quit-quiz">返回</div>
+            <div class="nav-title">腎臟知識測驗</div>
+            <div></div>
+        </div>
+        
+        <!-- 滾動內容區 -->
+        <div class="content-container">
+            <!-- 測驗畫面 -->
+            <div id="quiz-screen" class="quiz-container">
+                <!-- 視力輔助工具 -->
+                <div class="visual-aid-tools">
+                    <div class="visual-aid-btn" id="increase-text">
+                        <i class="fas fa-text-height"></i>
+                    </div>
+                    <div class="visual-aid-btn" id="high-contrast">
+                        <i class="fas fa-adjust"></i>
+                    </div>
+                </div>
+                
+                <div class="timer-container">
+                    <div class="timer">
+                        <i class="fas fa-clock"></i> <span id="timer">02:00</span>
+                    </div>
+                </div>
+                
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">1</span> <span id="question-text">洗腎患者每日建議的最大飲水量是多少？</span>
+                    </div>
+                    
+                    <div class="options-list" id="options-list">
+                        <!-- 選項將由 JavaScript 動態生成 -->
+                    </div>
+                    
+                    <button class="hint-btn" id="hint-btn" onclick="useHint()">
+                        <i class="fas fa-lightbulb"></i> 使用提示
+                    </button>
+                    
+                    <div class="help-tip">* 點擊選項進行選擇，然後點擊「下一題」按鈕繼續</div>
+                    
+                    <div id="explanation-box" class="explanation-box">
+                        <div class="explanation-title">
+                            <i class="fas fa-info-circle"></i> 解析
+                        </div>
+                        <div id="explanation-text"></div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn prev-btn" id="prev-btn" onclick="prevQuestion()">
+                            <i class="fas fa-arrow-left"></i> 上一題
+                        </button>
+                        <button class="action-btn next-btn" id="next-btn" onclick="nextQuestion()">
+                            下一題 <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="question-status-container">
+                    <div class="question-status-indicators" id="question-status">
+                        <!-- 問題狀態指示器將由 JavaScript 動態生成 -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 結果畫面 -->
+            <div id="result-screen" class="result-screen">
+                <div class="result-header">
+                    <div class="result-icon">🏆</div>
+                    <div class="result-title">測驗完成!</div>
+                    <div class="result-subtitle">以下是您的測驗結果</div>
+                </div>
+                
+                <div class="result-score" id="final-score">0</div>
+                
+                <div class="score-detail">
+                    答對題數：<span id="correct-count">0</span> / <span id="total-questions">10</span>
+                </div>
+                
+                <div class="result-message" id="result-message">
+                    正在計算結果...
+                </div>
+                
+                <div class="action-buttons mt-3">
+                    <div class="action-btn secondary" id="retry-btn">重新挑戰</div>
+                    <div class="action-btn" id="back-to-selector">選擇其他測驗</div>
+                </div>
+                
+                <!-- 錯題集 -->
+                <div id="incorrect-questions-container" class="incorrect-questions-container" style="display: none;">
+                    <div class="incorrect-questions-title">需要加強的題目</div>
+                    <div id="incorrect-questions-list">
+                        <!-- 錯題將由 JavaScript 動態添加 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <a href="main.html" class="tab-item">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </a>
+            <a href="quiz-selector.html" class="tab-item active">
+                <i class="fas fa-clipboard-list"></i>
+                <span>測驗</span>
+            </a>
+            <a href="learning-resources.html" class="tab-item">
+                <i class="fas fa-book-open"></i>
+                <span>學習</span>
+            </a>
+            <a href="dialysis-schedule.html" class="tab-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>排程</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- 獎勵彈窗 -->
+    <div id="reward-modal" class="reward-modal">
+        <div class="reward-content">
+            <div class="reward-icon">
+                <i class="fas fa-gift"></i>
+            </div>
+            <div class="reward-title">恭喜獲得獎勵！</div>
+            <div class="reward-description">
+                你獲得了 <span id="reward-amount">20</span> 金幣
+            </div>
+            <button id="reward-confirm" class="reward-confirm">確認</button>
+        </div>
+    </div>
+    
+    <script src="js/nursing-questions.js"></script>
+    <script src="js/public-questions.js"></script>
+    <script src="js/fontawesome.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 變數初始化
+            let currentQuestions = [];    // 當前測驗的問題
+            let currentQuestionIndex = 0; // 當前問題索引
+            let score = 0;                // 分數
+            let timeLeft = 60;            // 每題剩餘時間（秒）
+            let timerInterval;            // 計時器
+            let selectedOptions = [];     // 用戶選擇的答案
+            let quizType = localStorage.getItem('quizType') || 'public'; // 從本地存儲獲取測驗類型
+            let incorrectQuestions = [];  // 錯誤的問題
+            let answeredQuestions = [];   // 已回答的問題
+            let isAnswerLocked = false;   // 是否鎖定當前題目的答案選擇
+            
+            // DOM 元素
+            const quizScreen = document.getElementById('quiz-screen');
+            const resultScreen = document.getElementById('result-screen');
+            const timerElement = document.getElementById('timer');
+            const progressBar = document.getElementById('progress-bar');
+            const questionNumberElement = document.getElementById('question-number');
+            const questionTextElement = document.getElementById('question-text');
+            const optionsContainer = document.getElementById('options-container');
+            const explanationBox = document.getElementById('explanation-box');
+            const explanationText = document.getElementById('explanation-text');
+            const currentScoreElement = document.getElementById('current-score');
+            const finalScoreElement = document.getElementById('final-score');
+            const correctCountElement = document.getElementById('correct-count');
+            const totalQuestionsElement = document.getElementById('total-questions');
+            const resultMessageElement = document.getElementById('result-message');
+            const incorrectQuestionsContainer = document.getElementById('incorrect-questions-container');
+            const incorrectQuestionsList = document.getElementById('incorrect-questions-list');
+            const questionStatusIndicators = document.getElementById('question-status-indicators');
+            
+            // 按鈕
+            const prevButton = document.getElementById('prev-btn');
+            const nextButton = document.getElementById('next-btn');
+            const retryButton = document.getElementById('retry-btn');
+            const backToSelectorButton = document.getElementById('back-to-selector');
+            const quitButton = document.getElementById('quit-quiz');
+            
+            // 初始化測驗
+            initializeQuiz();
+            
+            // 初始化測驗函數
+            function initializeQuiz() {
+                // 初始化問題
+                initializeQuizQuestions();
+                
+                // 重置測驗狀態
+                currentQuestionIndex = 0;
+                score = 0;
+                timeLeft = 60;
+                selectedOptions = new Array(currentQuestions.length).fill(null);
+                incorrectQuestions = [];
+                answeredQuestions = [];
+                isAnswerLocked = false;
+                
+                // 更新界面
+                updateQuestionDisplay();
+                currentScoreElement.textContent = '0';
+                
+                // 設置總題數
+                totalQuestionsElement.textContent = currentQuestions.length;
+                
+                // 初始化題目狀態指示器
+                updateQuestionStatus();
+                
+                // 顯示測驗畫面
+                quizScreen.style.display = 'block';
+                resultScreen.style.display = 'none';
+                
+                // 開始計時
+                startTimer();
+                
+                // 禁用上一題按鈕（第一題）
+                prevButton.style.opacity = '0.5';
+                prevButton.style.pointerEvents = 'none';
+                
+                // 設置下一題按鈕文字
+                nextButton.textContent = '下一題';
+            }
+            
+            // 初始化測驗問題
+            function initializeQuizQuestions() {
+                // 根據選擇的測驗類型加載問題
+                switch(quizType) {
+                    case 'public':
+                        currentQuestions = publicQuestions.slice();
+                        break;
+                    case 'hd':
+                        currentQuestions = nursingQuestions.hdQuestions.slice();
+                        break;
+                    case 'pd':
+                        currentQuestions = nursingQuestions.pdQuestions.slice();
+                        break;
+                    default:
+                        currentQuestions = publicQuestions.slice();
+                }
+                
+                // 隨機排序問題
+                currentQuestions = shuffleArray(currentQuestions).slice(0, 10);
+            }
+            
+            // 更新問題顯示
+            function updateQuestionDisplay() {
+                const question = currentQuestions[currentQuestionIndex];
+                
+                // 更新問題信息
+                questionNumberElement.textContent = `問題 ${currentQuestionIndex + 1} / ${currentQuestions.length}`;
+                questionTextElement.textContent = question.question;
+                
+                // 更新進度條
+                const progressPercentage = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
+                
+                // 清空選項容器
+                optionsContainer.innerHTML = '';
+                
+                // 添加選項
+                question.options.forEach((option, index) => {
+                    const optionCard = document.createElement('div');
+                    optionCard.className = 'option-item';
+                    optionCard.dataset.index = index;
+                    
+                    // 如果已經選擇了該選項
+                    if(selectedOptions[currentQuestionIndex] === index) {
+                        optionCard.classList.add('selected');
+                    }
+                    
+                    optionCard.innerHTML = `
+                        <div class="option-label">${String.fromCharCode(65 + index)}</div>
+                        <div class="option-text">${option}</div>
+                        <div class="option-icon"></div>
+                    `;
+                    
+                    // 添加點擊事件
+                    optionCard.addEventListener('click', function() {
+                        selectOption(index);
+                    });
+                    
+                    optionsContainer.appendChild(optionCard);
+                });
+                
+                // 隱藏解釋框
+                explanationBox.style.display = 'none';
+                
+                // 檢查當前題目是否已回答
+                if (answeredQuestions.includes(currentQuestionIndex)) {
+                    isAnswerLocked = true;
+                    if (selectedOptions[currentQuestionIndex] !== null) {
+                        selectOption(selectedOptions[currentQuestionIndex]);
+                    }
+                } else {
+                    isAnswerLocked = false;
+                    // 重置計時器
+                    timeLeft = 60;
+                    startTimer();
+                }
+                
+                // 添加題目狀態顯示
+                updateQuestionStatus();
+                
+                // 更新按鈕狀態
+                updateButtonsState();
+            }
+            
+            // 選擇選項
+            function selectOption(optionIndex) {
+                // 如果答案已鎖定，不允許再選擇
+                if (isAnswerLocked) {
+                    return;
+                }
+                
+                // 設置選擇的選項並鎖定答案
+                selectedOptions[currentQuestionIndex] = optionIndex;
+                isAnswerLocked = true;
+                
+                // 將當前題目標記為已回答
+                if (!answeredQuestions.includes(currentQuestionIndex)) {
+                    answeredQuestions.push(currentQuestionIndex);
+                }
+                
+                // 清除當前題目計時器
+                clearInterval(timerInterval);
+                
+                // 更新選項顯示
+                const optionCards = document.querySelectorAll('.option-item');
+                optionCards.forEach(card => {
+                    card.classList.remove('selected', 'correct', 'incorrect');
+                });
+                
+                // 標記選中的選項
+                const currentQuestion = currentQuestions[currentQuestionIndex];
+                const selectedCard = optionCards[optionIndex];
+                selectedCard.classList.add('selected');
+                
+                // 顯示是否正確
+                if(optionIndex === currentQuestion.correctAnswer) {
+                    selectedCard.classList.add('correct');
+                    selectedCard.querySelector('.option-icon').className = 'option-icon correct-icon';
+                    selectedCard.querySelector('.option-icon').innerHTML = '✓';
+                    
+                    // 更新分數，只有在答對時加分
+                    score += 10;
+                    currentScoreElement.textContent = score;
+                } else {
+                    selectedCard.classList.add('incorrect');
+                    selectedCard.querySelector('.option-icon').className = 'option-icon incorrect-icon';
+                    selectedCard.querySelector('.option-icon').innerHTML = '✗';
+                    
+                    // 標記正確答案
+                    const correctCard = optionCards[currentQuestion.correctAnswer];
+                    correctCard.classList.add('correct');
+                    correctCard.querySelector('.option-icon').className = 'option-icon correct-icon';
+                    correctCard.querySelector('.option-icon').innerHTML = '✓';
+                    
+                    // 記錄錯題
+                    if(!incorrectQuestions.includes(currentQuestionIndex)) {
+                        incorrectQuestions.push(currentQuestionIndex);
+                    }
+                }
+                
+                // 顯示解釋
+                if(currentQuestion.explanation) {
+                    explanationBox.style.display = 'block';
+                    explanationText.textContent = currentQuestion.explanation;
+                }
+                
+                // 更新按鈕狀態
+                updateButtonsState();
+            }
+            
+            // 更新按鈕狀態
+            function updateButtonsState() {
+                // 上一題按鈕
+                if(currentQuestionIndex === 0) {
+                    prevButton.style.opacity = '0.5';
+                    prevButton.style.pointerEvents = 'none';
+                } else {
+                    prevButton.style.opacity = '1';
+                    prevButton.style.pointerEvents = 'auto';
+                }
+                
+                // 下一題/提交按鈕
+                if(currentQuestionIndex === currentQuestions.length - 1) {
+                    nextButton.textContent = '提交答案';
+                } else {
+                    nextButton.textContent = '下一題';
+                }
+                
+                // 如果當前題目已經選擇了答案
+                if(selectedOptions[currentQuestionIndex] !== null) {
+                    nextButton.style.opacity = '1';
+                    nextButton.style.pointerEvents = 'auto';
+                } else {
+                    // 可以在這裡決定是否禁用下一題按鈕
+                    // 此處允許跳過問題
+                    nextButton.style.opacity = '1';
+                    nextButton.style.pointerEvents = 'auto';
+                }
+            }
+            
+            // 移動到上一題
+            function goToPreviousQuestion() {
+                if(currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    updateQuestionDisplay();
+                    
+                    // 如果已經選擇了答案，顯示結果
+                    if(selectedOptions[currentQuestionIndex] !== null) {
+                        selectOption(selectedOptions[currentQuestionIndex]);
+                    }
+                    
+                    // 更新題目狀態指示器
+                    updateQuestionStatus();
+                }
+            }
+            
+            // 移動到下一題或提交
+            function goToNextOrSubmit() {
+                if(currentQuestionIndex < currentQuestions.length - 1) {
+                    // 移動到下一題
+                    currentQuestionIndex++;
+                    updateQuestionDisplay();
+                    
+                    // 如果已經選擇了答案，顯示結果
+                    if(selectedOptions[currentQuestionIndex] !== null) {
+                        selectOption(selectedOptions[currentQuestionIndex]);
+                    }
+                    
+                    // 更新題目狀態指示器
+                    updateQuestionStatus();
+                } else {
+                    // 提交答案
+                    finishQuiz();
+                }
+            }
+            
+            // 完成測驗
+            function finishQuiz() {
+                // 停止計時器
+                clearInterval(timerInterval);
+                
+                // 計算分數 - 只計算已回答正確的題目
+                let correctCount = 0;
+                
+                for(let i = 0; i < currentQuestions.length; i++) {
+                    if(selectedOptions[i] === currentQuestions[i].correctAnswer) {
+                        correctCount++;
+                    }
+                }
+                
+                // 最終分數為正確題目數 * 10
+                score = correctCount * 10;
+                
+                // 更新界面
+                finalScoreElement.textContent = score;
+                correctCountElement.textContent = correctCount;
+                
+                // 設置結果消息
+                let resultMessage;
+                if(score >= 90) {
+                    resultMessage = "太棒了！您是腎臟知識的專家！";
+                } else if(score >= 70) {
+                    resultMessage = "做得好！您對腎臟知識有很好的理解。";
+                } else if(score >= 50) {
+                    resultMessage = "及格！您對腎臟知識有基本了解。";
+                } else {
+                    resultMessage = "需要加強！建議您重新學習相關知識。";
+                }
+                resultMessageElement.textContent = resultMessage;
+                
+                // 如果有錯題，顯示錯題集
+                if(incorrectQuestions.length > 0) {
+                    displayIncorrectQuestions();
+                    incorrectQuestionsContainer.style.display = 'block';
+                } else {
+                    incorrectQuestionsContainer.style.display = 'none';
+                }
+                
+                // 顯示結果畫面
+                quizScreen.style.display = 'none';
+                resultScreen.style.display = 'block';
+            }
+            
+            // 顯示錯題集
+            function displayIncorrectQuestions() {
+                incorrectQuestionsList.innerHTML = '';
+                
+                incorrectQuestions.forEach(index => {
+                    const question = currentQuestions[index];
+                    const selectedOption = selectedOptions[index];
+                    
+                    const incorrectCard = document.createElement('div');
+                    incorrectCard.className = 'incorrect-question-card';
+                    
+                    let selectedAnswer = '未作答';
+                    if (selectedOption !== null && selectedOption >= 0) {
+                        selectedAnswer = question.options[selectedOption];
+                    }
+                    
+                    incorrectCard.innerHTML = `
+                        <div class="incorrect-question-text">${question.question}</div>
+                        <div class="incorrect-answers">
+                            <div class="incorrect-answer">您的答案：${selectedAnswer}</div>
+                            <div class="correct-answer">正確答案：${question.options[question.correctAnswer]}</div>
+                        </div>
+                        <div class="question-explanation">${question.explanation || '無解釋'}</div>
+                    `;
+                    
+                    incorrectQuestionsList.appendChild(incorrectCard);
+                });
+            }
+            
+            // 開始計時器
+            function startTimer() {
+                clearInterval(timerInterval);
+                
+                const updateTimer = () => {
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    
+                    timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    if(timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        
+                        // 時間到，自動提交當前題目的答案
+                        // 如果用戶沒有選擇，則視為錯誤
+                        if (!answeredQuestions.includes(currentQuestionIndex)) {
+                            selectedOptions[currentQuestionIndex] = -1; // 標記為未選擇
+                            incorrectQuestions.push(currentQuestionIndex);
+                            answeredQuestions.push(currentQuestionIndex);
+                            isAnswerLocked = true;
+                            
+                            // 標記所有選項，顯示正確答案
+                            const optionCards = document.querySelectorAll('.option-item');
+                            const correctIndex = currentQuestions[currentQuestionIndex].correctAnswer;
+                            
+                            // 標記正確答案
+                            optionCards[correctIndex].classList.add('correct');
+                            optionCards[correctIndex].querySelector('.option-icon').className = 'option-icon correct-icon';
+                            optionCards[correctIndex].querySelector('.option-icon').innerHTML = '✓';
+                            
+                            // 顯示解釋
+                            if (currentQuestions[currentQuestionIndex].explanation) {
+                                explanationBox.style.display = 'block';
+                                explanationText.textContent = currentQuestions[currentQuestionIndex].explanation;
+                            }
+                            
+                            // 更新題目狀態指示器
+                            updateQuestionStatus();
+                            
+                            // 更新按鈕狀態
+                            updateButtonsState();
+                        }
+                    }
+                    
+                    timeLeft--;
+                };
+                
+                updateTimer();
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+            
+            // 洗牌數組函數
+            function shuffleArray(array) {
+                const newArray = [...array];
+                for(let i = newArray.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+                }
+                return newArray;
+            }
+            
+            // 事件監聽器
+            prevButton.addEventListener('click', goToPreviousQuestion);
+            nextButton.addEventListener('click', goToNextOrSubmit);
+            retryButton.addEventListener('click', function() {
+                initializeQuiz();
+            });
+            backToSelectorButton.addEventListener('click', function() {
+                window.location.href = 'quiz-selector.html';
+            });
+            quitButton.addEventListener('click', function() {
+                if(confirm('確定要退出測驗嗎？您的進度將不會被保存。')) {
+                    window.location.href = 'quiz-selector.html';
+                }
+            });
+            
+            // 添加 updateQuestionStatus 函數
+            function updateQuestionStatus() {
+                // 清空狀態指示器
+                questionStatusIndicators.innerHTML = '';
+                
+                // 為每個問題添加狀態指示器
+                for (let i = 0; i < currentQuestions.length; i++) {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'status-indicator';
+                    indicator.textContent = (i + 1).toString();
+                    
+                    // 設置狀態樣式
+                    if (i === currentQuestionIndex) {
+                        indicator.classList.add('current');
+                    }
+                    
+                    if (answeredQuestions.includes(i)) {
+                        indicator.classList.add('answered');
+                        
+                        if (selectedOptions[i] === currentQuestions[i].correctAnswer) {
+                            indicator.classList.add('correct');
+                        } else {
+                            indicator.classList.add('incorrect');
+                        }
+                    }
+                    
+                    // 添加點擊事件，允許直接跳轉到該題
+                    indicator.addEventListener('click', function() {
+                        goToQuestion(i);
+                    });
+                    
+                    questionStatusIndicators.appendChild(indicator);
+                }
+            }
+            
+            // 添加跳轉到指定題目的函數
+            function goToQuestion(index) {
+                if (index !== currentQuestionIndex) {
+                    currentQuestionIndex = index;
+                    updateQuestionDisplay();
+                }
+            }
+
+            // 增加文字大小功能
+            document.getElementById('increase-text').addEventListener('click', function() {
+                document.body.classList.toggle('large-text');
+                
+                // 如果有large-text類，則放大所有文字
+                if (document.body.classList.contains('large-text')) {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1.2');
+                } else {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1');
+                }
+            });
+
+            // 高對比度模式
+            document.getElementById('high-contrast').addEventListener('click', function() {
+                document.body.classList.toggle('high-contrast');
+                
+                if (document.body.classList.contains('high-contrast')) {
+                    document.documentElement.style.setProperty('--ios-text-primary', '#000000');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '#222222');
+                    document.documentElement.style.setProperty('--ios-primary', '#0056b3');
+                    document.documentElement.style.setProperty('--ios-background', '#ffffff');
+                } else {
+                    document.documentElement.style.setProperty('--ios-text-primary', '');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '');
+                    document.documentElement.style.setProperty('--ios-primary', '');
+                    document.documentElement.style.setProperty('--ios-background', '');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

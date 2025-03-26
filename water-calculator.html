@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 飲水計算器</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <style>
+        .calculator-container {
+            padding: 16px;
+            padding-bottom: 100px;
+        }
+        
+        .intro-section {
+            margin-bottom: 20px;
+        }
+        
+        .intro-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--ios-text-primary);
+        }
+        
+        .intro-text {
+            font-size: 15px;
+            color: var(--ios-text-secondary);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .calculator-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--ios-text-primary);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: 1px solid var(--ios-gray5);
+            border-radius: 12px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            transition: all 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--ios-primary);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+        
+        .form-hint {
+            font-size: 13px;
+            color: var(--ios-text-tertiary);
+            margin-top: 6px;
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            padding: 14px 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background-color: var(--ios-primary);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .calculate-btn:active {
+            transform: scale(0.98);
+            background-color: var(--ios-primary-dark);
+        }
+        
+        .result-section {
+            margin-top: 24px;
+            display: none;
+        }
+        
+        .result-section.show {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+        
+        .result-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ios-text-primary);
+        }
+        
+        .result-card {
+            background-color: var(--ios-primary-light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--ios-primary);
+            margin-bottom: 8px;
+        }
+        
+        .result-unit {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            font-weight: 500;
+        }
+        
+        .recommendation-list {
+            margin-top: 20px;
+        }
+        
+        .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        
+        .recommendation-icon {
+            color: var(--ios-primary);
+            margin-right: 10px;
+            font-size: 16px;
+            margin-top: 3px;
+        }
+        
+        .recommendation-text {
+            flex: 1;
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            line-height: 1.5;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div id="status-time" class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">返回</div>
+            <div class="nav-title">飲水計算器</div>
+            <div></div>
+        </div>
+        
+        <!-- 滾動內容區 -->
+        <div class="content-container">
+            <div class="calculator-container">
+                <div class="intro-section">
+                    <div class="intro-title">飲水量計算器</div>
+                    <p class="intro-text">洗腎患者需要嚴格控制每日飲水量。根據國際腎臟病學會指南，一般建議的飲水量為：前一天尿量加上500-600毫升的基本飲水量。</p>
+                </div>
+                
+                <div class="calculator-card">
+                    <div class="form-group">
+                        <label class="form-label">前一天的尿量 (毫升)</label>
+                        <input type="number" id="urine-output" class="form-input" placeholder="例如：200">
+                        <div class="form-hint">如果您已無尿，請輸入 0</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">您的體重 (公斤)</label>
+                        <input type="number" id="weight" class="form-input" placeholder="例如：65">
+                        <div class="form-hint">用於計算基本液體需求</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">天氣狀況</label>
+                        <select id="weather" class="form-input">
+                            <option value="normal">一般天氣</option>
+                            <option value="hot">炎熱天氣 (>30°C)</option>
+                            <option value="very-hot">極度炎熱 (>35°C)</option>
+                        </select>
+                        <div class="form-hint">炎熱天氣可能需要額外補充少量水分</div>
+                    </div>
+                    
+                    <button id="calculate-btn" class="calculate-btn">計算飲水量</button>
+                </div>
+                
+                <div id="result-section" class="result-section">
+                    <div class="result-title">您的建議飲水量</div>
+                    
+                    <div class="result-card">
+                        <div id="result-value" class="result-value">0</div>
+                        <div class="result-unit">毫升/天</div>
+                    </div>
+                    
+                    <div class="recommendation-list">
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="recommendation-text">
+                                將每日飲水量平均分配，避免一次大量飲水
+                            </div>
+                        </div>
+                        
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="recommendation-text">
+                                記得計入湯、粥等液態食物的水分攝取量
+                            </div>
+                        </div>
+                        
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="recommendation-text">
+                                如感覺口渴，可以使用含片、漱口或含少量冰塊緩解
+                            </div>
+                        </div>
+                        
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="recommendation-text">
+                                使用小杯子飲水，給人心理上已喝足水的感覺
+                            </div>
+                        </div>
+                        
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="recommendation-text">
+                                此計算器僅供參考，請遵循醫師的個人化建議
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <a href="main.html" class="tab-item">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </a>
+            <a href="quiz-selector.html" class="tab-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span>測驗</span>
+            </a>
+            <a href="learning-resources.html" class="tab-item">
+                <i class="fas fa-book-open"></i>
+                <span>學習</span>
+            </a>
+            <a href="dialysis-schedule.html" class="tab-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>排程</span>
+            </a>
+        </div>
+    </div>
+    
+    <script src="js/fontawesome.min.js"></script>
+    <script>
+        // 更新狀態欄時間
+        function updateStatusBarTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('status-time').textContent = `${hours}:${minutes}`;
+        }
+        
+        // 初始化頁面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新時間
+            updateStatusBarTime();
+            setInterval(updateStatusBarTime, 60000);
+            
+            // 計算按鈕點擊事件
+            document.getElementById('calculate-btn').addEventListener('click', function() {
+                // 獲取輸入值
+                const urineOutput = parseInt(document.getElementById('urine-output').value) || 0;
+                const weight = parseFloat(document.getElementById('weight').value) || 70;
+                const weather = document.getElementById('weather').value;
+                
+                // 基本飲水計算公式：尿量 + 基本飲水量(約500-600毫升)
+                let baseFluid = 500;
+                
+                // 根據體重微調基本飲水量
+                if (weight < 50) {
+                    baseFluid = 450;
+                } else if (weight > 80) {
+                    baseFluid = 600;
+                }
+                
+                // 根據天氣狀況調整
+                let weatherAdjustment = 0;
+                if (weather === 'hot') {
+                    weatherAdjustment = 100;
+                } else if (weather === 'very-hot') {
+                    weatherAdjustment = 200;
+                }
+                
+                // 計算總飲水量
+                const totalFluid = urineOutput + baseFluid + weatherAdjustment;
+                
+                // 顯示結果
+                document.getElementById('result-value').textContent = totalFluid;
+                document.getElementById('result-section').classList.add('show');
+                
+                // 滾動到結果區域
+                document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html> 

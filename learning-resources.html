@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light only">
+    <title>腎好康 - 學習資源</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .resource-container {
+            padding: 20px;
+            flex: 1;
+            overflow: auto;
+        }
+        
+        /* 視力輔助工具 */
+        .visual-aid-tools {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        
+        .visual-aid-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            margin-left: 10px;
+            font-size: 20px;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--ios-text-primary);
+        }
+        
+        /* 增大篩選標籤 */
+        .filter-tabs {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        
+        .filter-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .filter-tab {
+            flex: 0 0 auto;
+            padding: 12px 20px; /* 增大內邊距 */
+            margin-right: 10px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-secondary);
+            border-radius: 20px;
+            font-size: 18px; /* 增大字體 */
+            font-weight: 600; /* 加粗 */
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* 添加陰影 */
+        }
+        
+        .filter-tab.active {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+        
+        /* 改為單欄佈局，更適合長輩閱讀 */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* 改為單欄 */
+            gap: 20px; /* 增大間距 */
+        }
+        
+        /* 增大資源卡片 */
+        .resource-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* 增強陰影 */
+            border: 1px solid var(--ios-separator);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+            height: 100%;
+        }
+        
+        /* 增大資源圖標 */
+        .resource-icon {
+            width: 60px; /* 增大尺寸 */
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            font-size: 28px; /* 增大圖標 */
+            background-color: rgba(45, 128, 251, 0.15); /* 增強顏色 */
+            color: var(--ios-primary);
+        }
+        
+        .resource-icon.video {
+            background-color: rgba(255, 69, 58, 0.15);
+            color: var(--ios-danger);
+        }
+        
+        .resource-icon.pdf {
+            background-color: rgba(255, 149, 0, 0.15);
+            color: var(--ios-orange);
+        }
+        
+        .resource-icon.link {
+            background-color: rgba(48, 209, 88, 0.15);
+            color: var(--ios-success);
+        }
+        
+        /* 增大資源標題和描述 */
+        .resource-title {
+            font-size: 20px; /* 增大字體 */
+            font-weight: 700; /* 加粗 */
+            margin-bottom: 8px;
+            color: var(--ios-text-primary);
+            line-height: 1.4;
+        }
+        
+        .resource-description {
+            font-size: 17px; /* 增大字體 */
+            color: var(--ios-text-secondary);
+            line-height: 1.5;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* 允許顯示更多行 */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex: 1;
+        }
+        
+        /* 增大元數據 */
+        .resource-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 15px; /* 增大字體 */
+            color: var(--ios-text-tertiary);
+            margin-top: auto;
+            font-weight: 500; /* 加粗 */
+        }
+        
+        .resource-meta span {
+            display: flex;
+            align-items: center;
+        }
+        
+        .resource-meta i {
+            margin-right: 6px;
+            font-size: 16px;
+        }
+        
+        /* 增大搜索框 */
+        .search-container {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 16px 20px 16px 50px; /* 增大內邊距 */
+            border-radius: 16px;
+            border: none;
+            background-color: var(--ios-gray6);
+            font-size: 18px; /* 增大字體 */
+            color: var(--ios-text-primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* 添加陰影 */
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--ios-text-tertiary);
+            font-size: 22px; /* 增大圖標 */
+        }
+        
+        /* 增大標籤 */
+        .tag {
+            display: inline-block;
+            padding: 6px 12px; /* 增大內邊距 */
+            border-radius: 8px;
+            font-size: 14px; /* 增大字體 */
+            font-weight: 600; /* 加粗 */
+            margin-right: 6px;
+            margin-bottom: 8px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-secondary);
+        }
+        
+        /* 類別標籤顏色 */
+        .tag.diet {
+            background-color: rgba(48, 209, 88, 0.15);
+            color: var(--ios-success);
+        }
+        
+        .tag.medication {
+            background-color: rgba(255, 69, 58, 0.15);
+            color: var(--ios-danger);
+        }
+        
+        .tag.care {
+            background-color: rgba(0, 122, 255, 0.15);
+            color: var(--ios-primary);
+        }
+        
+        /* 無搜索結果提示 */
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--ios-text-secondary);
+            font-size: 18px;
+        }
+        
+        /* 輔助說明提示 */
+        .help-tip {
+            background-color: rgba(0, 122, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--ios-text-secondary);
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .help-tip i {
+            color: var(--ios-primary);
+            font-size: 20px;
+            margin-right: 10px;
+            margin-top: 2px;
+        }
+        
+        /* 底部標籤欄調整 */
+        .tab-bar {
+            height: 70px;
+        }
+        
+        .tab-item {
+            padding: 12px 0;
+        }
+        
+        .tab-item i {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+        
+        .tab-item span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div class="status-time" id="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">返回</div>
+            <div class="nav-title">學習資源</div>
+            <div></div>
+        </div>
+        
+        <!-- 滾動內容區 -->
+        <div class="content-container">
+            <div class="resource-container">
+                <!-- 視力輔助工具 -->
+                <div class="visual-aid-tools">
+                    <div class="visual-aid-btn" id="increase-text">
+                        <i class="fas fa-text-height"></i>
+                    </div>
+                    <div class="visual-aid-btn" id="high-contrast">
+                        <i class="fas fa-adjust"></i>
+                    </div>
+                </div>
+                
+                <h1 class="page-title">腎臟健康學習資源</h1>
+                
+                <!-- 輔助說明提示 -->
+                <div class="help-tip">
+                    <i class="fas fa-info-circle"></i>
+                    <div>這裡展示的是與腎臟健康相關的教育資源。您可以使用搜索框尋找特定主題，也可以點擊上方標籤篩選不同類型的資源。</div>
+                </div>
+                
+                <!-- 搜索框 -->
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" id="search-input" placeholder="搜尋資源..." aria-label="搜尋資源">
+                </div>
+                
+                <!-- 分類標籤 -->
+                <div class="filter-tabs">
+                    <div class="filter-tab active" data-category="all">全部</div>
+                    <div class="filter-tab" data-category="diet">飲食控制</div>
+                    <div class="filter-tab" data-category="medication">藥物使用</div>
+                    <div class="filter-tab" data-category="complication">併發症預防</div>
+                    <div class="filter-tab" data-category="care">日常照護</div>
+                </div>
+                
+                <!-- 資源網格 -->
+                <div class="resource-grid" id="resource-grid">
+                    <!-- 資源卡片將由JavaScript動態生成 -->
+                </div>
+                
+                <!-- 無結果提示 -->
+                <div class="no-results" id="no-results" style="display: none;">
+                    <i class="fas fa-search" style="font-size: 40px; color: var(--ios-gray4); margin-bottom: 16px;"></i>
+                    <p>找不到符合條件的資源</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <a href="main.html" class="tab-item">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </a>
+            <a href="quiz-selector.html" class="tab-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span>測驗</span>
+            </a>
+            <a href="learning-resources.html" class="tab-item active">
+                <i class="fas fa-book-open"></i>
+                <span>學習</span>
+            </a>
+            <a href="dialysis-schedule.html" class="tab-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>排程</span>
+            </a>
+        </div>
+    </div>
+    
+    <script src="js/fontawesome.min.js"></script>
+    <script>
+        // 更新狀態欄時間
+        function updateStatusBarTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('status-time').textContent = `${hours}:${minutes}`;
+        }
+        
+        // 初始化頁面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新時間
+            updateStatusBarTime();
+            setInterval(updateStatusBarTime, 60000);
+            
+            // 獲取元素
+            const filterTabs = document.querySelectorAll('.filter-tab');
+            const resourceCards = document.querySelectorAll('.resource-card');
+            const searchInput = document.querySelector('.search-input');
+            const noResults = document.querySelector('.no-results');
+            
+            // 當前選中的分類
+            let currentCategory = 'all';
+            let searchTerm = '';
+            
+            // 分類標籤點擊事件
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 更新選中狀態
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 設置當前分類
+                    currentCategory = this.dataset.category;
+                    
+                    // 過濾卡片
+                    filterCards();
+                });
+            });
+            
+            // 資源卡片點擊事件
+            resourceCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    alert('資源詳情將在完整版本中提供');
+                });
+            });
+            
+            // 搜索功能
+            searchInput.addEventListener('input', function() {
+                searchTerm = this.value.trim().toLowerCase();
+                filterCards();
+            });
+            
+            // 過濾卡片函數
+            function filterCards() {
+                let visibleCount = 0;
+                
+                resourceCards.forEach(card => {
+                    const cardCategory = card.dataset.category || '';
+                    const title = card.querySelector('.resource-title').textContent.toLowerCase();
+                    const description = card.querySelector('.resource-description').textContent.toLowerCase();
+                    
+                    // 檢查分類和搜索詞
+                    const matchesCategory = currentCategory === 'all' || cardCategory.includes(currentCategory);
+                    const matchesSearch = searchTerm === '' || 
+                                         title.includes(searchTerm) || 
+                                         description.includes(searchTerm);
+                    
+                    // 顯示或隱藏卡片
+                    if (matchesCategory && matchesSearch) {
+                        card.style.display = 'flex';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // 處理無結果情況
+                if (visibleCount === 0) {
+                    noResults.style.display = 'block';
+                } else {
+                    noResults.style.display = 'none';
+                }
+            }
+            
+            // 增加文字大小功能
+            document.getElementById('increase-text').addEventListener('click', function() {
+                document.body.classList.toggle('large-text');
+                
+                // 如果有large-text類，則放大所有文字
+                if (document.body.classList.contains('large-text')) {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1.2');
+                } else {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1');
+                }
+            });
+            
+            // 高對比度模式
+            document.getElementById('high-contrast').addEventListener('click', function() {
+                document.body.classList.toggle('high-contrast');
+                
+                if (document.body.classList.contains('high-contrast')) {
+                    document.documentElement.style.setProperty('--ios-text-primary', '#000000');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '#222222');
+                    document.documentElement.style.setProperty('--ios-primary', '#0056b3');
+                    document.documentElement.style.setProperty('--ios-background', '#ffffff');
+                } else {
+                    document.documentElement.style.setProperty('--ios-text-primary', '');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '');
+                    document.documentElement.style.setProperty('--ios-primary', '');
+                    document.documentElement.style.setProperty('--ios-background', '');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
