@@ -197,7 +197,7 @@
             justify-content: flex-end;
             margin-bottom: 20px;
         }
-        
+
         .visual-aid-btn {
             display: flex;
             align-items: center;
@@ -279,29 +279,30 @@
                 </div>
             </div>
         </div>
+        
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <a href="main.html" class="tab-item">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </a>
+            <a href="quiz-selector.html" class="tab-item active">
+                <i class="fas fa-clipboard-list"></i>
+                <span>測驗</span>
+            </a>
+            <a href="learning-resources.html" class="tab-item">
+                <i class="fas fa-book-open"></i>
+                <span>學習</span>
+            </a>
+            <a href="dialysis-schedule.html" class="tab-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>排程</span>
+            </a>
+        </div>
     </div>
     
-    <!-- 底部標籤欄 -->
-    <div class="tab-bar">
-        <a href="main.html" class="tab-item">
-            <i class="fas fa-home"></i>
-            <span>首頁</span>
-        </a>
-        <a href="quiz-selector.html" class="tab-item active">
-            <i class="fas fa-clipboard-list"></i>
-            <span>測驗</span>
-        </a>
-        <a href="learning-resources.html" class="tab-item">
-            <i class="fas fa-book-open"></i>
-            <span>學習</span>
-        </a>
-        <a href="dialysis-schedule.html" class="tab-item">
-            <i class="fas fa-calendar-alt"></i>
-            <span>排程</span>
-        </a>
-    </div>
-    
-    <script src="js/fontawesome.min.js"></script>
+    <!-- 從 CDN 引用 FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 一般大眾測驗按鈕點擊事件

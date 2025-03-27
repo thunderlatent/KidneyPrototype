@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 藥物追蹤</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .medication-container {
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+        
+        .page-header {
+            margin-bottom: 24px;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--ios-text-primary);
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            line-height: 1.4;
+        }
+        
+        .med-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--ios-primary);
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+        }
+        
+        .add-med-btn {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: var(--ios-primary-light);
+            color: var(--ios-primary);
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .add-med-btn i {
+            margin-right: 6px;
+        }
+        
+        .med-list {
+            margin-bottom: 32px;
+        }
+        
+        .med-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .med-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .med-info {
+            flex: 1;
+        }
+        
+        .med-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .med-purpose {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+        }
+        
+        .med-actions {
+            display: flex;
+        }
+        
+        .med-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            color: var(--ios-primary);
+            background-color: var(--ios-primary-light);
+            font-size: 16px;
+        }
+        
+        .med-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .med-detail {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-size: 14px;
+            color: var(--ios-text-tertiary);
+            margin-bottom: 4px;
+        }
+        
+        .detail-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ios-text-primary);
+        }
+        
+        .dosage-schedule {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .time-pill {
+            background-color: var(--ios-gray6);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .time-pill i {
+            margin-right: 6px;
+            font-size: 14px;
+        }
+        
+        .compliance-bar {
+            height: 8px;
+            background-color: var(--ios-gray6);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .compliance-fill {
+            height: 100%;
+            background-color: var(--ios-success);
+            border-radius: 4px;
+        }
+        
+        .compliance-text {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .med-tracking-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .date-selector {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .date-nav {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            font-size: 16px;
+        }
+        
+        .current-date {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+        }
+        
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .time-slot {
+            background-color: var(--ios-gray6);
+            border-radius: 12px;
+            padding: 16px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .time-slot.active {
+            background-color: var(--ios-primary-light);
+            color: var(--ios-primary);
+        }
+        
+        .time-icon {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .time-label {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .med-check-list {
+            margin-top: 20px;
+        }
+        
+        .med-check-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--ios-gray6);
+        }
+        
+        .med-check-item:last-child {
+            border-bottom: none;
+        }
+        
+        .med-check-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .med-check-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            margin-right: 12px;
+        }
+        
+        .med-check-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ios-text-primary);
+        }
+        
+        .med-check-details {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            margin-top: 4px;
+        }
+        
+        .med-check-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--ios-gray5);
+            color: transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .med-check-btn.checked {
+            background-color: var(--ios-success);
+            border-color: var(--ios-success);
+            color: white;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px 20px 0 0;
+            padding: 24px;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+        }
+        
+        .close-modal {
+            font-size: 24px;
+            color: var(--ios-text-secondary);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ios-text-primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 1px solid var(--ios-gray5);
+            border-radius: 12px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--ios-primary);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: var(--ios-gray6);
+            border-radius: 20px;
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            cursor: pointer;
+        }
+        
+        .checkbox-label.selected {
+            background-color: var(--ios-primary-light);
+            color: var(--ios-primary);
+        }
+        
+        .checkbox-label input {
+            display: none;
+        }
+        
+        .save-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            background-color: var(--ios-primary);
+            border: none;
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div id="status-time" class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">返回</div>
+            <div class="nav-title">藥物追蹤</div>
+            <div></div>
+        </div>
+        
+        <!-- 滾動內容區 -->
+        <div class="content-container">
+            <div class="medication-container">
+                <!-- 用藥統計 -->
+                <div class="page-header">
+                    <div class="page-title">藥物追蹤</div>
+                    <p class="page-subtitle">記錄並追蹤您的藥物服用情況，幫助您維持良好用藥習慣</p>
+                </div>
+                
+                <div class="med-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">95%</div>
+                        <div class="stat-label">本週用藥依從率</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">目前服用藥物數量</div>
+                    </div>
+                </div>
+                
+                <!-- 今日用藥 -->
+                <div class="med-tracking-card">
+                    <div class="section-header">
+                        <div class="section-title">今日用藥</div>
+                        <div class="date-selector">
+                            <div class="date-nav" id="prev-date">
+                                <i class="fas fa-chevron-left"></i>
+                            </div>
+                            <div class="current-date" id="current-date">2023年3月25日</div>
+                            <div class="date-nav" id="next-date">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="time-slots">
+                        <div class="time-slot" data-time="morning">
+                            <div class="time-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="time-label">早上</div>
+                        </div>
+                        <div class="time-slot active" data-time="noon">
+                            <div class="time-icon">
+                                <i class="fas fa-cloud-sun"></i>
+                            </div>
+                            <div class="time-label">中午</div>
+                        </div>
+                        <div class="time-slot" data-time="evening">
+                            <div class="time-icon">
+                                <i class="fas fa-moon"></i>
+                            </div>
+                            <div class="time-label">晚上</div>
+                        </div>
+                    </div>
+                    
+                    <div class="med-check-list" id="noon-med-list">
+                        <div class="med-check-item">
+                            <div class="med-check-info">
+                                <div class="med-check-color" style="background-color: #FF6B6B;"></div>
+                                <div>
+                                    <div class="med-check-name">磷結合劑</div>
+                                    <div class="med-check-details">1粒，飯後服用</div>
+                                </div>
+                            </div>
+                            <div class="med-check-btn checked">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        <div class="med-check-item">
+                            <div class="med-check-info">
+                                <div class="med-check-color" style="background-color: #4ECDC4;"></div>
+                                <div>
+                                    <div class="med-check-name">降血壓藥</div>
+                                    <div class="med-check-details">1粒，飯後服用</div>
+                                </div>
+                            </div>
+                            <div class="med-check-btn">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="med-check-list" id="morning-med-list" style="display: none;">
+                        <div class="med-check-item">
+                            <div class="med-check-info">
+                                <div class="med-check-color" style="background-color: #FF6B6B;"></div>
+                                <div>
+                                    <div class="med-check-name">磷結合劑</div>
+                                    <div class="med-check-details">1粒，飯後服用</div>
+                                </div>
+                            </div>
+                            <div class="med-check-btn checked">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        <div class="med-check-item">
+                            <div class="med-check-info">
+                                <div class="med-check-color" style="background-color: #4ECDC4;"></div>
+                                <div>
+                                    <div class="med-check-name">降血壓藥</div>
+                                    <div class="med-check-details">1粒，飯後服用</div>
+                                </div>
+                            </div>
+                            <div class="med-check-btn checked">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        <div class="med-check-item">
+                            <div class="med-check-info">
+                                <div class="med-check-color" style="background-color: #FFD166;"></div>
+                                <div>
+                                    <div class="med-check-name">鈣片</div>
+                                    <div class="med-check-details">1粒，飯後服用</div>
+                                </div>
+                            </div>
+                            <div class="med-check-btn checked">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="med-check-list" id="evening-med-list" style="display: none;">
+                        <div class="med-check-item">
+                            <div class="med-check-info">
+                                <div class="med-check-color" style="background-color: #FF6B6B;"></div>
+                                <div>
+                                    <div class="med-check-name">磷結合劑</div>
+                                    <div class="med-check-details">1粒，飯後服用</div>
+                                </div>
+                            </div>
+                            <div class="med-check-btn">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        <div class="med-check-item">
+                            <div class="med-check-info">
+                                <div class="med-check-color" style="background-color: #4ECDC4;"></div>
+                                <div>
+                                    <div class="med-check-name">降血壓藥</div>
+                                    <div class="med-check-details">1粒，飯後服用</div>
+                                </div>
+                            </div>
+                            <div class="med-check-btn">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        <div class="med-check-item">
+                            <div class="med-check-info">
+                                <div class="med-check-color" style="background-color: #9370DB;"></div>
+                                <div>
+                                    <div class="med-check-name">維生素D</div>
+                                    <div class="med-check-details">1粒，飯後服用</div>
+                                </div>
+                            </div>
+                            <div class="med-check-btn">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 我的藥物 -->
+                <div class="section-header">
+                    <div class="section-title">我的藥物</div>
+                    <div class="add-med-btn" id="add-med-btn">
+                        <i class="fas fa-plus"></i> 添加藥物
+                    </div>
+                </div>
+                
+                <div class="med-list">
+                    <div class="med-card">
+                        <div class="med-header">
+                            <div class="med-info">
+                                <div class="med-name">磷結合劑 (Sevelamer)</div>
+                                <div class="med-purpose">控制血磷水平</div>
+                            </div>
+                            <div class="med-actions">
+                                <div class="med-action-btn">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="med-action-btn">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="med-details">
+                            <div class="med-detail">
+                                <div class="detail-label">劑量</div>
+                                <div class="detail-value">800mg 每次1粒</div>
+                            </div>
+                            <div class="med-detail">
+                                <div class="detail-label">開始日期</div>
+                                <div class="detail-value">2023年1月15日</div>
+                            </div>
+                        </div>
+                        
+                        <div class="dosage-schedule">
+                            <div class="time-pill">
+                                <i class="fas fa-sun"></i> 早餐後
+                            </div>
+                            <div class="time-pill">
+                                <i class="fas fa-cloud-sun"></i> 午餐後
+                            </div>
+                            <div class="time-pill">
+                                <i class="fas fa-moon"></i> 晚餐後
+                            </div>
+                        </div>
+                        
+                        <div class="compliance-bar">
+                            <div class="compliance-fill" style="width: 92%;"></div>
+                        </div>
+                        <div class="compliance-text">
+                            <div>服藥依從率</div>
+                            <div>92%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="med-card">
+                        <div class="med-header">
+                            <div class="med-info">
+                                <div class="med-name">降血壓藥 (Amlodipine)</div>
+                                <div class="med-purpose">控制高血壓</div>
+                            </div>
+                            <div class="med-actions">
+                                <div class="med-action-btn">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="med-action-btn">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="med-details">
+                            <div class="med-detail">
+                                <div class="detail-label">劑量</div>
+                                <div class="detail-value">5mg 每次1粒</div>
+                            </div>
+                            <div class="med-detail">
+                                <div class="detail-label">開始日期</div>
+                                <div class="detail-value">2022年11月20日</div>
+                            </div>
+                        </div>
+                        
+                        <div class="dosage-schedule">
+                            <div class="time-pill">
+                                <i class="fas fa-sun"></i> 早餐後
+                            </div>
+                            <div class="time-pill">
+                                <i class="fas fa-cloud-sun"></i> 午餐後
+                            </div>
+                            <div class="time-pill">
+                                <i class="fas fa-moon"></i> 晚餐後
+                            </div>
+                        </div>
+                        
+                        <div class="compliance-bar">
+                            <div class="compliance-fill" style="width: 95%;"></div>
+                        </div>
+                        <div class="compliance-text">
+                            <div>服藥依從率</div>
+                            <div>95%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <a href="main.html" class="tab-item">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </a>
+            <a href="quiz-selector.html" class="tab-item">
+                <i class="fas fa-gamepad"></i>
+                <span>遊戲</span>
+            </a>
+            <a href="learning-resources.html" class="tab-item">
+                <i class="fas fa-book-open"></i>
+                <span>學習</span>
+            </a>
+            <a href="dialysis-schedule.html" class="tab-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>排程</span>
+            </a>
+        </div>
+        
+        <!-- 添加藥物模態框 -->
+        <div class="modal" id="add-med-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">添加新藥物</div>
+                    <div class="close-modal" id="close-modal">×</div>
+                </div>
+                
+                <form id="add-med-form">
+                    <div class="form-group">
+                        <label class="form-label">藥物名稱</label>
+                        <input type="text" class="form-input" id="med-name" placeholder="例如：磷結合劑">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">通用名/成分</label>
+                        <input type="text" class="form-input" id="med-generic" placeholder="例如：Sevelamer">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">用途</label>
+                        <input type="text" class="form-input" id="med-purpose" placeholder="例如：控制血磷水平">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">劑量</label>
+                        <input type="text" class="form-input" id="med-dosage" placeholder="例如：800mg 每次1粒">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">服用時間</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label" data-time="morning">
+                                <input type="checkbox" name="med-time" value="morning">
+                                早餐後
+                            </label>
+                            <label class="checkbox-label" data-time="noon">
+                                <input type="checkbox" name="med-time" value="noon">
+                                午餐後
+                            </label>
+                            <label class="checkbox-label" data-time="evening">
+                                <input type="checkbox" name="med-time" value="evening">
+                                晚餐後
+                            </label>
+                            <label class="checkbox-label" data-time="bedtime">
+                                <input type="checkbox" name="med-time" value="bedtime">
+                                睡前
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">開始日期</label>
+                        <input type="date" class="form-input" id="med-start-date">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">備註</label>
+                        <textarea class="form-input" id="med-notes" rows="2" placeholder="例如：飯後服用，多喝水"></textarea>
+                    </div>
+                    
+                    <button type="button" class="save-btn" id="save-med-btn">儲存</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script>
+        // 更新狀態欄時間
+        function updateStatusBarTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('status-time').textContent = `${hours}:${minutes}`;
+        }
+        
+        // 更新當前日期
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('zh-TW', options);
+        }
+        
+        // 時段切換
+        function setupTimeSlots() {
+            const timeSlots = document.querySelectorAll('.time-slot');
+            const medLists = {
+                'morning': document.getElementById('morning-med-list'),
+                'noon': document.getElementById('noon-med-list'),
+                'evening': document.getElementById('evening-med-list')
+            };
+            
+            timeSlots.forEach(slot => {
+                slot.addEventListener('click', () => {
+                    // 移除所有 active 類
+                    timeSlots.forEach(s => s.classList.remove('active'));
+                    
+                    // 隱藏所有藥物列表
+                    Object.values(medLists).forEach(list => {
+                        if (list) list.style.display = 'none';
+                    });
+                    
+                    // 添加 active 類到當前選中的時段
+                    slot.classList.add('active');
+                    
+                    // 顯示對應的藥物列表
+                    const timeSlot = slot.dataset.time;
+                    if (medLists[timeSlot]) {
+                        medLists[timeSlot].style.display = 'block';
+                    }
+                });
+            });
+        }
+        
+        // 藥物檢查按鈕
+        function setupCheckButtons() {
+            const checkBtns = document.querySelectorAll('.med-check-btn');
+            
+            checkBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.classList.toggle('checked');
+                });
+            });
+        }
+        
+        // 模態框控制
+        function setupModal() {
+            const modal = document.getElementById('add-med-modal');
+            const addBtn = document.getElementById('add-med-btn');
+            const closeBtn = document.getElementById('close-modal');
+            const saveBtn = document.getElementById('save-med-btn');
+            const checkboxLabels = document.querySelectorAll('.checkbox-label');
+            
+            addBtn.addEventListener('click', () => {
+                modal.style.display = 'flex';
+            });
+            
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            checkboxLabels.forEach(label => {
+                label.addEventListener('click', () => {
+                    label.classList.toggle('selected');
+                    const checkbox = label.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                });
+            });
+            
+            saveBtn.addEventListener('click', () => {
+                const medName = document.getElementById('med-name').value;
+                const medGeneric = document.getElementById('med-generic').value;
+                const medPurpose = document.getElementById('med-purpose').value;
+                const medDosage = document.getElementById('med-dosage').value;
+                const medStartDate = document.getElementById('med-start-date').value;
+                
+                // 簡單驗證
+                if (!medName || !medDosage || !medStartDate) {
+                    alert('請填寫所有必填欄位');
+                    return;
+                }
+                
+                // 模擬保存
+                alert('藥物已成功添加！');
+                
+                // 清空表單並關閉模態框
+                document.getElementById('add-med-form').reset();
+                checkboxLabels.forEach(label => label.classList.remove('selected'));
+                modal.style.display = 'none';
+                
+                // 這裡可以添加代碼來創建新的藥物卡片
+            });
+        }
+        
+        // 日期導航
+        function setupDateNav() {
+            const prevDateBtn = document.getElementById('prev-date');
+            const nextDateBtn = document.getElementById('next-date');
+            let currentDate = new Date();
+            
+            function updateDisplayDate() {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('current-date').textContent = currentDate.toLocaleDateString('zh-TW', options);
+            }
+            
+            prevDateBtn.addEventListener('click', () => {
+                currentDate.setDate(currentDate.getDate() - 1);
+                updateDisplayDate();
+            });
+            
+            nextDateBtn.addEventListener('click', () => {
+                currentDate.setDate(currentDate.getDate() + 1);
+                updateDisplayDate();
+            });
+        }
+        
+        // 頁面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新時間
+            updateStatusBarTime();
+            setInterval(updateStatusBarTime, 60000);
+            
+            // 更新日期
+            updateCurrentDate();
+            
+            // 設置時段切換
+            setupTimeSlots();
+            
+            // 設置檢查按鈕
+            setupCheckButtons();
+            
+            // 設置模態框
+            setupModal();
+            
+            // 設置日期導航
+            setupDateNav();
+        });
+    </script>
+</body>
+</html> 

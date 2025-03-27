@@ -1,0 +1,782 @@
+/* 腎好康遊戲相關樣式 */
+
+/* ========== 遊戲中心 ========== */
+.games-container {
+    padding: 16px;
+    padding-bottom: 100px;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.game-card {
+    background-color: var(--bg-primary);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.game-card:active {
+    transform: scale(0.97);
+}
+
+.game-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.game-info {
+    padding: 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.game-description {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+    flex: 1;
+}
+
+.game-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.game-badges {
+    display: flex;
+    gap: 4px;
+}
+
+.game-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 100px;
+    background-color: var(--tap-highlight);
+    color: var(--primary-color);
+}
+
+.game-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.game-status.new {
+    background-color: var(--success-color);
+}
+
+.game-status.hot {
+    background-color: var(--danger-color);
+}
+
+/* ========== 問答遊戲 ========== */
+.quiz-container {
+    padding: 16px;
+    padding-bottom: 100px;
+}
+
+.timer-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 12px;
+    background-color: var(--bg-primary);
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.timer {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-left: 8px;
+}
+
+.timer-icon {
+    color: var(--warning-color);
+}
+
+.question-container {
+    background-color: var(--bg-primary);
+    border-radius: var(--card-radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.question-number {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.question-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.option-card {
+    background-color: var(--bg-tertiary);
+    border-radius: var(--card-radius);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+    border: 2px solid transparent;
+}
+
+.option-card:active {
+    transform: scale(0.98);
+}
+
+.option-card.selected {
+    background-color: var(--tap-highlight);
+    border-color: var(--primary-color);
+}
+
+.option-card.correct {
+    background-color: rgba(52, 199, 89, 0.1);
+    border-color: var(--success-color);
+}
+
+.option-card.incorrect {
+    background-color: rgba(255, 59, 48, 0.1);
+    border-color: var(--danger-color);
+}
+
+.option-text {
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+.option-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.correct-icon {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.incorrect-icon {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.explanation-box {
+    background-color: var(--bg-tertiary);
+    border-radius: var(--card-radius);
+    padding: 16px;
+    margin-top: 16px;
+    border-left: 4px solid var(--primary-color);
+    display: none;
+    animation: fadeIn var(--transition-normal);
+}
+
+.explanation-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.explanation-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    border-radius: var(--btn-radius);
+    font-size: 16px;
+    font-weight: 600;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.action-btn:active {
+    background-color: var(--primary-dark);
+}
+
+.action-btn.secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+/* ========== 配對遊戲 ========== */
+.matching-container {
+    padding: 16px;
+    padding-bottom: 100px;
+}
+
+.matching-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.matching-card {
+    background-color: var(--bg-primary);
+    border-radius: var(--card-radius);
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.matching-card:active {
+    transform: scale(0.95);
+}
+
+.matching-card-front,
+.matching-card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    transition: transform var(--transition-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.matching-card-back {
+    background-color: var(--primary-color);
+    transform: rotateY(180deg);
+}
+
+.matching-card.flipped .matching-card-front {
+    transform: rotateY(180deg);
+}
+
+.matching-card.flipped .matching-card-back {
+    transform: rotateY(0deg);
+}
+
+.matching-card.matched {
+    box-shadow: 0 0 0 2px var(--success-color);
+    pointer-events: none;
+}
+
+/* ========== 藥物管理遊戲 ========== */
+.medication-game-container {
+    padding: 16px;
+    padding-bottom: 100px;
+}
+
+.med-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.med-card {
+    background-color: var(--bg-primary);
+    border-radius: var(--card-radius);
+    padding: 12px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform var(--transition-fast);
+}
+
+.med-card:active {
+    transform: scale(0.95);
+}
+
+.med-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    background-color: var(--tap-highlight);
+    color: var(--primary-color);
+    border-radius: 50%;
+    margin-bottom: 8px;
+}
+
+.med-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.med-hint {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    text-align: center;
+}
+
+.time-slots-container {
+    margin-top: 24px;
+}
+
+.time-slot-card {
+    background-color: var(--bg-primary);
+    border-radius: var(--card-radius);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 16px;
+}
+
+.time-slot-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.time-slot-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--tap-highlight);
+    color: var(--primary-color);
+    margin-right: 12px;
+}
+
+.time-slot-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.drop-zone {
+    min-height: 80px;
+    border: 2px dashed var(--border-medium);
+    border-radius: var(--card-radius);
+    padding: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.drop-zone.active {
+    border-color: var(--primary-color);
+    background-color: var(--tap-highlight);
+}
+
+.med-pill {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    background-color: var(--tap-highlight);
+    color: var(--primary-color);
+    border-radius: 100px;
+    font-size: 12px;
+    margin: 4px;
+}
+
+.med-pill i {
+    margin-right: 4px;
+    font-size: 10px;
+}
+
+/* ========== 飲食遊戲 ========== */
+.diet-game-container {
+    padding: 16px;
+    padding-bottom: 100px;
+}
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.food-card {
+    background-color: var(--bg-primary);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast);
+    position: relative;
+}
+
+.food-card:active {
+    transform: scale(0.97);
+}
+
+.food-image {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+}
+
+.food-info {
+    padding: 12px;
+}
+
+.food-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.food-nutrition {
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.categories-container {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.category-card {
+    background-color: var(--bg-primary);
+    border-radius: var(--card-radius);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.category-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.good-icon {
+    background-color: rgba(52, 199, 89, 0.2);
+    color: var(--success-color);
+}
+
+.bad-icon {
+    background-color: rgba(255, 59, 48, 0.2);
+    color: var(--danger-color);
+}
+
+.category-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.category-dropzone {
+    min-height: 80px;
+    border: 2px dashed var(--border-medium);
+    border-radius: var(--card-radius);
+    padding: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.category-dropzone.active {
+    border-color: var(--primary-color);
+    background-color: var(--tap-highlight);
+}
+
+.food-chip {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    margin: 4px;
+}
+
+.good-chip {
+    background-color: rgba(52, 199, 89, 0.1);
+    color: var(--success-color);
+}
+
+.bad-chip {
+    background-color: rgba(255, 59, 48, 0.1);
+    color: var(--danger-color);
+}
+
+.food-chip i {
+    margin-right: 4px;
+    font-size: 10px;
+}
+
+/* ========== 遊戲結果 ========== */
+.result-screen {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.result-header {
+    margin-bottom: 24px;
+}
+
+.result-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.result-subtitle {
+    font-size: 16px;
+    color: var(--text-tertiary);
+}
+
+.result-score {
+    font-size: 72px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 16px;
+}
+
+.score-detail {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.score-detail span {
+    font-weight: 600;
+}
+
+.result-message {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+}
+
+.result-icon {
+    font-size: 80px;
+    margin-bottom: 24px;
+}
+
+.result-rewards {
+    background-color: var(--bg-primary);
+    border-radius: var(--card-radius);
+    padding: 16px;
+    width: 100%;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+}
+
+.reward-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.reward-item:last-child {
+    border-bottom: none;
+}
+
+.reward-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--tap-highlight);
+    color: var(--primary-color);
+    margin-right: 16px;
+}
+
+.reward-info {
+    flex: 1;
+}
+
+.reward-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.reward-value {
+    font-size: 14px;
+    color: var(--text-tertiary);
+}
+
+.reward-action {
+    margin-left: 16px;
+}
+
+.result-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.result-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: var(--btn-radius);
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.result-btn i {
+    margin-right: 8px;
+}
+
+/* ========== 獎勵廣告相關 ========== */
+.ad-reward-card {
+    background-color: var(--bg-primary);
+    border-radius: var(--card-radius);
+    padding: 16px;
+    margin: 16px 0;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+}
+
+.ad-reward-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background-color: var(--tap-highlight);
+    color: var(--primary-color);
+    margin-right: 16px;
+    font-size: 24px;
+}
+
+.ad-reward-info {
+    flex: 1;
+}
+
+.ad-reward-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.ad-reward-desc {
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.ad-reward-btn {
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--btn-radius);
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 16px;
+    border: none;
+}
+
+.ad-container {
+    width: 100%;
+    height: 100px;
+    background-color: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 0;
+    border-radius: 8px;
+    color: var(--text-tertiary);
+    font-size: 14px;
+} 

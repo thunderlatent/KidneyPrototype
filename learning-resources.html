@@ -3,186 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="color-scheme" content="light only">
+    <meta name="color-scheme" content="light">
     <title>腎好康 - 學習資源</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/additional-styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        .resource-container {
-            padding: 20px;
+        .resources-container {
+            padding: 16px;
             flex: 1;
             overflow: auto;
+            padding-bottom: 80px;
         }
         
-        /* 視力輔助工具 */
-        .visual-aid-tools {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-        }
-        
-        .visual-aid-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            border-radius: 22px;
-            background-color: var(--ios-gray6);
-            color: var(--ios-text-primary);
-            margin-left: 10px;
-            font-size: 20px;
-        }
-        
-        .page-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: var(--ios-text-primary);
-        }
-        
-        /* 增大篩選標籤 */
-        .filter-tabs {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-        
-        .filter-tabs::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .filter-tab {
-            flex: 0 0 auto;
-            padding: 12px 20px; /* 增大內邊距 */
-            margin-right: 10px;
-            background-color: var(--ios-gray6);
-            color: var(--ios-text-secondary);
-            border-radius: 20px;
-            font-size: 18px; /* 增大字體 */
-            font-weight: 600; /* 加粗 */
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* 添加陰影 */
-        }
-        
-        .filter-tab.active {
-            background-color: var(--ios-primary);
-            color: white;
-        }
-        
-        /* 改為單欄佈局，更適合長輩閱讀 */
-        .resource-grid {
-            display: grid;
-            grid-template-columns: 1fr; /* 改為單欄 */
-            gap: 20px; /* 增大間距 */
-        }
-        
-        /* 增大資源卡片 */
-        .resource-card {
-            background-color: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* 增強陰影 */
-            border: 1px solid var(--ios-separator);
-            display: flex;
-            flex-direction: column;
-            transition: all 0.2s ease;
-            height: 100%;
-        }
-        
-        /* 增大資源圖標 */
-        .resource-icon {
-            width: 60px; /* 增大尺寸 */
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 16px;
-            margin-bottom: 16px;
-            font-size: 28px; /* 增大圖標 */
-            background-color: rgba(45, 128, 251, 0.15); /* 增強顏色 */
-            color: var(--ios-primary);
-        }
-        
-        .resource-icon.video {
-            background-color: rgba(255, 69, 58, 0.15);
-            color: var(--ios-danger);
-        }
-        
-        .resource-icon.pdf {
-            background-color: rgba(255, 149, 0, 0.15);
-            color: var(--ios-orange);
-        }
-        
-        .resource-icon.link {
-            background-color: rgba(48, 209, 88, 0.15);
-            color: var(--ios-success);
-        }
-        
-        /* 增大資源標題和描述 */
-        .resource-title {
-            font-size: 20px; /* 增大字體 */
-            font-weight: 700; /* 加粗 */
-            margin-bottom: 8px;
-            color: var(--ios-text-primary);
-            line-height: 1.4;
-        }
-        
-        .resource-description {
-            font-size: 17px; /* 增大字體 */
-            color: var(--ios-text-secondary);
-            line-height: 1.5;
-            margin-bottom: 16px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3; /* 允許顯示更多行 */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            flex: 1;
-        }
-        
-        /* 增大元數據 */
-        .resource-meta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 15px; /* 增大字體 */
-            color: var(--ios-text-tertiary);
-            margin-top: auto;
-            font-weight: 500; /* 加粗 */
-        }
-        
-        .resource-meta span {
-            display: flex;
-            align-items: center;
-        }
-        
-        .resource-meta i {
-            margin-right: 6px;
-            font-size: 16px;
-        }
-        
-        /* 增大搜索框 */
+        /* 搜索欄 */
         .search-container {
-            margin-bottom: 20px;
             position: relative;
+            margin-bottom: 24px;
         }
         
         .search-input {
             width: 100%;
-            padding: 16px 20px 16px 50px; /* 增大內邊距 */
+            padding: 14px 20px 14px 50px;
             border-radius: 16px;
             border: none;
-            background-color: var(--ios-gray6);
-            font-size: 18px; /* 增大字體 */
-            color: var(--ios-text-primary);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* 添加陰影 */
+            background-color: white;
+            font-size: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
         .search-icon {
@@ -190,65 +37,246 @@
             left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--ios-text-tertiary);
-            font-size: 22px; /* 增大圖標 */
-        }
-        
-        /* 增大標籤 */
-        .tag {
-            display: inline-block;
-            padding: 6px 12px; /* 增大內邊距 */
-            border-radius: 8px;
-            font-size: 14px; /* 增大字體 */
-            font-weight: 600; /* 加粗 */
-            margin-right: 6px;
-            margin-bottom: 8px;
-            background-color: var(--ios-gray6);
-            color: var(--ios-text-secondary);
-        }
-        
-        /* 類別標籤顏色 */
-        .tag.diet {
-            background-color: rgba(48, 209, 88, 0.15);
-            color: var(--ios-success);
-        }
-        
-        .tag.medication {
-            background-color: rgba(255, 69, 58, 0.15);
-            color: var(--ios-danger);
-        }
-        
-        .tag.care {
-            background-color: rgba(0, 122, 255, 0.15);
-            color: var(--ios-primary);
-        }
-        
-        /* 無搜索結果提示 */
-        .no-results {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--ios-text-secondary);
-            font-size: 18px;
-        }
-        
-        /* 輔助說明提示 */
-        .help-tip {
-            background-color: rgba(0, 122, 255, 0.08);
-            border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 20px;
-            font-size: 16px;
-            line-height: 1.5;
-            color: var(--ios-text-secondary);
-            display: flex;
-            align-items: flex-start;
-        }
-        
-        .help-tip i {
-            color: var(--ios-primary);
+            color: var(--ios-gray1);
             font-size: 20px;
+        }
+        
+        /* 分類標籤 */
+        .category-tabs {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 10px;
+            margin-bottom: 24px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* 隱藏滾動條 */
+        }
+        
+        .category-tabs::-webkit-scrollbar {
+            display: none; /* 隱藏滾動條 */
+        }
+        
+        .category-tab {
+            padding: 12px 20px;
+            background-color: var(--ios-gray6);
+            border-radius: 20px;
             margin-right: 10px;
-            margin-top: 2px;
+            font-size: 16px;
+            color: var(--ios-text-primary);
+            transition: all 0.2s ease;
+        }
+        
+        .category-tab.active {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+        
+        /* 資源類別標題 */
+        .category-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 20px 0 16px 0;
+            color: var(--ios-text-primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .category-title i {
+            margin-right: 10px;
+            color: var(--ios-primary);
+        }
+        
+        /* 資源卡片 */
+        .resource-card {
+            background-color: white;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        
+        .resource-card:active {
+            transform: scale(0.98);
+        }
+        
+        .resource-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .resource-details {
+            padding: 16px 20px;
+        }
+        
+        .resource-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .resource-desc {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .resource-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--ios-text-tertiary);
+            font-size: 14px;
+        }
+        
+        .resource-type {
+            display: flex;
+            align-items: center;
+        }
+        
+        .resource-type i {
+            margin-right: 5px;
+        }
+        
+        .resource-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+        
+        .info-item i {
+            margin-right: 5px;
+        }
+        
+        /* 資源標籤 */
+        .resource-tags {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .resource-tag {
+            padding: 5px 10px;
+            background-color: var(--ios-gray6);
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--ios-text-secondary);
+        }
+        
+        /* 廣告區域 */
+        .ad-container {
+            background-color: var(--ios-gray5);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 24px 0;
+            text-align: center;
+            position: relative;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .ad-label {
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            font-size: 12px;
+            color: var(--ios-text-tertiary);
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        /* 專家專欄 */
+        .expert-section {
+            margin-bottom: 30px;
+        }
+        
+        .expert-header {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 20px 0 16px 0;
+            color: var(--ios-text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .see-all {
+            font-size: 16px;
+            color: var(--ios-primary);
+            font-weight: 500;
+        }
+        
+        .expert-cards {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            gap: 15px;
+            padding-bottom: 5px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        
+        .expert-cards::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .expert-card {
+            width: 280px;
+            display: inline-block;
+            background-color: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .expert-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .expert-info {
+            padding: 15px;
+        }
+        
+        .expert-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--ios-text-primary);
+        }
+        
+        .expert-role {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        .expert-bio {
+            font-size: 14px;
+            color: var(--ios-text-tertiary);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         
         /* 底部標籤欄調整 */
@@ -275,7 +303,7 @@
     <div class="iphone-container">
         <!-- 狀態欄 -->
         <div class="status-bar">
-            <div class="status-time" id="status-time">9:41</div>
+            <div class="status-time">9:41</div>
             <div class="status-icons">
                 <div class="status-icon">📶</div>
                 <div class="status-icon">📊</div>
@@ -292,49 +320,316 @@
         
         <!-- 滾動內容區 -->
         <div class="content-container">
-            <div class="resource-container">
-                <!-- 視力輔助工具 -->
-                <div class="visual-aid-tools">
-                    <div class="visual-aid-btn" id="increase-text">
-                        <i class="fas fa-text-height"></i>
-                    </div>
-                    <div class="visual-aid-btn" id="high-contrast">
-                        <i class="fas fa-adjust"></i>
-                    </div>
-                </div>
-                
-                <h1 class="page-title">腎臟健康學習資源</h1>
-                
-                <!-- 輔助說明提示 -->
-                <div class="help-tip">
-                    <i class="fas fa-info-circle"></i>
-                    <div>這裡展示的是與腎臟健康相關的教育資源。您可以使用搜索框尋找特定主題，也可以點擊上方標籤篩選不同類型的資源。</div>
-                </div>
-                
-                <!-- 搜索框 -->
+            <div class="resources-container">
+                <!-- 搜索欄 -->
                 <div class="search-container">
+                    <input type="text" class="search-input" placeholder="搜尋腎臟透析知識..." />
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-input" id="search-input" placeholder="搜尋資源..." aria-label="搜尋資源">
                 </div>
                 
                 <!-- 分類標籤 -->
-                <div class="filter-tabs">
-                    <div class="filter-tab active" data-category="all">全部</div>
-                    <div class="filter-tab" data-category="diet">飲食控制</div>
-                    <div class="filter-tab" data-category="medication">藥物使用</div>
-                    <div class="filter-tab" data-category="complication">併發症預防</div>
-                    <div class="filter-tab" data-category="care">日常照護</div>
+                <div class="category-tabs">
+                    <div class="category-tab active" data-category="all">全部</div>
+                    <div class="category-tab" data-category="diet">飲食控制</div>
+                    <div class="category-tab" data-category="medication">藥物使用</div>
+                    <div class="category-tab" data-category="complication">併發症預防</div>
+                    <div class="category-tab" data-category="daily">日常照護</div>
                 </div>
                 
-                <!-- 資源網格 -->
-                <div class="resource-grid" id="resource-grid">
-                    <!-- 資源卡片將由JavaScript動態生成 -->
+                <!-- 專家專欄 -->
+                <div class="expert-section">
+                    <div class="expert-header">
+                        <span>專家專欄</span>
+                        <span class="see-all">查看全部</span>
+                    </div>
+                    
+                    <div class="expert-cards">
+                        <div class="expert-card">
+                            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="expert-image" alt="林醫師" />
+                            <div class="expert-info">
+                                <div class="expert-name">林醫師</div>
+                                <div class="expert-role">腎臟科主治醫師</div>
+                                <div class="expert-bio">
+                                    20年臨床經驗，專注於腎臟病及透析治療研究，關注患者生活品質提升。
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="expert-card">
+                            <img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" class="expert-image" alt="陳護理師" />
+                            <div class="expert-info">
+                                <div class="expert-name">陳護理師</div>
+                                <div class="expert-role">透析室資深護理師</div>
+                                <div class="expert-bio">
+                                    15年透析室工作經驗，專精於血液透析及腹膜透析護理，致力推廣患者自我照護教育。
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="expert-card">
+                            <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="expert-image" alt="王營養師" />
+                            <div class="expert-info">
+                                <div class="expert-name">王營養師</div>
+                                <div class="expert-role">腎臟科專科營養師</div>
+                                <div class="expert-bio">
+                                    專注於腎臟病患者的飲食調整與營養補充，提供個人化的營養療法，協助患者維持良好的身體狀況。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
-                <!-- 無結果提示 -->
-                <div class="no-results" id="no-results" style="display: none;">
-                    <i class="fas fa-search" style="font-size: 40px; color: var(--ios-gray4); margin-bottom: 16px;"></i>
-                    <p>找不到符合條件的資源</p>
+                <!-- 飲食控制資源 -->
+                <div class="category-title" id="diet-category">
+                    <i class="fas fa-utensils"></i>
+                    飲食控制
+                </div>
+                
+                <div class="resource-card" data-category="diet">
+                    <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="resource-image" alt="透析患者的飲食指南" />
+                    <div class="resource-details">
+                        <div class="resource-title">透析患者的飲食指南：如何控制磷、鉀和鈉的攝取</div>
+                        <div class="resource-desc">
+                            本文將介紹洗腎患者需要特別注意的飲食原則，包括如何控制磷、鉀和鈉的攝取量，並提供適合的食物選擇與烹調方法建議。
+                        </div>
+                        <div class="resource-meta">
+                            <div class="resource-type">
+                                <i class="fas fa-file-alt"></i>
+                                文章
+                            </div>
+                            <div class="resource-info">
+                                <div class="info-item">
+                                    <i class="fas fa-clock"></i>
+                                    12分鐘
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-eye"></i>
+                                    2.5K
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-tags">
+                            <div class="resource-tag">飲食控制</div>
+                            <div class="resource-tag">電解質</div>
+                            <div class="resource-tag">營養</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="resource-card" data-category="diet">
+                    <img src="https://images.unsplash.com/photo-1542814784-133712088e5a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" class="resource-image" alt="低磷低鉀食譜" />
+                    <div class="resource-details">
+                        <div class="resource-title">低磷低鉀食譜：十道適合透析患者的美味料理</div>
+                        <div class="resource-desc">
+                            透析患者常需要限制磷、鉀的攝取，但這不代表飲食就必須乏味。本文提供十道兼顧美味與營養需求的食譜，讓患者享受美食的同時也能維護健康。
+                        </div>
+                        <div class="resource-meta">
+                            <div class="resource-type">
+                                <i class="fas fa-film"></i>
+                                影片
+                            </div>
+                            <div class="resource-info">
+                                <div class="info-item">
+                                    <i class="fas fa-clock"></i>
+                                    15分鐘
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-eye"></i>
+                                    1.8K
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-tags">
+                            <div class="resource-tag">食譜</div>
+                            <div class="resource-tag">低磷</div>
+                            <div class="resource-tag">低鉀</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 廣告區域 -->
+                <div class="ad-container">
+                    <span class="ad-label">廣告</span>
+                    <span><b>腎臟病友互助群組</b> - 加入專屬社群獲得支援</span>
+                </div>
+                
+                <!-- 藥物使用資源 -->
+                <div class="category-title" id="medication-category">
+                    <i class="fas fa-pills"></i>
+                    藥物使用
+                </div>
+                
+                <div class="resource-card" data-category="medication">
+                    <img src="https://images.unsplash.com/photo-1576602975754-df5197d5f6e4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" class="resource-image" alt="透析患者常用藥物" />
+                    <div class="resource-details">
+                        <div class="resource-title">透析患者常用藥物與注意事項</div>
+                        <div class="resource-desc">
+                            本文介紹透析患者常用的藥物種類、作用機制及可能的副作用，並說明正確的服用方法和需要注意的事項，幫助患者安全有效地使用藥物。
+                        </div>
+                        <div class="resource-meta">
+                            <div class="resource-type">
+                                <i class="fas fa-file-alt"></i>
+                                文章
+                            </div>
+                            <div class="resource-info">
+                                <div class="info-item">
+                                    <i class="fas fa-clock"></i>
+                                    18分鐘
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-eye"></i>
+                                    3.2K
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-tags">
+                            <div class="resource-tag">藥物</div>
+                            <div class="resource-tag">副作用</div>
+                            <div class="resource-tag">用藥安全</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="resource-card" data-category="medication">
+                    <img src="https://images.unsplash.com/photo-1587854692152-cbe6805291ea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" class="resource-image" alt="磷結合劑使用指南" />
+                    <div class="resource-details">
+                        <div class="resource-title">磷結合劑使用指南：正確時機與劑量調整</div>
+                        <div class="resource-desc">
+                            磷結合劑是許多透析患者必須使用的藥物，但正確的使用時機和劑量對於藥效發揮至關重要。本文詳細解說磷結合劑的使用時機、劑量調整原則，以及可能遇到的問題與解決方法。
+                        </div>
+                        <div class="resource-meta">
+                            <div class="resource-type">
+                                <i class="fas fa-film"></i>
+                                影片
+                            </div>
+                            <div class="resource-info">
+                                <div class="info-item">
+                                    <i class="fas fa-clock"></i>
+                                    10分鐘
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-eye"></i>
+                                    1.5K
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-tags">
+                            <div class="resource-tag">磷結合劑</div>
+                            <div class="resource-tag">用藥時機</div>
+                            <div class="resource-tag">劑量調整</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 併發症預防資源 -->
+                <div class="category-title" id="complication-category">
+                    <i class="fas fa-heartbeat"></i>
+                    併發症預防
+                </div>
+                
+                <div class="resource-card" data-category="complication">
+                    <img src="https://images.unsplash.com/photo-1504439468489-c8920d796a29?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" class="resource-image" alt="心血管疾病預防" />
+                    <div class="resource-details">
+                        <div class="resource-title">透析患者心血管疾病預防策略</div>
+                        <div class="resource-desc">
+                            心血管疾病是透析患者主要的併發症和死亡原因。本文介紹透析患者預防心血管疾病的關鍵策略，包括血壓管理、血脂控制、生活方式調整等，幫助降低發生嚴重心血管事件的風險。
+                        </div>
+                        <div class="resource-meta">
+                            <div class="resource-type">
+                                <i class="fas fa-file-alt"></i>
+                                文章
+                            </div>
+                            <div class="resource-info">
+                                <div class="info-item">
+                                    <i class="fas fa-clock"></i>
+                                    20分鐘
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-eye"></i>
+                                    2.7K
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-tags">
+                            <div class="resource-tag">心血管疾病</div>
+                            <div class="resource-tag">預防</div>
+                            <div class="resource-tag">血壓管理</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 廣告區域 -->
+                <div class="ad-container">
+                    <span class="ad-label">廣告</span>
+                    <span><b>營養補充飲品</b> - 專為腎臟病患者設計的低磷低鉀配方</span>
+                </div>
+                
+                <!-- 日常照護資源 -->
+                <div class="category-title" id="daily-category">
+                    <i class="fas fa-hands-helping"></i>
+                    日常照護
+                </div>
+                
+                <div class="resource-card" data-category="daily">
+                    <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="resource-image" alt="透析管路照護" />
+                    <div class="resource-details">
+                        <div class="resource-title">透析管路的日常護理與感染預防</div>
+                        <div class="resource-desc">
+                            透析管路是透析患者的生命線，正確的日常護理對預防感染至關重要。本文提供詳細的管路清潔步驟、常見問題處理方法，以及需要立即就醫的警訊，幫助患者和照護者維護管路健康。
+                        </div>
+                        <div class="resource-meta">
+                            <div class="resource-type">
+                                <i class="fas fa-film"></i>
+                                影片
+                            </div>
+                            <div class="resource-info">
+                                <div class="info-item">
+                                    <i class="fas fa-clock"></i>
+                                    15分鐘
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-eye"></i>
+                                    3.8K
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-tags">
+                            <div class="resource-tag">管路照護</div>
+                            <div class="resource-tag">感染預防</div>
+                            <div class="resource-tag">衛生習慣</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="resource-card" data-category="daily">
+                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" class="resource-image" alt="水分控制" />
+                    <div class="resource-details">
+                        <div class="resource-title">透析患者的水分控制技巧</div>
+                        <div class="resource-desc">
+                            水分控制是透析患者日常管理中極為重要的一環。本文分享實用的水分控制技巧，包括如何準確計算每日水分攝取量、減輕口渴感的方法、特殊場合的應對策略等，幫助患者維持合適的體液狀態。
+                        </div>
+                        <div class="resource-meta">
+                            <div class="resource-type">
+                                <i class="fas fa-file-pdf"></i>
+                                PDF
+                            </div>
+                            <div class="resource-info">
+                                <div class="info-item">
+                                    <i class="fas fa-clock"></i>
+                                    8分鐘
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-eye"></i>
+                                    4.2K
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-tags">
+                            <div class="resource-tag">水分控制</div>
+                            <div class="resource-tag">口渴處理</div>
+                            <div class="resource-tag">體重管理</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -360,119 +655,136 @@
         </div>
     </div>
     
-    <script src="js/fontawesome.min.js"></script>
     <script>
-        // 更新狀態欄時間
-        function updateStatusBarTime() {
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('status-time').textContent = `${hours}:${minutes}`;
-        }
-        
-        // 初始化頁面
         document.addEventListener('DOMContentLoaded', function() {
-            // 更新時間
-            updateStatusBarTime();
-            setInterval(updateStatusBarTime, 60000);
-            
-            // 獲取元素
-            const filterTabs = document.querySelectorAll('.filter-tab');
-            const resourceCards = document.querySelectorAll('.resource-card');
-            const searchInput = document.querySelector('.search-input');
-            const noResults = document.querySelector('.no-results');
-            
-            // 當前選中的分類
-            let currentCategory = 'all';
-            let searchTerm = '';
-            
-            // 分類標籤點擊事件
-            filterTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // 更新選中狀態
-                    filterTabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // 設置當前分類
-                    currentCategory = this.dataset.category;
-                    
-                    // 過濾卡片
-                    filterCards();
-                });
-            });
-            
-            // 資源卡片點擊事件
-            resourceCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    alert('資源詳情將在完整版本中提供');
-                });
-            });
-            
-            // 搜索功能
-            searchInput.addEventListener('input', function() {
-                searchTerm = this.value.trim().toLowerCase();
-                filterCards();
-            });
-            
-            // 過濾卡片函數
-            function filterCards() {
-                let visibleCount = 0;
+            // 更新狀態欄時間
+            function updateStatusTime() {
+                const now = new Date();
+                let hours = now.getHours();
+                let minutes = now.getMinutes();
                 
-                resourceCards.forEach(card => {
-                    const cardCategory = card.dataset.category || '';
-                    const title = card.querySelector('.resource-title').textContent.toLowerCase();
-                    const description = card.querySelector('.resource-description').textContent.toLowerCase();
-                    
-                    // 檢查分類和搜索詞
-                    const matchesCategory = currentCategory === 'all' || cardCategory.includes(currentCategory);
-                    const matchesSearch = searchTerm === '' || 
-                                         title.includes(searchTerm) || 
-                                         description.includes(searchTerm);
-                    
-                    // 顯示或隱藏卡片
-                    if (matchesCategory && matchesSearch) {
-                        card.style.display = 'flex';
-                        visibleCount++;
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+                // 格式化時間
+                hours = hours < 10 ? '0' + hours : hours;
+                minutes = minutes < 10 ? '0' + minutes : minutes;
                 
-                // 處理無結果情況
-                if (visibleCount === 0) {
-                    noResults.style.display = 'block';
-                } else {
-                    noResults.style.display = 'none';
-                }
+                document.querySelector('.status-time').textContent = hours + ':' + minutes;
             }
             
-            // 增加文字大小功能
-            document.getElementById('increase-text').addEventListener('click', function() {
-                document.body.classList.toggle('large-text');
+            // 初始化時間並每分鐘更新
+            updateStatusTime();
+            setInterval(updateStatusTime, 60000);
+            
+            // 分類標籤點擊事件
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            const resourceCards = document.querySelectorAll('.resource-card');
+            const categoryTitles = document.querySelectorAll('.category-title');
+            
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有標籤的活動狀態
+                    categoryTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // 添加當前標籤的活動狀態
+                    this.classList.add('active');
+                    
+                    const category = this.getAttribute('data-category');
+                    
+                    // 如果選擇"全部"，顯示所有資源
+                    if (category === 'all') {
+                        resourceCards.forEach(card => {
+                            card.style.display = 'block';
+                        });
+                        
+                        categoryTitles.forEach(title => {
+                            title.style.display = 'flex';
+                        });
+                    } else {
+                        // 否則，只顯示選定分類的資源
+                        resourceCards.forEach(card => {
+                            if (card.getAttribute('data-category') === category) {
+                                card.style.display = 'block';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                        
+                        // 顯示/隱藏分類標題
+                        categoryTitles.forEach(title => {
+                            if (title.id === `${category}-category`) {
+                                title.style.display = 'flex';
+                            } else {
+                                title.style.display = 'none';
+                            }
+                        });
+                    }
+                });
+            });
+            
+            // 搜尋功能
+            const searchInput = document.querySelector('.search-input');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
                 
-                // 如果有large-text類，則放大所有文字
-                if (document.body.classList.contains('large-text')) {
-                    document.documentElement.style.setProperty('--font-size-multiplier', '1.2');
+                if (searchTerm.length > 0) {
+                    // 重置分類標籤
+                    categoryTabs.forEach(tab => tab.classList.remove('active'));
+                    document.querySelector('.category-tab[data-category="all"]').classList.add('active');
+                    
+                    // 顯示所有分類標題
+                    categoryTitles.forEach(title => {
+                        title.style.display = 'flex';
+                    });
+                    
+                    // 過濾資源卡片
+                    let hasResults = false;
+                    
+                    resourceCards.forEach(card => {
+                        const title = card.querySelector('.resource-title').textContent.toLowerCase();
+                        const desc = card.querySelector('.resource-desc').textContent.toLowerCase();
+                        const tags = Array.from(card.querySelectorAll('.resource-tag')).map(tag => tag.textContent.toLowerCase());
+                        
+                        if (title.includes(searchTerm) || desc.includes(searchTerm) || tags.some(tag => tag.includes(searchTerm))) {
+                            card.style.display = 'block';
+                            hasResults = true;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                    
+                    // 如果沒有結果，顯示提示信息
+                    if (!hasResults) {
+                        // 這裡可以添加一個"無結果"的提示
+                        console.log('No results found');
+                    }
                 } else {
-                    document.documentElement.style.setProperty('--font-size-multiplier', '1');
+                    // 如果搜尋欄為空，顯示所有資源
+                    resourceCards.forEach(card => {
+                        card.style.display = 'block';
+                    });
                 }
             });
             
-            // 高對比度模式
-            document.getElementById('high-contrast').addEventListener('click', function() {
-                document.body.classList.toggle('high-contrast');
-                
-                if (document.body.classList.contains('high-contrast')) {
-                    document.documentElement.style.setProperty('--ios-text-primary', '#000000');
-                    document.documentElement.style.setProperty('--ios-text-secondary', '#222222');
-                    document.documentElement.style.setProperty('--ios-primary', '#0056b3');
-                    document.documentElement.style.setProperty('--ios-background', '#ffffff');
-                } else {
-                    document.documentElement.style.setProperty('--ios-text-primary', '');
-                    document.documentElement.style.setProperty('--ios-text-secondary', '');
-                    document.documentElement.style.setProperty('--ios-primary', '');
-                    document.documentElement.style.setProperty('--ios-background', '');
-                }
+            // 模擬點擊資源卡片的事件
+            resourceCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const title = this.querySelector('.resource-title').textContent;
+                    alert(`您點擊了資源：${title}\n\n(實際開發時將導航到詳細內容頁面)`);
+                });
+            });
+            
+            // 專家卡片點擊事件
+            const expertCards = document.querySelectorAll('.expert-card');
+            expertCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const name = this.querySelector('.expert-name').textContent;
+                    alert(`您點擊了專家資料：${name}\n\n(實際開發時將顯示專家詳細介紹和專欄文章)`);
+                });
+            });
+            
+            // "查看全部"按鈕點擊事件
+            document.querySelector('.see-all').addEventListener('click', function() {
+                alert('您點擊了查看全部專家\n\n(實際開發時將導航到專家列表頁面)');
             });
         });
     </script>

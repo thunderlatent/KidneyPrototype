@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 時間挑戰</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --ios-primary: #007AFF;
+            --ios-success: #34C759;
+            --ios-warning: #FF9500;
+            --ios-danger: #FF3B30;
+        }
+
+        .timer-challenge-container {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        /* 計時器樣式 */
+        .time-display {
+            background: linear-gradient(135deg, #FF9500, #FF3B30);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(255, 149, 0, 0.2);
+        }
+
+        .time-display.warning {
+            animation: pulse 0.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.02); }
+        }
+
+        .time-remaining {
+            font-size: 60px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .time-label {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .score-display {
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .score-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+            margin-bottom: 5px;
+        }
+
+        .score-label {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+        }
+
+        /* 問題卡片 */
+        .question-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--ios-text-primary);
+            line-height: 1.5;
+        }
+
+        /* 選項樣式 */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            background-color: var(--ios-gray6);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .option-item:active {
+            transform: scale(0.98);
+        }
+
+        .option-item.selected {
+            background-color: rgba(0, 122, 255, 0.1);
+            border-color: var(--ios-primary);
+        }
+
+        .option-item.correct {
+            background-color: rgba(52, 199, 89, 0.1);
+            border-color: var(--ios-success);
+        }
+
+        .option-item.incorrect {
+            background-color: rgba(255, 59, 48, 0.1);
+            border-color: var(--ios-danger);
+        }
+
+        .option-label {
+            width: 32px;
+            height: 32px;
+            border-radius: 16px;
+            background-color: rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+            font-weight: 600;
+            color: var(--ios-text-secondary);
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 18px;
+            color: var(--ios-text-primary);
+        }
+
+        .option-icon {
+            margin-left: auto;
+            width: 32px;
+            height: 32px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .option-item.correct .option-icon {
+            background-color: var(--ios-success);
+            color: white;
+            opacity: 1;
+        }
+
+        .option-item.incorrect .option-icon {
+            background-color: var(--ios-danger);
+            color: white;
+            opacity: 1;
+        }
+
+        /* 遊戲結束畫面 */
+        .game-over {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .game-over-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--ios-text-primary);
+        }
+
+        .final-score {
+            font-size: 70px;
+            font-weight: 800;
+            color: var(--ios-primary);
+            margin-bottom: 16px;
+        }
+
+        .score-summary {
+            margin: 24px 0;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .summary-item {
+            flex: 1;
+        }
+
+        .summary-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+            margin-bottom: 6px;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0 8px;
+            text-align: center;
+        }
+
+        .btn-retry {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+
+        .btn-home {
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+        }
+
+        /* 遊戲開始提示 */
+        .start-prompt {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-radius: 20px;
+        }
+
+        .prompt-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .prompt-desc {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .start-btn {
+            background-color: var(--ios-warning);
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 16px 40px;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 149, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <!-- 頂部狀態欄 -->
+        <div class="status-bar">
+            <div class="status-time" id="statusTime">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">
+                    <i class="fas fa-signal"></i>
+                </div>
+                <div class="status-icon">
+                    <i class="fas fa-wifi"></i>
+                </div>
+                <div class="status-icon">
+                    <i class="fas fa-battery-full"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="nav-title">60秒挑戰</div>
+            <div class="nav-back" style="visibility: hidden;"></div>
+        </div>
+
+        <!-- 計時挑戰容器 -->
+        <div class="timer-challenge-container">
+            <!-- 計時器 -->
+            <div class="time-display" id="timeDisplay">
+                <div class="time-remaining" id="timeRemaining">60</div>
+                <div class="time-label">剩餘秒數</div>
+
+                <!-- 開始提示 -->
+                <div class="start-prompt" id="startPrompt">
+                    <div class="prompt-title">60秒挑戰</div>
+                    <div class="prompt-desc">在60秒內回答盡可能多的腎臟照護問題，每答對一題得1分，答錯不扣分。準備好了嗎？</div>
+                    <div class="start-btn" onclick="startGame()">開始挑戰</div>
+                </div>
+            </div>
+
+            <!-- 得分顯示 -->
+            <div class="score-display">
+                <div class="score-item">
+                    <div class="score-value" id="currentScore">0</div>
+                    <div class="score-label">當前得分</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-value" id="bestScore">0</div>
+                    <div class="score-label">最佳得分</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-value" id="questionsAnswered">0</div>
+                    <div class="score-label">已答題數</div>
+                </div>
+            </div>
+
+            <!-- 問題卡片 -->
+            <div class="question-card" id="questionCard">
+                <div class="question-text" id="questionText">
+                    等待開始...
+                </div>
+                <div class="options-container" id="optionsContainer">
+                    <!-- 選項將由 JavaScript 動態生成 -->
+                </div>
+            </div>
+
+            <!-- 遊戲結束畫面 -->
+            <div class="game-over" id="gameOver">
+                <div class="game-over-title">時間到!</div>
+                <div class="final-score" id="finalScore">0</div>
+                <div class="score-summary">
+                    <div class="summary-item">
+                        <div class="summary-value" id="summaryCorrect">0</div>
+                        <div class="summary-label">答對</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="summaryIncorrect">0</div>
+                        <div class="summary-label">答錯</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="summaryTotal">0</div>
+                        <div class="summary-label">總題數</div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <div class="action-btn btn-retry" onclick="restartGame()">再玩一次</div>
+                    <div class="action-btn btn-home" onclick="navigateTo('game-mode.html')">回遊戲首頁</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 問題庫 (簡化版，實際應用可以從外部加載)
+        const questions = [
+            {
+                question: "洗腎患者每日建議的最大飲水量是多少？",
+                options: [
+                    "不限量，需多喝水",
+                    "500-600毫升 + 前一天尿量",
+                    "1500-2000毫升",
+                    "視情況而定，無特別限制"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "以下哪種食物對洗腎患者來說鉀含量最高，應該避免或限制攝取？",
+                options: [
+                    "白米飯",
+                    "雞蛋",
+                    "香蕉",
+                    "豆腐"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "關於洗腎患者的血管通路照護，下列哪一項是正確的？",
+                options: [
+                    "避免在該側手臂測量血壓",
+                    "可配戴手錶或緊身衣物壓迫血管通路",
+                    "血管通路處發紅腫脹是正常現象",
+                    "血管通路應經常按摩以促進血液循環"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "洗腎患者的磷控制對健康很重要，以下哪一類食物通常含磷量高？",
+                options: [
+                    "新鮮蔬菜",
+                    "加工食品和碳酸飲料",
+                    "白米和白麵包",
+                    "新鮮水果"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "洗腎治療期間出現肌肉痙攣，以下哪種處理最適當？",
+                options: [
+                    "增加鹽分攝取",
+                    "立即停止透析治療",
+                    "通知醫護人員並適度伸展按摩",
+                    "大量飲水"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "洗腎患者服用磷結合劑的正確時間為何？",
+                options: [
+                    "睡前空腹時服用",
+                    "餐中或餐前服用",
+                    "早上起床空腹時服用",
+                    "餐後兩小時服用"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "哪一項症狀可能表示洗腎患者的乾體重設定過低？",
+                options: [
+                    "透析中頻繁出現低血壓和抽筋",
+                    "持續性高血壓",
+                    "呼吸困難和下肢水腫",
+                    "食慾不振"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "下列何種情況下，洗腎患者應立即就醫？",
+                options: [
+                    "透析前體重增加1公斤",
+                    "血管通路處有紅腫熱痛現象",
+                    "偶爾血壓稍微上升",
+                    "輕微疲勞感"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "關於洗腎患者的飲食建議，下列敘述何者正確？",
+                options: [
+                    "應遵循高蛋白質、低醣類的飲食原則",
+                    "應儘量避免所有水果的攝取",
+                    "通常需要控制鉀、磷、鈉及水分的攝取",
+                    "可以自由飲用含咖啡因的飲料"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "下列哪一種食物中的蛋白質品質最高，適合洗腎患者攝取？",
+                options: [
+                    "糙米",
+                    "雞蛋",
+                    "豆腐",
+                    "花生"
+                ],
+                correctAnswer: 1
+            }
+        ];
+
+        // 遊戲變數
+        let timer;
+        let timeLeft = 60;
+        let currentScore = 0;
+        let bestScore = 0;
+        let questionsAnswered = 0;
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+        let currentQuestionIndex;
+        let usedQuestionIndices = [];
+        let canAnswer = false;
+
+        // DOM 元素
+        const timeRemainingEl = document.getElementById('timeRemaining');
+        const timeDisplayEl = document.getElementById('timeDisplay');
+        const currentScoreEl = document.getElementById('currentScore');
+        const bestScoreEl = document.getElementById('bestScore');
+        const questionsAnsweredEl = document.getElementById('questionsAnswered');
+        const questionTextEl = document.getElementById('questionText');
+        const optionsContainerEl = document.getElementById('optionsContainer');
+        const startPromptEl = document.getElementById('startPrompt');
+        const gameOverEl = document.getElementById('gameOver');
+        const finalScoreEl = document.getElementById('finalScore');
+        const summaryCorrectEl = document.getElementById('summaryCorrect');
+        const summaryIncorrectEl = document.getElementById('summaryIncorrect');
+        const summaryTotalEl = document.getElementById('summaryTotal');
+
+        // 更新狀態欄時間
+        function updateStatusTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('statusTime').textContent = hours + ':' + minutes;
+        }
+
+        // 開始遊戲
+        function startGame() {
+            // 隱藏開始提示
+            startPromptEl.style.display = 'none';
+            gameOverEl.style.display = 'none';
+            
+            // 重置遊戲狀態
+            timeLeft = 60;
+            currentScore = 0;
+            questionsAnswered = 0;
+            correctAnswers = 0;
+            incorrectAnswers = 0;
+            usedQuestionIndices = [];
+            canAnswer = true;
+            
+            // 讀取最佳分數
+            bestScore = localStorage.getItem('timerChallengeBestScore') || 0;
+            bestScoreEl.textContent = bestScore;
+            
+            // 更新 UI
+            timeRemainingEl.textContent = timeLeft;
+            currentScoreEl.textContent = currentScore;
+            questionsAnsweredEl.textContent = questionsAnswered;
+            
+            // 載入第一個問題
+            loadNextQuestion();
+            
+            // 開始倒數計時
+            timer = setInterval(() => {
+                timeLeft--;
+                timeRemainingEl.textContent = timeLeft;
+                
+                // 最後10秒閃爍警告
+                if (timeLeft <= 10) {
+                    timeDisplayEl.classList.add('warning');
+                }
+                
+                // 時間到，結束遊戲
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        // 載入下一個問題
+        function loadNextQuestion() {
+            // 重置選項容器
+            optionsContainerEl.innerHTML = '';
+            
+            // 如果所有問題都已使用，重置使用過的問題列表
+            if (usedQuestionIndices.length >= questions.length) {
+                usedQuestionIndices = [];
+            }
+            
+            // 隨機選擇未使用的問題
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * questions.length);
+            } while (usedQuestionIndices.includes(randomIndex));
+            
+            currentQuestionIndex = randomIndex;
+            usedQuestionIndices.push(currentQuestionIndex);
+            
+            const currentQuestion = questions[currentQuestionIndex];
+            
+            // 更新問題文字
+            questionTextEl.textContent = currentQuestion.question;
+            
+            // 生成選項
+            const optionLabels = ['A', 'B', 'C', 'D'];
+            currentQuestion.options.forEach((option, index) => {
+                const optionItem = document.createElement('div');
+                optionItem.className = 'option-item';
+                optionItem.onclick = () => selectOption(index);
+                
+                optionItem.innerHTML = `
+                    <div class="option-label">${optionLabels[index]}</div>
+                    <div class="option-text">${option}</div>
+                    <div class="option-icon">
+                        <i class="fas ${index === currentQuestion.correctAnswer ? 'fa-check' : 'fa-times'}"></i>
+                    </div>
+                `;
+                
+                optionsContainerEl.appendChild(optionItem);
+            });
+        }
+
+        // 選擇選項
+        function selectOption(selectedIndex) {
+            // 如果無法回答，直接返回
+            if (!canAnswer) return;
+            
+            // 暫時禁止回答
+            canAnswer = false;
+            
+            const currentQuestion = questions[currentQuestionIndex];
+            const optionItems = document.querySelectorAll('.option-item');
+            
+            // 標記選中的選項
+            optionItems[selectedIndex].classList.add('selected');
+            
+            // 判斷答案是否正確
+            const isCorrect = selectedIndex === currentQuestion.correctAnswer;
+            
+            // 標記正確和錯誤選項
+            if (isCorrect) {
+                optionItems[selectedIndex].classList.add('correct');
+                currentScore++;
+                correctAnswers++;
+            } else {
+                optionItems[selectedIndex].classList.add('incorrect');
+                // 標記正確答案
+                optionItems[currentQuestion.correctAnswer].classList.add('correct');
+                incorrectAnswers++;
+            }
+            
+            // 更新得分和答題數
+            questionsAnswered++;
+            currentScoreEl.textContent = currentScore;
+            questionsAnsweredEl.textContent = questionsAnswered;
+            
+            // 延遲一秒後加載下一題
+            setTimeout(() => {
+                loadNextQuestion();
+                canAnswer = true;
+            }, 1000);
+        }
+
+        // 結束遊戲
+        function endGame() {
+            // 停止計時器
+            clearInterval(timer);
+            
+            // 更新最佳分數
+            if (currentScore > bestScore) {
+                bestScore = currentScore;
+                localStorage.setItem('timerChallengeBestScore', bestScore);
+            }
+            
+            // 顯示結束頁面
+            document.getElementById('questionCard').style.display = 'none';
+            gameOverEl.style.display = 'block';
+            
+            // 更新結束頁面數據
+            finalScoreEl.textContent = currentScore;
+            summaryCorrectEl.textContent = correctAnswers;
+            summaryIncorrectEl.textContent = incorrectAnswers;
+            summaryTotalEl.textContent = questionsAnswered;
+        }
+
+        // 重新開始遊戲
+        function restartGame() {
+            document.getElementById('questionCard').style.display = 'block';
+            timeDisplayEl.classList.remove('warning');
+            startGame();
+        }
+
+        // 導航至指定頁面
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+
+        // 初始化頁面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新狀態欄時間
+            updateStatusTime();
+            setInterval(updateStatusTime, 60000);
+            
+            // 讀取最佳分數
+            bestScore = localStorage.getItem('timerChallengeBestScore') || 0;
+            bestScoreEl.textContent = bestScore;
+        });
+    </script>
+</body>
+</html> 

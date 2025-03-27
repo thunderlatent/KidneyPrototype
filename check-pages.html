@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 頁面結構檢查</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <style>
+        body {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f7;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .success {
+            color: #34C759;
+        }
+        .error {
+            color: #FF3B30;
+        }
+        .warning {
+            color: #FF9500;
+        }
+        .action-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007AFF;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f2f2f7;
+        }
+    </style>
+</head>
+<body>
+    <h1>腎好康 - 頁面結構檢查</h1>
+    
+    <button id="checkPagesBtn" class="action-btn">檢查所有頁面</button>
+    
+    <div id="results">
+        <p>點擊上方按鈕開始檢查...</p>
+    </div>
+    
+    <script>
+        // 頁面列表
+        const pages = [
+            'index.html',
+            'main.html',
+            'dialysis-schedule.html',
+            'learning-resources.html',
+            'quiz-page.html',
+            'quiz-selector.html',
+            'diet-tracker.html',
+            'water-calculator.html',
+            'emergency-contacts.html',
+            'game-mode.html',
+            'health-data.html',
+            'medication-tracker.html',
+            'symptom-checker.html',
+            'timer-challenge.html'
+        ];
+        
+        // 需要檢查的關鍵資源
+        const requiredResources = {
+            'css/theme.css': '主題樣式',
+            'css/styles.css': '基本樣式',
+            'js/navigation.js': '導航功能',
+            'font-awesome': '圖標字體'
+        };
+        
+        // 檢查頁面功能
+        async function checkPage(url) {
+            try {
+                const response = await fetch(url);
+                const html = await response.text();
+                
+                const results = {
+                    url: url,
+                    exists: true,
+                    resources: {}
+                };
+                
+                // 檢查每個必需資源
+                for (const [resource, description] of Object.entries(requiredResources)) {
+                    if (resource === 'font-awesome') {
+                        results.resources[resource] = {
+                            exists: html.includes('font-awesome') || html.includes('fontawesome'),
+                            description: description
+                        };
+                    } else {
+                        results.resources[resource] = {
+                            exists: html.includes(resource),
+                            description: description
+                        };
+                    }
+                }
+                
+                return results;
+            } catch (error) {
+                return {
+                    url: url,
+                    exists: false,
+                    error: error.message
+                };
+            }
+        }
+        
+        // 處理檢查結果
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('results');
+            let html = '<h2>檢查結果</h2>';
+            
+            html += '<table>';
+            html += '<tr><th>頁面</th><th>狀態</th><th>缺少的資源</th></tr>';
+            
+            results.forEach(result => {
+                if (!result.exists) {
+                    html += `<tr>
+                        <td>${result.url}</td>
+                        <td class="error">不存在</td>
+                        <td>${result.error || '無法訪問'}</td>
+                    </tr>`;
+                    return;
+                }
+                
+                const missingResources = [];
+                for (const [resource, data] of Object.entries(result.resources)) {
+                    if (!data.exists) {
+                        missingResources.push(data.description);
+                    }
+                }
+                
+                const status = missingResources.length === 0 ? 
+                    '<span class="success">正常</span>' : 
+                    `<span class="warning">缺少資源 (${missingResources.length})</span>`;
+                
+                html += `<tr>
+                    <td>${result.url}</td>
+                    <td>${status}</td>
+                    <td>${missingResources.join(', ') || '-'}</td>
+                </tr>`;
+            });
+            
+            html += '</table>';
+            
+            // 添加總結
+            const totalPages = results.length;
+            const validPages = results.filter(r => r.exists).length;
+            const perfectPages = results.filter(r => {
+                if (!r.exists) return false;
+                return Object.values(r.resources).every(data => data.exists);
+            }).length;
+            
+            html += `<div>
+                <p>總計 ${totalPages} 個頁面，${validPages} 個存在，${perfectPages} 個資源完整。</p>
+                <p>${perfectPages === totalPages ? 
+                    '<span class="success">所有頁面結構正常！</span>' : 
+                    '<span class="warning">部分頁面缺少資源，但可能不影響基本功能。</span>'}
+                </p>
+            </div>`;
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        // 檢查所有頁面
+        async function checkAllPages() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>正在檢查頁面，請稍候...</p>';
+            
+            const results = [];
+            for (const page of pages) {
+                results.push(await checkPage(page));
+            }
+            
+            displayResults(results);
+        }
+        
+        // 添加按鈕事件
+        document.getElementById('checkPagesBtn').addEventListener('click', checkAllPages);
+    </script>
+</body>
+</html> 

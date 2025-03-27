@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 健康數據</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .health-data-container {
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+        
+        .page-header {
+            margin-bottom: 24px;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--ios-text-primary);
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            line-height: 1.4;
+        }
+        
+        .visual-aid-tools {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 16px;
+        }
+        
+        .visual-aid-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            margin-left: 10px;
+            font-size: 20px;
+        }
+        
+        .data-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-title i {
+            margin-right: 12px;
+            color: var(--ios-primary);
+            font-size: 22px;
+        }
+        
+        .add-btn {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: var(--ios-primary-light);
+            color: var(--ios-primary);
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .add-btn i {
+            margin-right: 6px;
+        }
+        
+        .input-group {
+            margin-bottom: 16px;
+        }
+        
+        .input-label {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--ios-text-primary);
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 1px solid var(--ios-gray5);
+            border-radius: 12px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--ios-primary);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+        
+        .input-hint {
+            font-size: 14px;
+            color: var(--ios-text-tertiary);
+        }
+        
+        .dual-input {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .dual-input .input-group {
+            flex: 1;
+        }
+        
+        .save-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            background-color: var(--ios-primary);
+            border: none;
+            border-radius: 12px;
+            margin-top: 16px;
+        }
+        
+        .data-history {
+            margin-top: 20px;
+        }
+        
+        .history-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--ios-text-primary);
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .history-table th {
+            padding: 12px 8px;
+            font-size: 16px;
+            text-align: left;
+            border-bottom: 2px solid var(--ios-gray5);
+            color: var(--ios-text-secondary);
+            font-weight: 600;
+        }
+        
+        .history-table td {
+            padding: 14px 8px;
+            font-size: 16px;
+            border-bottom: 1px solid var(--ios-gray6);
+            color: var(--ios-text-primary);
+        }
+        
+        .chart-container {
+            margin-top: 20px;
+            height: 250px;
+            position: relative;
+        }
+        
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--ios-gray6);
+            border-radius: 12px;
+            color: var(--ios-text-secondary);
+            font-style: italic;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            background-color: var(--ios-gray6);
+            border-radius: 12px;
+            padding: 4px;
+        }
+        
+        .tab-item {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ios-text-secondary);
+            border-radius: 10px;
+        }
+        
+        .tab-item.active {
+            background-color: white;
+            color: var(--ios-primary);
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div id="status-time" class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">返回</div>
+            <div class="nav-title">健康數據</div>
+            <div></div>
+        </div>
+        
+        <!-- 滾動內容區 -->
+        <div class="content-container">
+            <div class="health-data-container">
+                <!-- 視力輔助工具 -->
+                <div class="visual-aid-tools">
+                    <div class="visual-aid-btn" id="increase-text">
+                        <i class="fas fa-text-height"></i>
+                    </div>
+                    <div class="visual-aid-btn" id="high-contrast">
+                        <i class="fas fa-adjust"></i>
+                    </div>
+                </div>
+                
+                <div class="page-header">
+                    <div class="page-title">健康數據</div>
+                    <p class="page-subtitle">記錄並追蹤您的健康指標，幫助您更好地管理腎臟健康</p>
+                </div>
+                
+                <div class="tab-container">
+                    <div class="tab-item active" data-tab="vitals">生理指標</div>
+                    <div class="tab-item" data-tab="blood">血液檢測</div>
+                    <div class="tab-item" data-tab="dialysis">透析數據</div>
+                </div>
+                
+                <!-- 生理指標頁籤 -->
+                <div id="vitals-tab" class="tab-content active">
+                    <div class="data-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fas fa-heartbeat"></i>
+                                記錄生理指標
+                            </div>
+                            <div class="add-btn" id="add-vitals-btn">
+                                <i class="fas fa-plus"></i> 新增
+                            </div>
+                        </div>
+                        
+                        <form id="vitals-form">
+                            <div class="dual-input">
+                                <div class="input-group">
+                                    <div class="input-label">收縮壓 (mmHg)</div>
+                                    <input type="number" class="input-field" id="systolic" placeholder="例如：120">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-label">舒張壓 (mmHg)</div>
+                                    <input type="number" class="input-field" id="diastolic" placeholder="例如：80">
+                                </div>
+                            </div>
+                            
+                            <div class="dual-input">
+                                <div class="input-group">
+                                    <div class="input-label">心率 (bpm)</div>
+                                    <input type="number" class="input-field" id="heart-rate" placeholder="例如：75">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-label">體重 (kg)</div>
+                                    <input type="number" step="0.1" class="input-field" id="weight" placeholder="例如：70.5">
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <div class="input-label">日期和時間</div>
+                                <input type="datetime-local" class="input-field" id="vitals-datetime">
+                                <div class="input-hint">若未填寫，預設使用當前時間</div>
+                            </div>
+                            
+                            <button type="button" class="save-btn" id="save-vitals-btn">儲存資料</button>
+                        </form>
+                        
+                        <div class="data-history">
+                            <div class="history-title">歷史記錄</div>
+                            <div class="chart-container">
+                                <div class="chart-placeholder">
+                                    血壓趨勢圖 (此處為示意，實際應用將顯示圖表)
+                                </div>
+                            </div>
+                            <table class="history-table">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>血壓</th>
+                                        <th>心率</th>
+                                        <th>體重</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vitals-history">
+                                    <tr>
+                                        <td>2023/03/25 08:30</td>
+                                        <td>125/85 mmHg</td>
+                                        <td>78 bpm</td>
+                                        <td>79.2 kg</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023/03/24 08:15</td>
+                                        <td>130/82 mmHg</td>
+                                        <td>75 bpm</td>
+                                        <td>79.4 kg</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023/03/23 08:45</td>
+                                        <td>128/80 mmHg</td>
+                                        <td>82 bpm</td>
+                                        <td>79.8 kg</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 血液檢測頁籤 -->
+                <div id="blood-tab" class="tab-content">
+                    <div class="data-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fas fa-vial"></i>
+                                血液檢測數據
+                            </div>
+                            <div class="add-btn" id="add-blood-btn">
+                                <i class="fas fa-plus"></i> 新增
+                            </div>
+                        </div>
+                        
+                        <form id="blood-form">
+                            <div class="dual-input">
+                                <div class="input-group">
+                                    <div class="input-label">血鉀 (mEq/L)</div>
+                                    <input type="number" step="0.1" class="input-field" id="potassium" placeholder="例如：4.5">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-label">血磷 (mg/dL)</div>
+                                    <input type="number" step="0.1" class="input-field" id="phosphorus" placeholder="例如：4.0">
+                                </div>
+                            </div>
+                            
+                            <div class="dual-input">
+                                <div class="input-group">
+                                    <div class="input-label">血鈣 (mg/dL)</div>
+                                    <input type="number" step="0.1" class="input-field" id="calcium" placeholder="例如：9.5">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-label">血紅蛋白 (g/dL)</div>
+                                    <input type="number" step="0.1" class="input-field" id="hemoglobin" placeholder="例如：11.0">
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <div class="input-label">日期</div>
+                                <input type="date" class="input-field" id="blood-date">
+                                <div class="input-hint">請輸入血液檢測的日期</div>
+                            </div>
+                            
+                            <button type="button" class="save-btn" id="save-blood-btn">儲存數據</button>
+                        </form>
+                        
+                        <div class="data-history">
+                            <div class="history-title">歷史記錄</div>
+                            <div class="chart-container">
+                                <div class="chart-placeholder">
+                                    血液數值趨勢圖 (此處為示意，實際應用將顯示圖表)
+                                </div>
+                            </div>
+                            <table class="history-table">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>血鉀</th>
+                                        <th>血磷</th>
+                                        <th>血鈣</th>
+                                        <th>血紅蛋白</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="blood-history">
+                                    <tr>
+                                        <td>2023/03/20</td>
+                                        <td>5.8 mEq/L</td>
+                                        <td>4.2 mg/dL</td>
+                                        <td>9.4 mg/dL</td>
+                                        <td>10.8 g/dL</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023/02/20</td>
+                                        <td>5.5 mEq/L</td>
+                                        <td>4.5 mg/dL</td>
+                                        <td>9.2 mg/dL</td>
+                                        <td>11.0 g/dL</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023/01/20</td>
+                                        <td>5.3 mEq/L</td>
+                                        <td>4.8 mg/dL</td>
+                                        <td>9.5 mg/dL</td>
+                                        <td>10.5 g/dL</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 透析數據頁籤 -->
+                <div id="dialysis-tab" class="tab-content">
+                    <div class="data-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fas fa-clipboard-list"></i>
+                                透析治療數據
+                            </div>
+                            <div class="add-btn" id="add-dialysis-btn">
+                                <i class="fas fa-plus"></i> 新增
+                            </div>
+                        </div>
+                        
+                        <form id="dialysis-form">
+                            <div class="dual-input">
+                                <div class="input-group">
+                                    <div class="input-label">透析前體重 (kg)</div>
+                                    <input type="number" step="0.1" class="input-field" id="pre-weight" placeholder="例如：81.5">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-label">透析後體重 (kg)</div>
+                                    <input type="number" step="0.1" class="input-field" id="post-weight" placeholder="例如：79.0">
+                                </div>
+                            </div>
+                            
+                            <div class="dual-input">
+                                <div class="input-group">
+                                    <div class="input-label">透析時間 (小時)</div>
+                                    <input type="number" step="0.5" class="input-field" id="dialysis-time" placeholder="例如：4.0">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-label">超濾量 (L)</div>
+                                    <input type="number" step="0.1" class="input-field" id="uf-volume" placeholder="例如：2.5">
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <div class="input-label">透析日期</div>
+                                <input type="date" class="input-field" id="dialysis-date">
+                                <div class="input-hint">請輸入透析治療的日期</div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <div class="input-label">備註</div>
+                                <textarea class="input-field" id="dialysis-notes" rows="3" placeholder="例如：今日感覺良好，無特殊不適"></textarea>
+                            </div>
+                            
+                            <button type="button" class="save-btn" id="save-dialysis-btn">儲存數據</button>
+                        </form>
+                        
+                        <div class="data-history">
+                            <div class="history-title">歷史記錄</div>
+                            <div class="chart-container">
+                                <div class="chart-placeholder">
+                                    體重變化趨勢圖 (此處為示意，實際應用將顯示圖表)
+                                </div>
+                            </div>
+                            <table class="history-table">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>透析前體重</th>
+                                        <th>透析後體重</th>
+                                        <th>超濾量</th>
+                                        <th>時間</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dialysis-history">
+                                    <tr>
+                                        <td>2023/03/25</td>
+                                        <td>81.3 kg</td>
+                                        <td>79.2 kg</td>
+                                        <td>2.1 L</td>
+                                        <td>4.0 小時</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023/03/23</td>
+                                        <td>81.2 kg</td>
+                                        <td>79.4 kg</td>
+                                        <td>1.8 L</td>
+                                        <td>4.0 小時</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023/03/21</td>
+                                        <td>82.1 kg</td>
+                                        <td>79.8 kg</td>
+                                        <td>2.3 L</td>
+                                        <td>4.0 小時</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <a href="main.html" class="tab-item">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </a>
+            <a href="quiz-selector.html" class="tab-item">
+                <i class="fas fa-gamepad"></i>
+                <span>遊戲</span>
+            </a>
+            <a href="learning-resources.html" class="tab-item">
+                <i class="fas fa-book-open"></i>
+                <span>學習</span>
+            </a>
+            <a href="dialysis-schedule.html" class="tab-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>排程</span>
+            </a>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script>
+        // 更新狀態欄時間
+        function updateStatusBarTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('status-time').textContent = `${hours}:${minutes}`;
+        }
+        
+        // 頁籤切換功能
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab-item');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetTab = tab.dataset.tab;
+                    
+                    // 移除所有 active 類
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // 添加 active 類到當前選中的頁籤
+                    tab.classList.add('active');
+                    document.getElementById(`${targetTab}-tab`).classList.add('active');
+                });
+            });
+        }
+        
+        // 數據保存功能
+        function setupFormHandlers() {
+            // 生理指標表單
+            document.getElementById('save-vitals-btn').addEventListener('click', function() {
+                const systolic = document.getElementById('systolic').value;
+                const diastolic = document.getElementById('diastolic').value;
+                const heartRate = document.getElementById('heart-rate').value;
+                const weight = document.getElementById('weight').value;
+                const datetime = document.getElementById('vitals-datetime').value || new Date().toISOString();
+                
+                // 簡單驗證
+                if (!systolic || !diastolic || !heartRate || !weight) {
+                    alert('請填寫所有必填欄位');
+                    return;
+                }
+                
+                // 模擬數據保存 (實際應用中應保存到資料庫)
+                alert('生理指標數據已儲存！');
+                
+                // 清空表單
+                document.getElementById('vitals-form').reset();
+                
+                // 在表格中添加新記錄 (模擬)
+                const formattedDate = new Date(datetime).toLocaleString('zh-TW', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const newRow = `
+                    <tr>
+                        <td>${formattedDate}</td>
+                        <td>${systolic}/${diastolic} mmHg</td>
+                        <td>${heartRate} bpm</td>
+                        <td>${weight} kg</td>
+                    </tr>
+                `;
+                
+                document.getElementById('vitals-history').innerHTML = newRow + document.getElementById('vitals-history').innerHTML;
+            });
+            
+            // 血液檢測表單
+            document.getElementById('save-blood-btn').addEventListener('click', function() {
+                const potassium = document.getElementById('potassium').value;
+                const phosphorus = document.getElementById('phosphorus').value;
+                const calcium = document.getElementById('calcium').value;
+                const hemoglobin = document.getElementById('hemoglobin').value;
+                const date = document.getElementById('blood-date').value || new Date().toISOString().split('T')[0];
+                
+                // 簡單驗證
+                if (!potassium || !phosphorus || !calcium || !hemoglobin || !date) {
+                    alert('請填寫所有必填欄位');
+                    return;
+                }
+                
+                // 模擬數據保存
+                alert('血液檢測數據已儲存！');
+                
+                // 清空表單
+                document.getElementById('blood-form').reset();
+                
+                // 在表格中添加新記錄 (模擬)
+                const formattedDate = new Date(date).toLocaleDateString('zh-TW');
+                
+                const newRow = `
+                    <tr>
+                        <td>${formattedDate}</td>
+                        <td>${potassium} mEq/L</td>
+                        <td>${phosphorus} mg/dL</td>
+                        <td>${calcium} mg/dL</td>
+                        <td>${hemoglobin} g/dL</td>
+                    </tr>
+                `;
+                
+                document.getElementById('blood-history').innerHTML = newRow + document.getElementById('blood-history').innerHTML;
+            });
+            
+            // 透析數據表單
+            document.getElementById('save-dialysis-btn').addEventListener('click', function() {
+                const preWeight = document.getElementById('pre-weight').value;
+                const postWeight = document.getElementById('post-weight').value;
+                const dialysisTime = document.getElementById('dialysis-time').value;
+                const ufVolume = document.getElementById('uf-volume').value;
+                const date = document.getElementById('dialysis-date').value || new Date().toISOString().split('T')[0];
+                
+                // 簡單驗證
+                if (!preWeight || !postWeight || !dialysisTime || !date) {
+                    alert('請填寫所有必填欄位');
+                    return;
+                }
+                
+                // 模擬數據保存
+                alert('透析治療數據已儲存！');
+                
+                // 清空表單
+                document.getElementById('dialysis-form').reset();
+                
+                // 在表格中添加新記錄 (模擬)
+                const formattedDate = new Date(date).toLocaleDateString('zh-TW');
+                const calculatedUf = ufVolume || (preWeight - postWeight).toFixed(1);
+                
+                const newRow = `
+                    <tr>
+                        <td>${formattedDate}</td>
+                        <td>${preWeight} kg</td>
+                        <td>${postWeight} kg</td>
+                        <td>${calculatedUf} L</td>
+                        <td>${dialysisTime} 小時</td>
+                    </tr>
+                `;
+                
+                document.getElementById('dialysis-history').innerHTML = newRow + document.getElementById('dialysis-history').innerHTML;
+            });
+        }
+        
+        // 頁面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新時間
+            updateStatusBarTime();
+            setInterval(updateStatusBarTime, 60000);
+            
+            // 設置頁籤功能
+            setupTabs();
+            
+            // 設置表單處理程序
+            setupFormHandlers();
+            
+            // 增加文字大小功能
+            document.getElementById('increase-text').addEventListener('click', function() {
+                document.body.classList.toggle('large-text');
+                
+                if (document.body.classList.contains('large-text')) {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1.2');
+                } else {
+                    document.documentElement.style.setProperty('--font-size-multiplier', '1');
+                }
+            });
+            
+            // 高對比度模式
+            document.getElementById('high-contrast').addEventListener('click', function() {
+                document.body.classList.toggle('high-contrast');
+                
+                if (document.body.classList.contains('high-contrast')) {
+                    document.documentElement.style.setProperty('--ios-text-primary', '#000000');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '#222222');
+                    document.documentElement.style.setProperty('--ios-primary', '#0056b3');
+                    document.documentElement.style.setProperty('--ios-background', '#ffffff');
+                } else {
+                    document.documentElement.style.setProperty('--ios-text-primary', '');
+                    document.documentElement.style.setProperty('--ios-text-secondary', '');
+                    document.documentElement.style.setProperty('--ios-primary', '');
+                    document.documentElement.style.setProperty('--ios-background', '');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
