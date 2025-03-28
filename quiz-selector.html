@@ -308,7 +308,7 @@
             // 一般大眾測驗按鈕點擊事件
             document.getElementById('start-public-quiz').addEventListener('click', function() {
                 localStorage.setItem('quizType', 'public');
-                window.location.href = 'quiz-page.html';
+                window.location.href = 'quiz-page-enhanced.html';
             });
             
             // 護理人員版卡片點擊事件 - 顯示子類別
@@ -338,14 +338,14 @@
             document.getElementById('hd-quiz').addEventListener('click', function(event) {
                 event.stopPropagation(); // 阻止事件冒泡到父元素
                 localStorage.setItem('quizType', 'hd');
-                window.location.href = 'quiz-page.html';
+                startQuiz('hd', 'hd-quiz');
             });
             
             // 腹膜透析測驗按鈕點擊事件
             document.getElementById('pd-quiz').addEventListener('click', function(event) {
                 event.stopPropagation(); // 阻止事件冒泡到父元素
                 localStorage.setItem('quizType', 'pd');
-                window.location.href = 'quiz-page.html';
+                startQuiz('pd', 'pd-quiz');
             });
             
             // 添加按鈕點擊效果
@@ -402,6 +402,12 @@
                     document.documentElement.style.setProperty('--ios-background', '');
                 }
             });
+
+            // 開始測驗
+            function startQuiz(category, subcategory) {
+                // 更新URL，將選擇的類別和子類別信息傳遞給測驗頁面
+                location.href = `quiz-page-enhanced.html?category=${encodeURIComponent(category)}&subcategory=${encodeURIComponent(subcategory)}`;
+            }
         });
     </script>
 </body>

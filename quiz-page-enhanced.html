@@ -107,6 +107,13 @@
             border-color: var(--ios-danger);
             background-color: rgba(255, 59, 48, 0.15);
             border-width: 3px;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
         
         .option-icon {
@@ -132,6 +139,35 @@
         @keyframes pulseError {
             0%, 100% { transform: translateY(-50%) scale(1); }
             50% { transform: translateY(-50%) scale(1.2); }
+        }
+        
+        /* 自定義叉號圖標 */
+        .error-x-mark {
+            display: inline-block;
+            position: relative;
+            width: 30px;
+            height: 30px;
+            margin-left: 8px;
+        }
+        
+        .error-x-mark::before,
+        .error-x-mark::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 24px;
+            background-color: var(--ios-danger);
+            top: 3px;
+            left: 13px;
+            border-radius: 3px;
+        }
+        
+        .error-x-mark::before {
+            transform: rotate(45deg);
+        }
+        
+        .error-x-mark::after {
+            transform: rotate(-45deg);
         }
         
         /* 解釋區域 */
@@ -164,12 +200,14 @@
         }
         
         .explanation-card.incorrect {
-            background-color: var(--ios-danger-light);
+            background-color: rgba(255, 59, 48, 0.1);
             border-left-color: var(--ios-danger);
+            border-left-width: 5px;
         }
         
         .explanation-card.incorrect .explanation-title {
             color: var(--ios-danger);
+            font-weight: 700;
         }
         
         /* 底部按鈕 */
@@ -671,7 +709,8 @@
             } else {
                 // 答錯了
                 selectedOption.classList.add('incorrect');
-                selectedOption.innerHTML += '<span class="option-icon incorrect-icon"><i class="fas fa-times-circle"></i></span>';
+                // 使用自定義的叉號圖標，使其更加明顯
+                selectedOption.innerHTML += '<span class="option-icon incorrect-icon"><i class="fas fa-times-circle"></i><div class="error-x-mark"></div></span>';
                 
                 // 標記正確答案
                 const correctOption = options[currentQuestion.correctAnswer];
@@ -681,7 +720,7 @@
                 // 更新解釋卡片樣式
                 const explanationCard = document.getElementById('explanation-card');
                 explanationCard.className = 'explanation-card incorrect';
-                document.getElementById('explanation-title').textContent = '答錯了！';
+                document.getElementById('explanation-title').innerHTML = '<i class="fas fa-times-circle"></i> 答錯了！';
                 
                 incorrectCount++;
             }
@@ -817,7 +856,5 @@
             loadCurrentQuestion();
         });
     </script>
-    <!-- 引入增強錯誤答案顯示的 JavaScript 檔案 -->
-    <script src="js/quiz-enhancements.js"></script>
 </body>
 </html> 

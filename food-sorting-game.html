@@ -978,11 +978,14 @@
             transform: translateX(-50%) translateY(-5px);
             transition: opacity 0.3s ease, transform 0.3s ease;
             z-index: 5;
+            visibility: hidden; /* 初始隱藏 */
         }
         
         .answer-btn.selected .answer-status-label {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
+            visibility: visible; /* 確保可見性 */
+            display: block; /* 確保顯示 */
         }
         
         .answer-btn.selected.correct .answer-status-label {
@@ -1040,7 +1043,7 @@
         </div>
         
         <!-- 內容區域 -->
-        <div class="content-container">
+        <div class="content-container" style="padding-bottom: 80px; overflow-y: auto; overflow-x: hidden;">
             <div class="game-container">
                 <!-- 遊戲頭部 -->
                 <div class="game-header">
@@ -1521,12 +1524,18 @@
             goodBtnElement.classList.add('selected', 'correct');
             badBtnElement.classList.add('not-selected');
             // 更新狀態標籤
-            goodBtnElement.querySelector('.answer-status-label').textContent = '正確答案';
+            const statusLabel = goodBtnElement.querySelector('.answer-status-label');
+            statusLabel.textContent = '正確答案';
+            statusLabel.style.visibility = 'visible';
+            statusLabel.style.opacity = '1';
         } else {
             badBtnElement.classList.add('selected', 'correct');
             goodBtnElement.classList.add('not-selected');
             // 更新狀態標籤
-            badBtnElement.querySelector('.answer-status-label').textContent = '正確答案';
+            const statusLabel = badBtnElement.querySelector('.answer-status-label');
+            statusLabel.textContent = '正確答案';
+            statusLabel.style.visibility = 'visible';
+            statusLabel.style.opacity = '1';
         }
         
         // 播放反饋音效
@@ -1558,24 +1567,38 @@
             goodBtnElement.classList.add('selected');
             goodBtnElement.classList.add(isCorrect ? 'correct' : 'incorrect');
             badBtnElement.classList.add('not-selected');
+            
             // 更新狀態標籤
-            goodBtnElement.querySelector('.answer-status-label').textContent = isCorrect ? '答對了！' : '答錯了！';
+            const statusLabel = goodBtnElement.querySelector('.answer-status-label');
+            statusLabel.textContent = isCorrect ? '答對了！' : '答錯了！';
+            statusLabel.style.visibility = 'visible';
+            statusLabel.style.opacity = '1';
         } else {
             badBtnElement.classList.add('selected');
             badBtnElement.classList.add(isCorrect ? 'correct' : 'incorrect');
             goodBtnElement.classList.add('not-selected');
+            
             // 更新狀態標籤
-            badBtnElement.querySelector('.answer-status-label').textContent = isCorrect ? '答對了！' : '答錯了！';
+            const statusLabel = badBtnElement.querySelector('.answer-status-label');
+            statusLabel.textContent = isCorrect ? '答對了！' : '答錯了！';
+            statusLabel.style.visibility = 'visible';
+            statusLabel.style.opacity = '1';
         }
         
         // 如果答錯了，顯示正確答案
         if (!isCorrect) {
             if (currentQuestion.category === 'good') {
                 goodBtnElement.classList.add('correct');
-                goodBtnElement.querySelector('.answer-status-label').textContent = '正確答案';
+                const statusLabel = goodBtnElement.querySelector('.answer-status-label');
+                statusLabel.textContent = '正確答案';
+                statusLabel.style.visibility = 'visible';
+                statusLabel.style.opacity = '1';
             } else {
                 badBtnElement.classList.add('correct');
-                badBtnElement.querySelector('.answer-status-label').textContent = '正確答案';
+                const statusLabel = badBtnElement.querySelector('.answer-status-label');
+                statusLabel.textContent = '正確答案';
+                statusLabel.style.visibility = 'visible';
+                statusLabel.style.opacity = '1';
             }
         }
         
@@ -1693,9 +1716,21 @@
         goodBtnElement.classList.remove('selected', 'correct', 'incorrect', 'not-selected');
         badBtnElement.classList.remove('selected', 'correct', 'incorrect', 'not-selected');
         
-        // 重置狀態標籤
-        goodBtnElement.querySelector('.answer-status-label').textContent = '';
-        badBtnElement.querySelector('.answer-status-label').textContent = '';
+        // 重置狀態標籤並確保可見性設置
+        const goodStatusLabel = goodBtnElement.querySelector('.answer-status-label');
+        const badStatusLabel = badBtnElement.querySelector('.answer-status-label');
+        
+        if (goodStatusLabel) {
+            goodStatusLabel.textContent = '';
+            goodStatusLabel.style.visibility = 'hidden';
+            goodStatusLabel.style.opacity = '0';
+        }
+        
+        if (badStatusLabel) {
+            badStatusLabel.textContent = '';
+            badStatusLabel.style.visibility = 'hidden';
+            badStatusLabel.style.opacity = '0';
+        }
         
         // 隱藏回饋
         answerFeedbackElement.style.display = 'none';
@@ -1961,6 +1996,49 @@
         setTimeout(() => {
             scoreAnim.remove();
         }, 1500);
+    }
+
+    // 重置遊戲
+    function resetGame() {
+        // 重置遊戲狀態
+        gameState.currentQuestionIndex = 0;
+        gameState.score = 0;
+        gameState.answers = [];
+        gameState.timeLeft = 15;
+        
+        // 更新UI
+        scoreElement.textContent = gameState.score;
+        currentQuestionElement.textContent = gameState.currentQuestionIndex + 1;
+        questionNumberElement.textContent = gameState.currentQuestionIndex + 1;
+        
+        // 重置按鈕樣式
+        goodBtnElement.classList.remove('selected', 'correct', 'incorrect', 'not-selected');
+        badBtnElement.classList.remove('selected', 'correct', 'incorrect', 'not-selected');
+        
+        // 重置答案標籤內容和可見性
+        const goodStatusLabel = goodBtnElement.querySelector('.answer-status-label');
+        const badStatusLabel = badBtnElement.querySelector('.answer-status-label');
+        
+        if (goodStatusLabel) {
+            goodStatusLabel.textContent = '';
+            goodStatusLabel.style.visibility = 'hidden';
+            goodStatusLabel.style.opacity = '0';
+        }
+        
+        if (badStatusLabel) {
+            badStatusLabel.textContent = '';
+            badStatusLabel.style.visibility = 'hidden';
+            badStatusLabel.style.opacity = '0';
+        }
+        
+        // 隱藏回饋
+        answerFeedbackElement.style.display = 'none';
+        
+        // 啟用按鈕
+        enableAnswerButtons();
+        
+        // 加載第一題
+        loadQuestion(gameState.currentQuestionIndex);
     }
 </script>
 </html> 

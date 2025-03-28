@@ -505,7 +505,7 @@
                             獲得知識積分獎勵
                         </div>
                         <div class="reward-desc">
-                            學習透析知識獲得積分，可在"首頁→積分商城"兌換獎勵！
+                            學習透析知識獲得積分，可在積分商城兌換主題、徽章、知識解鎖等獎勵！
                         </div>
                         <div class="reward-points">
                             +<span id="reward-points">50</span> 積分
@@ -513,7 +513,10 @@
                     </div>
                     
                     <div class="result-actions">
-                        <button class="result-btn primary" onclick="location.href='quiz-selector.html'">
+                        <button class="result-btn primary" onclick="location.href='points-shop.html'">
+                            <i class="fas fa-gem"></i> 前往積分商城
+                        </button>
+                        <button class="result-btn secondary" onclick="location.href='quiz-selector.html'">
                             繼續學習其他知識
                         </button>
                         <button class="result-btn secondary" onclick="location.href='main.html'">
@@ -785,8 +788,18 @@
             const totalPoints = basePoints + bonusPoints;
             document.getElementById('reward-points').textContent = totalPoints;
             
+            // 保存獲得的積分
+            savePoints(totalPoints);
+            
             // 顯示結果容器
             document.getElementById('result-container').style.display = 'block';
+        }
+        
+        // 保存獲得的積分
+        function savePoints(points) {
+            let userData = JSON.parse(localStorage.getItem('kidneyCareUser') || '{"points": 0, "purchases": []}');
+            userData.points += points;
+            localStorage.setItem('kidneyCareUser', JSON.stringify(userData));
         }
         
         // 觀看廣告獲得提示
