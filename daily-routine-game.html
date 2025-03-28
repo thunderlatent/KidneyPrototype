@@ -746,7 +746,7 @@
             background-color: var(--ios-primary);
             box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
         }
-        
+
         .start-button:disabled {
             background-color: var(--ios-gray3);
             color: var(--ios-gray1);
@@ -756,6 +756,97 @@
         
         .start-button.active:active {
             transform: scale(0.98);
+        }
+
+        .result-feedback {
+            margin-bottom: 20px;
+        }
+        
+        .result-feedback h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ios-text-primary);
+        }
+        
+        .care-review-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .care-review-item {
+            background-color: var(--ios-gray6);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        
+        .care-review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .care-review-time {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ios-text-tertiary);
+        }
+        
+        .care-review-status {
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .care-review-status.correct {
+            color: var(--ios-success);
+        }
+        
+        .care-review-status.incorrect {
+            color: var(--ios-danger);
+        }
+        
+        .care-review-status.moderate {
+            color: var(--ios-warning);
+        }
+        
+        .care-review-question {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .care-review-choice {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 8px;
+            padding-left: 8px;
+            border-left: 2px solid var(--ios-gray4);
+        }
+        
+        .care-review-explanation {
+            font-size: 13px;
+            color: var(--ios-text-secondary);
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            line-height: 1.4;
+        }
+        
+        .care-review-explanation.correct {
+            border-left: 3px solid var(--ios-success);
+        }
+        
+        .care-review-explanation.incorrect {
+            border-left: 3px solid var(--ios-danger);
+        }
+        
+        .care-review-explanation.moderate {
+            border-left: 3px solid var(--ios-warning);
         }
     </style>
 </head>
@@ -876,9 +967,9 @@
                     
                     <div class="result-feedback" id="resultFeedback">
                         <h3>今日照護回顧</h3>
-                        <ul id="feedbackList">
-                            <!-- 由JS動態生成 -->
-                        </ul>
+                        <div class="care-review-list" id="careReviewList">
+                            <!-- 由JS動態生成照護回顧項目 -->
+                        </div>
                     </div>
                     
                     <div class="result-tip">

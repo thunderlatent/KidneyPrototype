@@ -869,37 +869,79 @@ document.addEventListener('DOMContentLoaded', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // 生成反饋列表
-    function generateFeedbackList() {
-        feedbackList.innerHTML = '';
-        
-        // 選擇最多5個重要的反饋
-        const significantChoices = getSignificantChoices(5);
-        
-        significantChoices.forEach(choice => {
-            const listItem = document.createElement('li');
-            listItem.className = choice.option.score >= 4 ? 'feedback-positive' : 'feedback-negative';
-            listItem.textContent = `${choice.time}：${choice.option.feedback}`;
-            feedbackList.appendChild(listItem);
-        });
-    }
-
-    // 獲取重要的選擇
-    function getSignificantChoices(count) {
-        // 根據重要性排序（高分和低分的選擇更重要）
-        const sortedChoices = [...playerChoices].sort((a, b) => {
-            const aImportance = Math.abs(a.option.score - 2.5);
-            const bImportance = Math.abs(b.option.score - 2.5);
-            return bImportance - aImportance;
-        });
-        
-        return sortedChoices.slice(0, count);
-    }
-
     // 獲取選項圖標
     function getOptionIcon(index) {
         const icons = ['utensils', 'glass-water', 'person-walking', 'pills', 'bed'];
         return icons[index % icons.length];
+    }
+
+    // 生成反饋列表
+    function generateFeedbackList() {
+        const careReviewList = document.getElementById('careReviewList');
+        if (!careReviewList) {
+            console.error('找不到照護回顧列表元素');
+            return;
+        }
+        
+        careReviewList.innerHTML = '';
+        
+        // 按時間順序排列所有選擇
+        const chronologicalChoices = [...playerChoices].sort((a, b) => 
+            a.scenarioIndex - b.scenarioIndex
+        );
+        
+        chronologicalChoices.forEach(choice => {
+            const scenario = currentScenarios[choice.scenarioIndex];
+            
+            // 確定選擇的正確性級別
+            let statusClass, statusText, explanationClass;
+            if (choice.option.score >= 4) {
+                statusClass = 'correct';
+                statusText = '優良選擇';
+                explanationClass = 'correct';
+            } else if (choice.option.score >= 3) {
+                statusClass = 'moderate';
+                statusText = '可接受';
+                explanationClass = 'moderate';
+            } else {
+                statusClass = 'incorrect';
+                statusText = '需改進';
+                explanationClass = 'incorrect';
+            }
+            
+            // 找出最佳選項（用於對比錯誤選擇）
+            const bestOption = scenario.options.reduce((best, current) => 
+                (current.score > best.score) ? current : best
+            , {score: 0});
+            
+            // 創建反饋項目
+            const reviewItem = document.createElement('div');
+            reviewItem.className = 'care-review-item';
+            
+            let explanationContent = choice.option.feedback;
+            
+            // 如果是錯誤選擇，添加最佳選擇的信息
+            if (choice.option.score < 3 && bestOption.text !== choice.option.text) {
+                explanationContent += `<br><br>更好的選擇是：「${bestOption.text}」<br>${bestOption.feedback}`;
+            }
+            
+            reviewItem.innerHTML = `
+                <div class="care-review-header">
+                    <div class="care-review-time">${choice.time}</div>
+                    <div class="care-review-status ${statusClass}">
+                        <i class="fas fa-${statusClass === 'correct' ? 'check-circle' : (statusClass === 'moderate' ? 'info-circle' : 'exclamation-circle')}"></i>
+                        ${statusText}
+                    </div>
+                </div>
+                <div class="care-review-question">${choice.question}</div>
+                <div class="care-review-choice">「${choice.option.text}」</div>
+                <div class="care-review-explanation ${explanationClass}">
+                    ${explanationContent}
+                </div>
+            `;
+            
+            careReviewList.appendChild(reviewItem);
+        });
     }
 
     // 初始化遊戲
