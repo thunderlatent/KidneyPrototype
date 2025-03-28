@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>註冊帳號 - 腎好康</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/auth/auth-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+        
+        .checkbox-label {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            line-height: 1.4;
+        }
+        
+        .checkbox-label a {
+            color: var(--ios-primary);
+            text-decoration: none;
+        }
+        
+        .form-error {
+            color: #ff3b30;
+            font-size: 14px;
+            margin-top: 4px;
+            display: none;
+        }
+        
+        .password-strength {
+            margin-top: 6px;
+            height: 4px;
+            background-color: var(--ios-gray5);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .password-strength-indicator {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s, background-color 0.3s;
+        }
+        
+        .weak { 
+            background-color: #ff3b30; 
+            width: 25%; 
+        }
+        
+        .medium { 
+            background-color: #ff9500; 
+            width: 50%; 
+        }
+        
+        .strong { 
+            background-color: #34c759; 
+            width: 100%; 
+        }
+        
+        .password-hint {
+            font-size: 12px;
+            color: var(--ios-text-tertiary);
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="back-button" onclick="history.back()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="nav-title">註冊帳號</div>
+            <div></div>
+        </div>
+        
+        <!-- 內容區域 -->
+        <div class="content-container">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <img src="../../images/logo.png" alt="腎好康 Logo" class="auth-logo">
+                    <h1 class="auth-title">創建您的腎好康帳號</h1>
+                    <p class="auth-subtitle">加入我們，開始您的健康管理旅程</p>
+                </div>
+                
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="username" class="form-label">用戶名</label>
+                        <input type="text" id="username" class="form-input" placeholder="請輸入用戶名">
+                        <div id="username-error" class="form-error">用戶名不能為空</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">電子郵件</label>
+                        <input type="email" id="email" class="form-input" placeholder="請輸入電子郵件">
+                        <div id="email-error" class="form-error">請輸入有效的電子郵件</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">密碼</label>
+                        <div class="password-input-container">
+                            <input type="password" id="password" class="form-input" placeholder="請設置密碼">
+                            <i class="fas fa-eye toggle-password"></i>
+                        </div>
+                        <div class="password-strength">
+                            <div id="password-strength-indicator" class="password-strength-indicator"></div>
+                        </div>
+                        <div class="password-hint">密碼應包含至少8個字符，並混合使用字母、數字和符號</div>
+                        <div id="password-error" class="form-error">密碼長度至少為8位</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm-password" class="form-label">確認密碼</label>
+                        <div class="password-input-container">
+                            <input type="password" id="confirm-password" class="form-input" placeholder="請再次輸入密碼">
+                            <i class="fas fa-eye toggle-password"></i>
+                        </div>
+                        <div id="confirm-password-error" class="form-error">兩次輸入的密碼不一致</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nickname" class="form-label">暱稱 (選填)</label>
+                        <input type="text" id="nickname" class="form-input" placeholder="他人如何稱呼您">
+                    </div>
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="terms-agree">
+                        <label for="terms-agree" class="checkbox-label">
+                            我已閱讀並同意<a href="#">用戶協議</a>和<a href="#">隱私政策</a>，並瞭解我的個人資料將如何被處理
+                        </label>
+                    </div>
+                    
+                    <div id="terms-error" class="form-error">請同意用戶協議和隱私政策</div>
+                    
+                    <button type="submit" class="auth-button">註冊</button>
+                    
+                    <div class="auth-separator">
+                        <span>或者</span>
+                    </div>
+                    
+                    <button type="button" class="social-auth-button apple-auth">
+                        <i class="fab fa-apple"></i>
+                        <span>使用 Apple 帳號註冊</span>
+                    </button>
+                    
+                    <button type="button" class="social-auth-button google-auth">
+                        <i class="fab fa-google"></i>
+                        <span>使用 Google 帳號註冊</span>
+                    </button>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>已有帳號？<a href="login.html">登入</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 註冊成功模態框 -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="modal-title">註冊成功！</h2>
+            <p class="modal-message">您的腎好康帳號已創建成功</p>
+            <button class="modal-button" onclick="window.location.href='../../main.html'">開始使用</button>
+        </div>
+    </div>
+    
+    <script src="../../js/auth/user.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.getElementById('register-form');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirm-password');
+            const passwordStrengthIndicator = document.getElementById('password-strength-indicator');
+            const successModal = document.getElementById('success-modal');
+            
+            // 密碼強度檢查
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+                
+                if (password.length >= 8) strength += 1;
+                if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength += 1;
+                if (password.match(/[0-9]/)) strength += 1;
+                if (password.match(/[^a-zA-Z0-9]/)) strength += 1;
+                
+                passwordStrengthIndicator.className = 'password-strength-indicator';
+                
+                if (password.length === 0) {
+                    passwordStrengthIndicator.style.width = '0';
+                } else if (strength < 2) {
+                    passwordStrengthIndicator.classList.add('weak');
+                } else if (strength < 4) {
+                    passwordStrengthIndicator.classList.add('medium');
+                } else {
+                    passwordStrengthIndicator.classList.add('strong');
+                }
+            });
+            
+            // 切換密碼可見性
+            document.querySelectorAll('.toggle-password').forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    const type = input.type === 'password' ? 'text' : 'password';
+                    input.type = type;
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            });
+            
+            // 表單提交
+            registerForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // 重置錯誤提示
+                document.querySelectorAll('.form-error').forEach(error => {
+                    error.style.display = 'none';
+                });
+                
+                // 獲取表單數據
+                const username = document.getElementById('username').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                const nickname = document.getElementById('nickname').value.trim();
+                const termsAgreed = document.getElementById('terms-agree').checked;
+                
+                // 驗證
+                let valid = true;
+                
+                if (!username) {
+                    document.getElementById('username-error').style.display = 'block';
+                    valid = false;
+                }
+                
+                if (!email || !validateEmail(email)) {
+                    document.getElementById('email-error').style.display = 'block';
+                    valid = false;
+                }
+                
+                if (!password || password.length < 8) {
+                    document.getElementById('password-error').style.display = 'block';
+                    valid = false;
+                }
+                
+                if (password !== confirmPassword) {
+                    document.getElementById('confirm-password-error').style.display = 'block';
+                    valid = false;
+                }
+                
+                if (!termsAgreed) {
+                    document.getElementById('terms-error').style.display = 'block';
+                    valid = false;
+                }
+                
+                if (valid) {
+                    try {
+                        const result = await window.userSystem.register(username, email, password, nickname);
+                        
+                        if (result.success) {
+                            // 顯示成功模態框
+                            successModal.style.display = 'flex';
+                            
+                            // 3秒後自動跳轉
+                            setTimeout(() => {
+                                window.location.href = '../../main.html';
+                            }, 3000);
+                        } else {
+                            // 顯示錯誤
+                            alert(result.message);
+                        }
+                    } catch (error) {
+                        console.error('註冊時出錯:', error);
+                        alert('註冊時發生錯誤，請稍後再試');
+                    }
+                }
+            });
+            
+            // 電子郵件驗證函數
+            function validateEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+        });
+    </script>
+</body>
+</html> 

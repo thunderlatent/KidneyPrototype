@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>登入 - 腎好康</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/auth/auth-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="back-button" onclick="history.back()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="nav-title">登入</div>
+            <div></div>
+        </div>
+        
+        <!-- 內容區域 -->
+        <div class="content-container">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <img src="../../images/logo.png" alt="腎好康 Logo" class="auth-logo">
+                    <h1 class="auth-title">歡迎回來</h1>
+                    <p class="auth-subtitle">登入您的腎好康帳號</p>
+                </div>
+                
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="username" class="form-label">用戶名或電子郵件</label>
+                        <input type="text" id="username" class="form-input" placeholder="請輸入用戶名或電子郵件">
+                        <div id="username-error" class="form-error">請輸入用戶名或電子郵件</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">密碼</label>
+                        <div class="password-input-container">
+                            <input type="password" id="password" class="form-input" placeholder="請輸入密碼">
+                            <i class="fas fa-eye toggle-password"></i>
+                        </div>
+                        <div id="password-error" class="form-error">請輸入密碼</div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember-me">
+                            <label for="remember-me">記住我</label>
+                        </div>
+                        <a href="forgot-password.html" class="forgot-password">忘記密碼？</a>
+                    </div>
+                    
+                    <button type="submit" class="auth-button">登入</button>
+                    
+                    <div class="auth-separator">
+                        <span>或者</span>
+                    </div>
+                    
+                    <button type="button" class="social-auth-button apple-auth">
+                        <i class="fab fa-apple"></i>
+                        <span>使用 Apple 帳號登入</span>
+                    </button>
+                    
+                    <button type="button" class="social-auth-button google-auth">
+                        <i class="fab fa-google"></i>
+                        <span>使用 Google 帳號登入</span>
+                    </button>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>還沒有帳號？<a href="register.html">註冊新帳號</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../../js/auth/user.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            
+            // 切換密碼可見性
+            document.querySelector('.toggle-password').addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                const type = input.type === 'password' ? 'text' : 'password';
+                input.type = type;
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+            
+            // 表單提交
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // 重置錯誤提示
+                document.querySelectorAll('.form-error').forEach(error => {
+                    error.style.display = 'none';
+                });
+                
+                // 獲取表單數據
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('remember-me').checked;
+                
+                // 驗證
+                let valid = true;
+                
+                if (!username) {
+                    document.getElementById('username-error').style.display = 'block';
+                    valid = false;
+                }
+                
+                if (!password) {
+                    document.getElementById('password-error').style.display = 'block';
+                    valid = false;
+                }
+                
+                if (valid) {
+                    try {
+                        const result = await window.userSystem.login(username, password);
+                        
+                        if (result.success) {
+                            // 如果選擇"記住我"，可以設置持久化登入
+                            if (rememberMe) {
+                                // 存儲登入狀態
+                                localStorage.setItem('rememberLogin', 'true');
+                            }
+                            
+                            // 登入成功，跳轉到首頁
+                            window.location.href = '../../main.html';
+                        } else {
+                            // 顯示錯誤
+                            alert(result.message);
+                        }
+                    } catch (error) {
+                        console.error('登入時出錯:', error);
+                        alert('登入時發生錯誤，請稍後再試');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

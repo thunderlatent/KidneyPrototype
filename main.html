@@ -306,6 +306,49 @@
             font-weight: 700;
             color: var(--ios-primary);
         }
+        
+        .welcome-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        
+        .welcome-button {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .login-btn {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+        
+        .register-btn {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        
+        /* 已登入的用戶樣式 */
+        .user-info-welcome {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .user-stats {
+            font-size: 14px;
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
@@ -333,10 +376,18 @@
                 <!-- 歡迎區塊 -->
                 <div class="welcome-section">
                     <div class="welcome-header">
-                        <div class="welcome-title">你好，玩家！</div>
-                        <div class="avatar">😊</div>
+                        <div class="welcome-title">
+                            <span id="welcome-text">歡迎使用腎好康！</span>
+                        </div>
+                        <div id="user-avatar" class="avatar" onclick="navigateToProfile()">👤</div>
                     </div>
-                    <div class="welcome-message">今天準備好挑戰新的遊戲了嗎？來測試你的腎臟知識吧！</div>
+                    <div class="welcome-message">
+                        <span id="welcome-message-text">今天準備好挑戰新的遊戲了嗎？來測試你的腎臟知識吧！</span>
+                        <div id="login-register-buttons" class="welcome-buttons">
+                            <a href="pages/auth/login.html" class="welcome-button login-btn">登入</a>
+                            <a href="pages/auth/register.html" class="welcome-button register-btn">註冊</a>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- 遊戲統計 -->
@@ -532,6 +583,70 @@
             updateStatusTime();
             setInterval(updateStatusTime, 60000);
         });
+    </script>
+    
+    <script src="js/auth/user.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 檢查用戶登入狀態並更新UI
+            updateWelcomeUI();
+            
+            // 監聽登入狀態變更事件
+            window.addEventListener('loginStatusChanged', function(e) {
+                updateWelcomeUI();
+            });
+        });
+        
+        // 更新歡迎區塊UI
+        function updateWelcomeUI() {
+            const loginRegisterButtons = document.getElementById('login-register-buttons');
+            const welcomeText = document.getElementById('welcome-text');
+            const welcomeMessageText = document.getElementById('welcome-message-text');
+            const userAvatar = document.getElementById('user-avatar');
+            
+            if (window.userSystem && window.userSystem.isLoggedIn()) {
+                // 用戶已登入
+                const currentUser = window.userSystem.getCurrentUser();
+                
+                // 更新歡迎文字
+                welcomeText.textContent = `你好，${currentUser.nickname || currentUser.username}！`;
+                
+                // 更新歡迎訊息
+                welcomeMessageText.innerHTML = `
+                    <div class="user-info-welcome">
+                        <span class="user-stats">連續登入: ${currentUser.stats.consecutiveLoginDays || 0} 天</span>
+                    </div>
+                `;
+                
+                // 隱藏登入/註冊按鈕
+                loginRegisterButtons.style.display = 'none';
+                
+                // 更新頭像（如果有自定義頭像）
+                if (currentUser.avatar && currentUser.avatar !== 'default') {
+                    userAvatar.innerHTML = `<img src="images/avatars/${currentUser.avatar}.png" alt="頭像">`;
+                } else {
+                    // 如果沒有自定義頭像，顯示首字母或表情符號
+                    userAvatar.innerHTML = currentUser.nickname ? currentUser.nickname.charAt(0).toUpperCase() : '😊';
+                }
+            } else {
+                // 用戶未登入
+                welcomeText.textContent = '歡迎使用腎好康！';
+                welcomeMessageText.textContent = '今天準備好挑戰新的遊戲了嗎？來測試你的腎臟知識吧！';
+                loginRegisterButtons.style.display = 'flex';
+                userAvatar.innerHTML = '👤';
+            }
+        }
+        
+        // 導航到個人資料頁面
+        function navigateToProfile() {
+            if (window.userSystem && window.userSystem.isLoggedIn()) {
+                // 導航到個人資料頁面
+                window.location.href = 'pages/auth/profile.html';
+            } else {
+                // 導航到登入頁面
+                window.location.href = 'pages/auth/login.html';
+            }
+        }
     </script>
 </body>
 </html> 

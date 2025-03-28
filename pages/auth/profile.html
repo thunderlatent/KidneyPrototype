@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>個人資料 - 腎好康</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/auth/auth-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .profile-container {
+            padding: 24px;
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        
+        .profile-avatar-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 16px;
+        }
+        
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: var(--ios-primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .edit-avatar {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 32px;
+            height: 32px;
+            background-color: var(--ios-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .profile-email {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 12px;
+        }
+        
+        .profile-stats {
+            background-color: var(--ios-gray6);
+            border-radius: 16px;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 8px;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--ios-primary);
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--ios-gray5);
+        }
+        
+        .menu-list {
+            margin-bottom: 24px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background-color: white;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .menu-item:active {
+            background-color: var(--ios-gray6);
+        }
+        
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--ios-primary-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 18px;
+            color: var(--ios-primary);
+        }
+        
+        .menu-text {
+            flex: 1;
+        }
+        
+        .menu-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ios-text-primary);
+            margin-bottom: 2px;
+        }
+        
+        .menu-desc {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+        }
+        
+        .menu-arrow {
+            color: var(--ios-gray4);
+            font-size: 16px;
+        }
+        
+        .logout-button {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background-color: #ff3b30;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 32px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-button:active {
+            background-color: #e0352b;
+            transform: scale(0.98);
+        }
+        
+        .profile-tab-bar {
+            display: flex;
+            border-bottom: 1px solid var(--ios-gray5);
+            margin-bottom: 24px;
+        }
+        
+        .profile-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ios-text-secondary);
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .profile-tab.active {
+            color: var(--ios-primary);
+        }
+        
+        .profile-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background-color: var(--ios-primary);
+            border-radius: 1.5px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="back-button" onclick="history.back()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="nav-title">個人資料</div>
+            <div><i class="fas fa-cog" onclick="window.location.href='settings.html'" style="font-size: 20px; color: var(--ios-primary);"></i></div>
+        </div>
+        
+        <!-- 內容區域 -->
+        <div class="content-container">
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="profile-avatar-container">
+                        <div class="profile-avatar" id="profile-avatar">
+                            <!-- 頭像將在JS中動態添加 -->
+                        </div>
+                        <div class="edit-avatar">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <h1 class="profile-name" id="profile-name">載入中...</h1>
+                    <p class="profile-email" id="profile-email">載入中...</p>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-games">0</div>
+                        <div class="stat-label">遊戲場次</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-points">0</div>
+                        <div class="stat-label">總積分</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-streak">0</div>
+                        <div class="stat-label">連續登入</div>
+                    </div>
+                </div>
+                
+                <div class="profile-tab-bar">
+                    <div class="profile-tab active" data-tab="personal-info">個人資訊</div>
+                    <div class="profile-tab" data-tab="health-data">健康資料</div>
+                    <div class="profile-tab" data-tab="achievements">成就</div>
+                </div>
+                
+                <div class="tab-content active" id="personal-info">
+                    <h2 class="section-title">帳號資訊</h2>
+                    
+                    <div class="menu-list">
+                        <div class="menu-item" onclick="window.location.href='edit-profile.html'">
+                            <div class="menu-icon">
+                                <i class="fas fa-user-edit"></i>
+                            </div>
+                            <div class="menu-text">
+                                <div class="menu-title">編輯個人資料</div>
+                                <div class="menu-desc">更新您的個人資訊</div>
+                            </div>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item" onclick="window.location.href='change-password.html'">
+                            <div class="menu-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <div class="menu-text">
+                                <div class="menu-title">修改密碼</div>
+                                <div class="menu-desc">更新您的登入密碼</div>
+                            </div>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item" onclick="window.location.href='notification-settings.html'">
+                            <div class="menu-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="menu-text">
+                                <div class="menu-title">通知設定</div>
+                                <div class="menu-desc">管理應用通知</div>
+                            </div>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h2 class="section-title">隱私與安全</h2>
+                    
+                    <div class="menu-list">
+                        <div class="menu-item" onclick="window.location.href='privacy-settings.html'">
+                            <div class="menu-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="menu-text">
+                                <div class="menu-title">隱私設定</div>
+                                <div class="menu-desc">管理您的資料分享偏好</div>
+                            </div>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item" onclick="window.location.href='connected-accounts.html'">
+                            <div class="menu-icon">
+                                <i class="fas fa-link"></i>
+                            </div>
+                            <div class="menu-text">
+                                <div class="menu-title">關聯帳號</div>
+                                <div class="menu-desc">管理關聯的社群帳號</div>
+                            </div>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="logout-button" id="logout-button">登出</button>
+                </div>
+                
+                <div class="tab-content" id="health-data">
+                    <h2 class="section-title">健康記錄</h2>
+                    
+                    <div class="menu-list">
+                        <div class="menu-item" onclick="window.location.href='../../health-data.html'">
+                            <div class="menu-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <div class="menu-text">
+                                <div class="menu-title">生理指標</div>
+                                <div class="menu-desc">血壓、體重等數據記錄</div>
+                            </div>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item" onclick="window.location.href='../../medication-tracker.html'">
+                            <div class="menu-icon">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                            <div class="menu-text">
+                                <div class="menu-title">用藥紀錄</div>
+                                <div class="menu-desc">管理您的藥物服用</div>
+                            </div>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item" onclick="window.location.href='diet-tracker.html'">
+                            <div class="menu-icon">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="menu-text">
+                                <div class="menu-title">飲食紀錄</div>
+                                <div class="menu-desc">追蹤您的飲食狀況</div>
+                            </div>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item" onclick="window.location.href='dialysis-record.html'">
+                            <div class="menu-icon">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <div class="menu-text">
+                                <div class="menu-title">透析紀錄</div>
+                                <div class="menu-desc">追蹤透析治療數據</div>
+                            </div>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="achievements">
+                    <h2 class="section-title">成就與獎勵</h2>
+                    
+                    <div class="menu-list">
+                        <div class="menu-item" onclick="window.location.href='../../rewards.html'">
+                            <div class="menu-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="menu-text">
+                                <div class="menu-title">成就獎盃</div>
+                                <div class="menu-desc">查看您獲得的成就</div>
+                            </div>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item" onclick="window.location.href='../../points-shop.html'">
+                            <div class="menu-icon">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            <div class="menu-text">
+                                <div class="menu-title">積分商店</div>
+                                <div class="menu-desc">兌換獎品與特權</div>
+                            </div>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item" onclick="window.location.href='daily-tasks.html'">
+                            <div class="menu-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="menu-text">
+                                <div class="menu-title">每日任務</div>
+                                <div class="menu-desc">完成任務獲取獎勵</div>
+                            </div>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../../js/auth/user.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 檢查登入狀態
+            if (!window.userSystem || !window.userSystem.isLoggedIn()) {
+                // 未登入，重定向到登入頁面
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // 獲取用戶資料
+            const currentUser = window.userSystem.getCurrentUser();
+            
+            // 更新頁面UI
+            updateProfileUI(currentUser);
+            
+            // 監聽標籤點擊事件
+            const tabs = document.querySelectorAll('.profile-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    
+                    // 更新標籤狀態
+                    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 更新內容顯示
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // 登出按鈕點擊事件
+            document.getElementById('logout-button').addEventListener('click', function() {
+                if (confirm('確定要登出嗎？')) {
+                    window.userSystem.logout();
+                }
+            });
+        });
+        
+        // 更新個人資料UI
+        function updateProfileUI(user) {
+            // 更新頭像
+            const avatarElement = document.getElementById('profile-avatar');
+            if (user.avatar && user.avatar !== 'default') {
+                avatarElement.innerHTML = `<img src="../../images/avatars/${user.avatar}.png" alt="頭像">`;
+            } else {
+                // 如果沒有自定義頭像，顯示首字母或表情符號
+                avatarElement.innerHTML = user.nickname ? user.nickname.charAt(0).toUpperCase() : '😊';
+            }
+            
+            // 更新名稱和電子郵件
+            document.getElementById('profile-name').textContent = user.nickname || user.username;
+            document.getElementById('profile-email').textContent = user.email;
+            
+            // 更新統計資料
+            document.getElementById('stat-games').textContent = user.stats.totalGamesPlayed || 0;
+            
+            // 如果有獎勵系統數據，顯示積分
+            if (window.userRewards) {
+                document.getElementById('stat-points').textContent = window.userRewards.coins || 0;
+            }
+            
+            // 更新連續登入天數
+            document.getElementById('stat-streak').textContent = user.stats.consecutiveLoginDays || 0;
+        }
+    </script>
+</body>
+</html> 
