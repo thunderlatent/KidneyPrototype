@@ -609,21 +609,23 @@
         }
         
         .character-select {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            display: flex;
+            flex-direction: column;
             gap: 16px;
             margin-bottom: 20px;
         }
         
         .character-option {
-            background-color: var(--ios-gray6);
-            border-radius: 14px;
-            padding: 16px;
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 20px;
             cursor: pointer;
             transition: all 0.2s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 2px solid transparent;
         }
         
         .character-option:active {
@@ -631,20 +633,23 @@
         }
         
         .character-option.selected {
-            background-color: rgba(0, 122, 255, 0.1);
+            background-color: rgba(0, 122, 255, 0.05);
             border: 2px solid var(--ios-primary);
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.15);
         }
         
         .character-option-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 30px;
+            width: 70px;
+            height: 70px;
+            border-radius: 35px;
             background-color: var(--ios-primary);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 30px;
             color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
         }
         
         .character-option-info {
@@ -652,22 +657,30 @@
         }
         
         .character-option-name {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 20px;
+            font-weight: 700;
             color: var(--ios-text-primary);
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
         
         .character-option-desc {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--ios-text-secondary);
+            line-height: 1.4;
         }
         
         .character-details {
-            background-color: var(--ios-gray6);
+            background-color: white;
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 24px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.5s ease;
+            display: none;
+        }
+        
+        .character-details.active {
+            display: block;
         }
         
         .character-details h3 {
@@ -677,14 +690,72 @@
             color: var(--ios-text-primary);
         }
         
+        .character-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .character-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            background-color: var(--ios-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+        
+        .character-info {
+            flex: 1;
+        }
+        
+        .character-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .character-description {
+            font-size: 15px;
+            color: var(--ios-text-secondary);
+            line-height: 1.5;
+        }
+        
+        .start-button {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            background-color: var(--ios-gray4);
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 16px;
+            border: none;
+        }
+        
         .start-button.active {
             background-color: var(--ios-primary);
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
         }
         
         .start-button:disabled {
             background-color: var(--ios-gray3);
             color: var(--ios-gray1);
             cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .start-button.active:active {
+            transform: scale(0.98);
         }
     </style>
 </head>
@@ -726,10 +797,12 @@
                         </div>
                     </div>
                     
-                    <div class="character-details">
+                    <div class="character-details" id="characterDetails">
                         <h3>角色介紹</h3>
                         <div class="character-card">
-                            <div class="character-avatar"></div>
+                            <div class="character-avatar" id="selectedCharacterAvatar">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
                             <div class="character-info">
                                 <div class="character-name" id="characterName">請選擇一位角色</div>
                                 <div class="character-description" id="characterDescription">點擊上方的角色頭像以查看詳細介紹</div>

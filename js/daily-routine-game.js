@@ -614,6 +614,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('正在初始化遊戲...', {characters});
         
+        // 初始化角色詳情區域
+        const characterDetails = document.getElementById('characterDetails');
+        if (characterDetails) {
+            // 初始設置為不可見
+            characterDetails.classList.remove('active');
+        }
+        
         // 生成角色選擇器
         generateCharacterOptions();
         
@@ -642,9 +649,13 @@ document.addEventListener('DOMContentLoaded', function() {
         characters.forEach(character => {
             const characterOption = document.createElement('div');
             characterOption.className = 'character-option';
+            
+            // 設置角色頭像顏色和圖標
+            let avatarStyle = character.avatarStyle || `background-color: var(--ios-primary)`;
+            
             characterOption.innerHTML = `
-                <div class="character-option-avatar" style="${character.avatarStyle || ''}">
-                    <i class="fas fa-${character.icon}"></i>
+                <div class="character-option-avatar" style="${avatarStyle}">
+                    <i class="fas fa-${character.icon || 'user'}"></i>
                 </div>
                 <div class="character-option-info">
                     <div class="character-option-name">${character.name}</div>
@@ -654,11 +665,26 @@ document.addEventListener('DOMContentLoaded', function() {
             
             characterOption.addEventListener('click', () => {
                 console.log('選擇角色:', character.name);
+                
+                // 移除所有選中狀態
                 document.querySelectorAll('.character-option').forEach(opt => {
                     opt.classList.remove('selected');
                 });
+                
+                // 添加選中狀態
                 characterOption.classList.add('selected');
                 selectedCharacter = character;
+                
+                // 顯示角色詳細信息
+                const characterDetails = document.getElementById('characterDetails');
+                characterDetails.classList.add('active');
+                
+                // 更新角色頭像
+                const selectedAvatar = document.getElementById('selectedCharacterAvatar');
+                if (selectedAvatar) {
+                    selectedAvatar.style = avatarStyle;
+                    selectedAvatar.innerHTML = `<i class="fas fa-${character.icon || 'user'}"></i>`;
+                }
                 
                 // 更新角色介紹
                 document.getElementById('characterName').textContent = character.name;
@@ -668,6 +694,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 startGameBtn.classList.add('active');
                 startGameBtn.disabled = false;
                 startGameBtn.textContent = '開始照護';
+                
+                // 滾動到角色詳情
+                characterDetails.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             });
             
             characterSelect.appendChild(characterOption);
@@ -814,9 +843,30 @@ document.addEventListener('DOMContentLoaded', function() {
             opt.classList.remove('selected');
         });
         
+        // 重置角色詳情
+        const characterDetails = document.getElementById('characterDetails');
+        if (characterDetails) {
+            characterDetails.classList.remove('active');
+        }
+        
+        // 重置角色介紹文字
+        document.getElementById('characterName').textContent = '請選擇一位角色';
+        document.getElementById('characterDescription').textContent = '點擊上方的角色頭像以查看詳細介紹';
+        
+        // 重置角色頭像
+        const selectedAvatar = document.getElementById('selectedCharacterAvatar');
+        if (selectedAvatar) {
+            selectedAvatar.style = 'background-color: var(--ios-primary)';
+            selectedAvatar.innerHTML = '<i class="fas fa-user-circle"></i>';
+        }
+        
+        // 重置開始按鈕
         startGameBtn.classList.remove('active');
         startGameBtn.disabled = true;
         startGameBtn.textContent = '請先選擇角色';
+        
+        // 滾動到頁面頂部
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // 生成反饋列表
@@ -852,104 +902,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return icons[index % icons.length];
     }
 
-    // 添加CSS樣式
-    function addCharacterSelectorStyles() {
-        const styleEl = document.createElement('style');
-        styleEl.textContent = `
-            .character-selector-section {
-                margin-bottom: 20px;
-            }
-            
-            .character-selector-section h3 {
-                font-size: 20px;
-                font-weight: 700;
-                margin-bottom: 16px;
-                color: var(--ios-text-primary);
-            }
-            
-            .character-select {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
-                margin-bottom: 20px;
-            }
-            
-            .character-option {
-                background-color: var(--ios-gray6);
-                border-radius: 14px;
-                padding: 16px;
-                display: flex;
-                align-items: center;
-                gap: 14px;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-            
-            .character-option:active {
-                transform: scale(0.98);
-            }
-            
-            .character-option.selected {
-                background-color: rgba(0, 122, 255, 0.1);
-                border: 2px solid var(--ios-primary);
-            }
-            
-            .character-option-avatar {
-                width: 60px;
-                height: 60px;
-                border-radius: 30px;
-                background-color: var(--ios-primary-light);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 30px;
-                color: white;
-            }
-            
-            .character-option-info {
-                flex: 1;
-            }
-            
-            .character-option-name {
-                font-size: 18px;
-                font-weight: 600;
-                color: var(--ios-text-primary);
-                margin-bottom: 4px;
-            }
-            
-            .character-option-desc {
-                font-size: 14px;
-                color: var(--ios-text-secondary);
-            }
-            
-            .character-details {
-                background-color: var(--ios-gray6);
-                border-radius: 16px;
-                padding: 20px;
-                margin-bottom: 24px;
-            }
-            
-            .character-details h3 {
-                font-size: 20px;
-                font-weight: 700;
-                margin-bottom: 16px;
-                color: var(--ios-text-primary);
-            }
-            
-            .start-button.active {
-                background-color: var(--ios-primary);
-            }
-            
-            .start-button:disabled {
-                background-color: var(--ios-gray3);
-                color: var(--ios-gray1);
-                cursor: not-allowed;
-            }
-        `;
-        document.head.appendChild(styleEl);
-    }
-
     // 初始化遊戲
-    addCharacterSelectorStyles();
     initGame();
 }); 
