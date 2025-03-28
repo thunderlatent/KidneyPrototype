@@ -42,6 +42,10 @@
     --radius-md: 12px;
     --radius-lg: 16px;
     --radius-xl: 20px;
+    
+    /* iPhone 16 Pro Max 尺寸 */
+    --iphone-16-promax-width: 430px;
+    --iphone-16-promax-height: 932px;
 }
 
 /* 基本重置 */
@@ -94,8 +98,8 @@ input, select, textarea {
 .iphone-container {
     width: 100%;
     height: 100vh;
-    max-width: 430px;
-    max-height: 100vh;
+    max-width: var(--iphone-16-promax-width);
+    max-height: var(--iphone-16-promax-height);
     margin: 0 auto;
     position: relative;
     display: flex;
@@ -477,23 +481,19 @@ input:checked + .toggle-slider:before {
 
 /* 深色模式支持 */
 @media (prefers-color-scheme: dark) {
+    /* 移除所有暗黑模式樣式，使用淺色模式 */
     :root {
-        --ios-text-primary: #FFFFFF;
-        --ios-text-secondary: rgba(255, 255, 255, 0.8);
-        --ios-text-tertiary: rgba(255, 255, 255, 0.6);
-        --ios-background: #000000;
-        --ios-separator: rgba(255, 255, 255, 0.1);
-        --ios-opaque-separator: rgba(255, 255, 255, 0.3);
-        --ios-gray6: #1C1C1E;
-        --ios-gray5: #2C2C2E;
-        --ios-gray4: #3A3A3C;
-        --ios-gray3: #48484A;
-        --ios-gray2: #636366;
-        --ios-gray1: #8E8E93;
+        /* 保持與淺色模式相同的顏色 */
+        --ios-background: #F2F2F7;
+        --ios-text-primary: #000000;
+        --ios-text-secondary: #3C3C43;
+        --ios-text-tertiary: #8E8E93;
+        --ios-separator: rgba(60, 60, 67, 0.1);
+        --ios-opaque-separator: rgba(60, 60, 67, 0.3);
     }
     
     .card, .tab-bar {
-        background-color: #1C1C1E;
+        background-color: white;
     }
 }
 
