@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/additional-styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- 引入擴充食物數據庫 -->
+    <script src="js/expanded-food-database.js"></script>
     <style>
         :root {
             --ios-primary: #007AFF;
@@ -1059,7 +1061,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">進度</div>
-                        <div class="info-value"><span id="currentQuestion">1</span>/<span id="totalQuestions">10</span></div>
+                        <div class="info-value"><span id="currentQuestion">1</span>/<span id="totalQuestions">20</span></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">時間</div>
@@ -1069,7 +1071,7 @@
                 
                 <!-- 食物展示區 -->
                 <div class="food-display-container">
-                    <div class="food-question-number">問題 <span id="questionNumber">1</span>/10</div>
+                    <div class="food-question-number">問題 <span id="questionNumber">1</span>/20</div>
                     <div class="food-display-card" id="currentFoodCard">
                         <div class="food-image-large" id="foodImage"></div>
                         <div class="food-details-large">
@@ -1256,99 +1258,9 @@
     // 常量
     const MAX_TIME = 15; // 每個問題的最大時間（秒）
 
-    // 食物數據庫
-    const foodDatabase = [
-        {
-            id: "food1",
-            name: "蘋果",
-            description: "新鮮水果，富含維生素",
-            nutrients: { "鉀": "中", "磷": "低" },
-            image: "images/food/apple.jpg",
-            category: "good", // 適合食用
-            explanation: "蘋果的鉀含量為中等，磷含量低，適合腎臟病患者適量食用。"
-        },
-        {
-            id: "food2",
-            name: "白米飯",
-            description: "主食，熱量來源",
-            nutrients: { "鉀": "低", "磷": "中" },
-            image: "images/food/rice.jpg",
-            category: "good", // 適合食用
-            explanation: "白米飯的鉀含量低，是適合腎臟病患者的主食選擇。"
-        },
-        {
-            id: "food3",
-            name: "香蕉",
-            description: "水果，富含鉀",
-            nutrients: { "鉀": "高", "磷": "中" },
-            image: "images/food/banana.jpg",
-            category: "bad", // 需要限制
-            explanation: "香蕉富含鉀，腎臟病患者應限制食用，避免血鉀升高。"
-        },
-        {
-            id: "food4",
-            name: "菠菜",
-            description: "綠葉蔬菜，富含鐵質",
-            nutrients: { "鉀": "高", "磷": "高", "鈉": "低" },
-            image: "images/food/spinach.jpg",
-            category: "bad", // 需要限制
-            explanation: "菠菜的鉀和磷含量都高，腎臟病患者應限制食用。"
-        },
-        {
-            id: "food5",
-            name: "白麵包",
-            description: "麥製品，烘焙食品",
-            nutrients: { "鉀": "低", "磷": "低", "鈉": "中" },
-            image: "images/food/bread.jpg",
-            category: "good", // 適合食用
-            explanation: "白麵包的鉀和磷含量都低，是腎臟病患者的良好選擇。"
-        },
-        {
-            id: "food6",
-            name: "巧克力",
-            description: "甜點，含可可成分",
-            nutrients: { "鉀": "高", "磷": "高" },
-            image: "images/food/chocolate.jpg",
-            category: "bad", // 需要限制
-            explanation: "巧克力中的鉀和磷含量都很高，腎臟病患者應避免食用。"
-        },
-        {
-            id: "food7",
-            name: "白蘿蔔",
-            description: "根莖類蔬菜",
-            nutrients: { "鉀": "低", "磷": "低", "鈉": "低" },
-            image: "images/food/radish.jpg",
-            category: "good", // 適合食用
-            explanation: "白蘿蔔的鉀、磷和鈉含量都低，是腎臟病患者的理想蔬菜選擇。"
-        },
-        {
-            id: "food8",
-            name: "起司",
-            description: "乳製品，含鈣質",
-            nutrients: { "鉀": "低", "磷": "高", "鈉": "高" },
-            image: "images/food/cheese.jpg",
-            category: "bad", // 需要限制
-            explanation: "起司的磷和鈉含量都高，腎臟病患者應限制食用。"
-        },
-        {
-            id: "food9",
-            name: "草莓",
-            description: "漿果類水果",
-            nutrients: { "鉀": "中", "磷": "低", "鈉": "低" },
-            image: "images/food/strawberry.jpg",
-            category: "good", // 適合食用
-            explanation: "草莓的磷和鈉含量低，鉀含量為中等，適合腎臟病患者適量食用。"
-        },
-        {
-            id: "food10",
-            name: "加工肉類",
-            description: "火腿、臘腸等",
-            nutrients: { "鉀": "中", "磷": "高", "鈉": "高" },
-            image: "images/food/processed-meat.jpg",
-            category: "bad", // 需要限制
-            explanation: "加工肉類的磷和鈉含量都高，腎臟病患者應限制食用。"
-        }
-    ];
+    // 使用擴充食物數據庫
+    // 原有的食物數據庫已被替換
+    // const foodDatabase = [ ... ]; 
 
     // 遊戲狀態
     let gameState = {
@@ -1360,8 +1272,34 @@
         questionTimer: null,
         gameActive: true,
         answers: [],
-        totalQuestions: 10
+        totalQuestions: 20 // 更改為20題
     };
+
+    // 檢查擴充食物數據庫是否已加載
+    if (typeof expandedFoodDatabase === 'undefined') {
+        console.error('擴充食物數據庫未正確載入');
+        // 創建一個簡單的備用食物數據庫
+        window.expandedFoodDatabase = [
+            {
+                id: "food1",
+                name: "蘋果",
+                description: "新鮮水果，富含維生素",
+                nutrients: { "鉀": "中", "磷": "低" },
+                image: "images/food/apple.jpg",
+                category: "good",
+                explanation: "蘋果的鉀含量為中等，磷含量低，適合腎臟病患者適量食用。"
+            },
+            {
+                id: "food2",
+                name: "香蕉",
+                description: "水果，富含鉀",
+                nutrients: { "鉀": "高", "磷": "中" },
+                image: "images/food/banana.jpg",
+                category: "bad",
+                explanation: "香蕉富含鉀，腎臟病患者應限制食用，避免血鉀升高。"
+            }
+        ];
+    }
 
     // DOM 元素
     const scoreElement = document.getElementById('score');
@@ -1409,22 +1347,24 @@
         // 重置遊戲狀態
         gameState = {
             gameActive: true,
-            questions: shuffleArray(foodDatabase).slice(0, 10), // 隨機選10題
+            questions: getRandomQuestions(expandedFoodDatabase, gameState.totalQuestions),
             currentQuestionIndex: 0,
             timeLeft: MAX_TIME,
             score: 0,
             timerInterval: null,
-            answers: []
+            answers: [],
+            totalQuestions: 20 // 確保與上面設置的值保持一致
         };
+        
+        // 更新UI
+        scoreElement.textContent = gameState.score;
+        totalQuestionsElement.textContent = gameState.questions.length;
         
         // 顯示第一題
         displayQuestion();
         
         // 啟用按鈕
         enableAnswerButtons();
-        
-        // 重置分數顯示
-        scoreElement.textContent = '0';
     }
 
     // 顯示當前問題
@@ -1450,7 +1390,31 @@
             foodImageElement.style.backgroundImage = 'none';
             foodImageElement.style.backgroundColor = currentQuestion.image;
         } else {
-            foodImageElement.style.backgroundImage = `url('${currentQuestion.image}')`;
+            // 設置圖片處理
+            try {
+                // 先設置默認圖片
+                foodImageElement.style.backgroundImage = `url('images/food/default.jpg')`;
+                
+                // 嘗試載入實際圖片
+                const img = new Image();
+                img.onload = function() {
+                    foodImageElement.style.backgroundImage = `url('${currentQuestion.image}')`;
+                };
+                img.onerror = function() {
+                    console.error(`圖片載入失敗: ${currentQuestion.image}`);
+                    // 使用基於類別的默認圖片
+                    if (currentQuestion.category === 'good') {
+                        foodImageElement.style.backgroundImage = `url('images/food/apple.jpg')`;
+                    } else {
+                        foodImageElement.style.backgroundImage = `url('images/food/banana.jpg')`;
+                    }
+                };
+                img.src = currentQuestion.image;
+            } catch (e) {
+                console.error('圖片處理錯誤:', e);
+                foodImageElement.style.backgroundImage = `url('images/food/default.jpg')`;
+            }
+            
             foodImageElement.style.backgroundColor = 'transparent';
         }
         
@@ -1552,6 +1516,8 @@
 
     // 處理用戶答案
     function handleAnswer(answer) {
+        console.log(`使用者選擇了: ${answer}`);
+        
         // 禁用按鈕
         disableAnswerButtons();
         
@@ -1560,7 +1526,10 @@
         
         // 檢查答案是否正確
         const currentQuestion = gameState.questions[gameState.currentQuestionIndex];
+        console.log(`當前問題:`, currentQuestion);
+        
         const isCorrect = answer === currentQuestion.category;
+        console.log(`答案是否正確: ${isCorrect}, 用戶答案: ${answer}, 正確答案: ${currentQuestion.category}`);
         
         // 添加視覺回饋到按鈕
         if (answer === 'good') {
@@ -1835,6 +1804,14 @@
         return newArray;
     }
 
+    // 從食物數據庫中隨機選擇指定數量的問題
+    function getRandomQuestions(database, count) {
+        // 打亂食物數據庫
+        const shuffledDatabase = shuffleArray(database);
+        // 取前count個元素
+        return shuffledDatabase.slice(0, count);
+    }
+
     // 事件監聽器
     document.addEventListener('DOMContentLoaded', () => {
         // 修改按鈕圖標，使用中性圖標代表選項類型
@@ -1872,34 +1849,41 @@
             badStatusLabel.textContent = '';
         }
         
-        // 添加下一題按鈕的事件監聽器
-        nextQuestionBtn.addEventListener('click', nextQuestion);
+        // 確保答案按鈕可點擊
+        goodBtnElement.onclick = function() { handleAnswer('good'); };
+        badBtnElement.onclick = function() { handleAnswer('bad'); };
         
-        // 答案按鈕的事件監聽器
-        goodBtnElement.addEventListener('click', () => handleAnswer('good'));
-        badBtnElement.addEventListener('click', () => handleAnswer('bad'));
+        // 添加下一題按鈕的事件監聽器
+        nextQuestionBtn.onclick = nextQuestion;
         
         // 說明彈窗開始按鈕
-        document.getElementById('startGameBtn').addEventListener('click', () => {
-            document.getElementById('instructionModal').style.display = 'none';
-            initGame();
-        });
+        const startGameBtn = document.getElementById('startGameBtn');
+        if (startGameBtn) {
+            startGameBtn.onclick = function() {
+                document.getElementById('instructionModal').style.display = 'none';
+                initGame();
+            };
+        }
         
         // 結果按鈕
-        backBtn.addEventListener('click', () => {
-            resultModal.classList.remove('active');
-            window.location.href = 'game-mode.html';
-        });
+        if (backBtn) {
+            backBtn.onclick = function() {
+                resultModal.classList.remove('active');
+                window.location.href = 'game-mode.html';
+            };
+        }
         
-        nextBtn.addEventListener('click', () => {
-            resultModal.classList.remove('active');
-            initGame(); // 重新開始遊戲
-        });
+        if (nextBtn) {
+            nextBtn.onclick = function() {
+                resultModal.classList.remove('active');
+                initGame(); // 重新開始遊戲
+            };
+        }
         
         // 廣告按鈕點擊事件
         const adButton = document.getElementById('adButton');
         if (adButton) {
-            adButton.addEventListener('click', function(e) {
+            adButton.onclick = function(e) {
                 e.preventDefault();
                 
                 // 顯示廣告點擊效果
@@ -1918,7 +1902,7 @@
                 setTimeout(() => {
                     this.classList.remove('clicked');
                 }, 200);
-            });
+            };
         }
         
         // 更新狀態欄時間
@@ -1927,6 +1911,8 @@
         
         // 初始顯示遊戲說明
         showInstructions();
+        
+        console.log("遊戲初始化完成，等待開始遊戲按鈕點擊");
     });
     
     // 顯示遊戲說明
@@ -2038,7 +2024,70 @@
         enableAnswerButtons();
         
         // 加載第一題
-        loadQuestion(gameState.currentQuestionIndex);
+        displayQuestion(); // 使用displayQuestion代替loadQuestion
     }
+    
+    // 加載特定索引問題的函數（為了兼容）
+    function loadQuestion(index) {
+        gameState.currentQuestionIndex = index;
+        displayQuestion();
+    }
+    
+    // 初始顯示遊戲說明
+    showInstructions();
+    
+    console.log("遊戲初始化完成，等待開始遊戲按鈕點擊");
+    
+    // 確保按鈕有點擊處理器
+    setTimeout(function() {
+        console.log("延遲設置按鈕事件處理");
+        
+        // 確保開始遊戲按鈕
+        const startGameBtn = document.getElementById('startGameBtn');
+        if (startGameBtn) {
+            console.log("找到開始遊戲按鈕，添加點擊事件");
+            startGameBtn.addEventListener('click', function() {
+                console.log("開始遊戲按鈕被點擊");
+                document.getElementById('instructionModal').style.display = 'none';
+                initGame();
+            });
+        } else {
+            console.error("未找到開始遊戲按鈕");
+        }
+        
+        // 確保答案按鈕
+        if (goodBtnElement) {
+            console.log("找到適合食用按鈕，添加點擊事件");
+            goodBtnElement.addEventListener('click', function() {
+                console.log("適合食用按鈕被點擊");
+                handleAnswer('good');
+            });
+        } else {
+            console.error("未找到適合食用按鈕");
+        }
+        
+        if (badBtnElement) {
+            console.log("找到需要限制按鈕，添加點擊事件");
+            badBtnElement.addEventListener('click', function() {
+                console.log("需要限制按鈕被點擊");
+                handleAnswer('bad');
+            });
+        } else {
+            console.error("未找到需要限制按鈕");
+        }
+        
+        // 確保下一題按鈕
+        if (nextQuestionBtn) {
+            console.log("找到下一題按鈕，添加點擊事件");
+            nextQuestionBtn.addEventListener('click', function() {
+                console.log("下一題按鈕被點擊");
+                nextQuestion();
+            });
+        } else {
+            console.error("未找到下一題按鈕");
+        }
+    }, 500);
+    
+    // 手動初始化遊戲
 </script>
 </html> 
