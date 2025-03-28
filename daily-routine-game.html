@@ -239,42 +239,30 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
-        .scene-image {
-            width: 100%;
-            height: 180px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .scene-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
+        .scene-header {
             padding: 16px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-            color: white;
         }
 
-        .scene-title {
+        .scene-location {
             font-size: 18px;
             font-weight: 600;
+            color: var(--ios-text-primary);
             margin-bottom: 4px;
         }
 
         .scene-description {
             font-size: 14px;
+            color: var(--ios-text-secondary);
         }
 
         .scene-content {
             padding: 20px;
         }
 
-        .scene-message {
+        .scene-question {
             font-size: 16px;
+            font-weight: 600;
             color: var(--ios-text-primary);
-            line-height: 1.5;
             margin-bottom: 16px;
         }
 
@@ -607,6 +595,97 @@
         .pulse {
             animation: pulse 1s infinite;
         }
+
+        /* 角色選擇器樣式 */
+        .character-selector-section {
+            margin-bottom: 20px;
+        }
+        
+        .character-selector-section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--ios-text-primary);
+        }
+        
+        .character-select {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .character-option {
+            background-color: var(--ios-gray6);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .character-option:active {
+            transform: scale(0.98);
+        }
+        
+        .character-option.selected {
+            background-color: rgba(0, 122, 255, 0.1);
+            border: 2px solid var(--ios-primary);
+        }
+        
+        .character-option-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            background-color: var(--ios-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+        }
+        
+        .character-option-info {
+            flex: 1;
+        }
+        
+        .character-option-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .character-option-desc {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+        }
+        
+        .character-details {
+            background-color: var(--ios-gray6);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .character-details h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--ios-text-primary);
+        }
+        
+        .start-button.active {
+            background-color: var(--ios-primary);
+        }
+        
+        .start-button:disabled {
+            background-color: var(--ios-gray3);
+            color: var(--ios-gray1);
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -636,24 +715,26 @@
             <div class="game-intro" id="gameIntro">
                 <div class="intro-header">
                     <div class="game-title">時間序列照護模擬</div>
-                    <div class="game-subtitle">跟隨小明的一天，在不同時間點做出關鍵照護決策</div>
+                    <div class="game-subtitle">選擇不同角色，在各種時間點做出關鍵照護決策</div>
                 </div>
                 
                 <div class="intro-content">
-                    <div class="character-card">
-                        <div class="character-avatar"></div>
-                        <div class="character-info">
-                            <div class="character-name">小明</div>
-                            <div class="character-description">第三期慢性腎臟病患者</div>
+                    <div class="character-selector-section">
+                        <h3>選擇照護對象</h3>
+                        <div class="character-select" id="characterSelect">
+                            <!-- 角色選項將由JS動態生成 -->
                         </div>
                     </div>
                     
-                    <div class="intro-description">
-                        <h3>遊戲說明</h3>
-                        <p>小明是一位慢性腎臟病第三期患者，他需要你的幫助來度過這一天。</p>
-                        <p>他的腎功能已下降至正常值的45%左右，需要小心管理飲食、水分、藥物和活動。</p>
-                        <p>在遊戲中，你將面臨一系列時間點的選擇，每個選擇都會影響他的健康狀況。</p>
-                        <p>做出正確的決策，協助小明安全度過這一天吧！</p>
+                    <div class="character-details">
+                        <h3>角色介紹</h3>
+                        <div class="character-card">
+                            <div class="character-avatar"></div>
+                            <div class="character-info">
+                                <div class="character-name" id="characterName">請選擇一位角色</div>
+                                <div class="character-description" id="characterDescription">點擊上方的角色頭像以查看詳細介紹</div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="intro-instructions">
@@ -673,11 +754,11 @@
                             <div class="instruction-icon">
                                 <i class="fas fa-heart"></i>
                             </div>
-                            <div class="instruction-text">你的選擇將影響小明的整體健康狀況</div>
+                            <div class="instruction-text">你的選擇將影響角色的整體健康狀況</div>
                         </div>
                     </div>
                     
-                    <button class="start-button" id="startGameBtn">開始照護</button>
+                    <button class="start-button" id="startGameBtn" disabled>請先選擇角色</button>
                 </div>
             </div>
 
@@ -690,11 +771,9 @@
                 
                 <!-- 場景顯示 -->
                 <div class="scene-display">
-                    <div class="scene-image" id="sceneImage">
-                        <div class="scene-overlay">
-                            <div class="scene-title" id="sceneTitle">早晨 · 家裡</div>
-                            <div class="scene-description" id="sceneDescription">新的一天開始了</div>
-                        </div>
+                    <div class="scene-header">
+                        <div class="scene-location" id="sceneTitle">早晨 · 家裡</div>
+                        <div class="scene-description" id="sceneDescription">新的一天開始了</div>
                     </div>
                     <div class="scene-content">
                         <div class="scene-question" id="sceneQuestion">你現在應該先做什麼？</div>
@@ -764,6 +843,7 @@
     </div>
     
     <!-- 載入遊戲數據 -->
+    <script src="js/daily-routine-characters.js"></script>
     <script src="js/daily-routine-data.js"></script>
     
     <!-- 載入遊戲邏輯 -->
