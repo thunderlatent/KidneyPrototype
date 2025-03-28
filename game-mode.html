@@ -36,6 +36,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            background-color: #F2F2F7;
         }
 
         /* 標題區塊 */
@@ -47,13 +48,13 @@
         .game-title {
             font-size: 28px;
             font-weight: 700;
-            color: var(--ios-text-primary);
+            color: #000000;
             margin-bottom: 8px;
         }
 
         .game-subtitle {
             font-size: 16px;
-            color: var(--ios-text-secondary);
+            color: #3C3C43;
         }
 
         /* 遊戲模式卡片 */
@@ -352,6 +353,37 @@
             color: var(--ios-success);
             font-size: 12px;
             font-weight: 600;
+        }
+
+        /* 強制淺色模式樣式 */
+        @media (prefers-color-scheme: dark) {
+            .game-container {
+                background-color: #F2F2F7;
+            }
+        
+            .mode-card, .achievements-section, .leaderboard-section {
+                background-color: white;
+            }
+            
+            .game-title, .mode-title, .section-title, .achievement-name, .leaderboard-name {
+                color: #000000;
+            }
+            
+            .game-subtitle, .mode-description, .achievement-progress, .leaderboard-score {
+                color: #3C3C43;
+            }
+            
+            .achievement-item, .leaderboard-item {
+                background-color: #F2F2F7;
+            }
+            
+            .mode-content {
+                background-color: white;
+            }
+            
+            .mode-meta {
+                color: #8E8E93;
+            }
         }
     </style>
 </head>

@@ -168,4 +168,51 @@
 
 .answer-feedback.incorrect {
     color: var(--ios-danger);
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+    /* 確保額外樣式在深色模式下也使用淺色主題 */
+    .status-bar, .nav-bar {
+        color: #000000;
+    }
+    
+    .card, .mode-card, .achievement-item, 
+    .game-container, .scene-display, 
+    .quiz-option, .result-content {
+        background-color: white;
+        color: #000000;
+    }
+    
+    .form-input, .quiz-container, .game-intro {
+        background-color: #F2F2F7;
+        color: #000000;
+    }
+    
+    /* 確保所有按鈕元素顏色正確 */
+    .ios-button, .start-button.active, .result-btn.primary {
+        background-color: #007AFF;
+        color: white;
+    }
+    
+    .result-btn.secondary, .quiz-option {
+        background-color: #F2F2F7;
+        color: #000000;
+    }
+    
+    /* 文字元素 */
+    .scene-title, .scene-location, .result-title, 
+    .card-title, .activity-title {
+        color: #000000;
+    }
+    
+    .scene-description, .scene-question, .activity-description {
+        color: #3C3C43;
+    }
+    
+    /* 特殊元素 */
+    .time-display {
+        background-color: #007AFF;
+        color: white;
+    }
 } 

@@ -299,6 +299,39 @@
             font-size: 14px;
             font-weight: 500;
         }
+        
+        /* 強制淺色模式樣式 */
+        @media (prefers-color-scheme: dark) {
+            .resources-container, .result-content {
+                background-color: #F2F2F7;
+            }
+            
+            .resource-card, .section-header {
+                background-color: white;
+                color: #000000;
+            }
+            
+            .resource-category, .category-tabs .tab {
+                background-color: #F2F2F7;
+            }
+            
+            .resource-title, .resource-category-title {
+                color: #000000;
+            }
+            
+            .resource-desc, .resource-meta {
+                color: #3C3C43;
+            }
+            
+            .category-tabs .tab.active {
+                background-color: #007AFF;
+                color: white;
+            }
+            
+            .category-tabs .tab {
+                color: #3C3C43;
+            }
+        }
     </style>
 </head>
 <body>

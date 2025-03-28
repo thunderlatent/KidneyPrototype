@@ -105,8 +105,8 @@ input, select, textarea {
     display: flex;
     flex-direction: column;
     overflow: hidden; /* 防止內容溢出 */
-    background-color: var(--ios-background);
-    color: var(--ios-text-primary);
+    background-color: #F2F2F7;
+    color: #000000;
 }
 
 /* 狀態欄 */
@@ -181,7 +181,7 @@ input, select, textarea {
     left: 0;
     right: 0;
     z-index: 100;
-    max-width: 430px;
+    max-width: var(--iphone-16-promax-width);
     margin: 0 auto;
     flex-shrink: 0; /* 防止被擠壓 */
 }
@@ -481,19 +481,87 @@ input:checked + .toggle-slider:before {
 
 /* 深色模式支持 */
 @media (prefers-color-scheme: dark) {
-    /* 移除所有暗黑模式樣式，使用淺色模式 */
+    /* 重寫所有變量，確保使用淺色模式顏色 */
     :root {
-        /* 保持與淺色模式相同的顏色 */
-        --ios-background: #F2F2F7;
+        /* iOS顏色 - 保持與淺色模式相同 */
+        --ios-primary: #007AFF;
+        --ios-primary-dark: #0062CC;
+        --ios-primary-light: #47A3FF;
+        --ios-secondary: #5AC8FA;
+        --ios-success: #34C759;
+        --ios-warning: #FF9500;
+        --ios-danger: #FF3B30;
+        --ios-gray1: #8E8E93;
+        --ios-gray2: #AEAEB2;
+        --ios-gray3: #C7C7CC;
+        --ios-gray4: #D1D1D6;
+        --ios-gray5: #E5E5EA;
+        --ios-gray6: #F2F2F7;
         --ios-text-primary: #000000;
         --ios-text-secondary: #3C3C43;
         --ios-text-tertiary: #8E8E93;
         --ios-separator: rgba(60, 60, 67, 0.1);
         --ios-opaque-separator: rgba(60, 60, 67, 0.3);
+        --ios-background: #F2F2F7;
     }
     
-    .card, .tab-bar {
+    /* 直接覆蓋關鍵元素樣式，不依賴變量 */
+    body {
+        background-color: #F2F2F7;
+        color: #000000;
+    }
+    
+    .iphone-container {
+        background-color: #F2F2F7;
+        color: #000000;
+    }
+    
+    .card, .tab-bar, 
+    .stats-section, .games-section, 
+    .achievements-section, .leaderboard-section,
+    .welcome-section, .mode-card, .mode-content {
         background-color: white;
+        color: #000000;
+    }
+    
+    .tab-item {
+        color: #8E8E93;
+    }
+    
+    .tab-item.active {
+        color: #007AFF;
+    }
+    
+    .nav-title, .section-title, .game-title,
+    .welcome-title, .mode-title, .category-title,
+    .stat-label, .achievement-title, .player-name {
+        color: #000000;
+    }
+    
+    .nav-back, .view-all {
+        color: #007AFF;
+    }
+    
+    .stat-item, .game-category, .achievement-item,
+    .player-item, .leaderboard-item {
+        background-color: #F2F2F7;
+    }
+    
+    /* 文字顏色 */
+    .welcome-message, .game-subtitle, .mode-description,
+    .achievement-desc, .player-score, .stat-label {
+        color: #3C3C43;
+    }
+    
+    /* 確保使用硬編碼顏色而不是變量，防止被替換 */
+    .primary-btn, .login-btn {
+        background-color: #007AFF;
+        color: white;
+    }
+    
+    .secondary-btn {
+        background-color: #F2F2F7;
+        color: #007AFF;
     }
 }
 

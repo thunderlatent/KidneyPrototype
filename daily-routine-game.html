@@ -850,6 +850,66 @@
         .care-review-explanation.moderate {
             border-left: 3px solid var(--ios-warning);
         }
+
+        /* 遊戲UI組件樣式 */
+        .game-intro {
+            background-color: #F2F2F7;
+            padding: 20px;
+        }
+        
+        .intro-header {
+            margin-bottom: 24px;
+        }
+        
+        .game-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 6px;
+        }
+        
+        .game-subtitle {
+            font-size: 16px;
+            color: #3C3C43;
+        }
+        
+        /* 強制淺色模式樣式 */
+        @media (prefers-color-scheme: dark) {
+            .game-title {
+                color: #000000;
+            }
+            
+            .game-subtitle {
+                color: #3C3C43;
+            }
+            
+            .character-option {
+                background-color: white;
+                border: 2px solid transparent;
+            }
+            
+            .character-option.selected {
+                background-color: rgba(0, 122, 255, 0.05);
+                border: 2px solid #007AFF;
+            }
+            
+            .care-review-explanation {
+                background-color: white;
+            }
+            
+            .game-container, .scene-display, .intro-content, .character-details {
+                background-color: white;
+                color: #000000;
+            }
+            
+            .character-name, .character-option-name {
+                color: #000000;
+            }
+            
+            .character-description, .character-option-desc {
+                color: #3C3C43;
+            }
+        }
     </style>
 </head>
 <body>
