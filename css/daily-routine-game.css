@@ -27,23 +27,270 @@
     flex-direction: column;
 }
 
-/* 遊戲頭部信息 */
-.game-header {
+/* 遊戲開始介面 */
+.game-intro {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    max-width: 100%;
+}
+
+.intro-header {
     text-align: center;
     margin-bottom: 24px;
 }
 
-.game-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--ios-text-primary);
-    margin-bottom: 6px;
+.intro-content {
+    background-color: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.game-subtitle {
-    font-size: 16px;
+.character-card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: var(--ios-gray6);
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.character-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    background-color: var(--ios-gray5);
+    margin-right: 16px;
+    background-size: cover;
+    background-position: center;
+    background-image: url('../images/character-avatar.jpg');
+}
+
+.intro-description {
+    margin-bottom: 20px;
+    background-color: var(--ios-gray6);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.intro-description h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: var(--ios-text-primary);
+}
+
+.intro-description p {
+    font-size: 15px;
+    line-height: 1.5;
     color: var(--ios-text-secondary);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+}
+
+.intro-instructions {
+    margin-bottom: 30px;
+}
+
+.instruction-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.instruction-icon {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 122, 255, 0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 14px;
+    color: var(--ios-primary);
+    font-size: 18px;
+}
+
+.instruction-text {
+    font-size: 15px;
+    color: var(--ios-text-secondary);
+}
+
+.start-button {
+    background-color: var(--ios-primary);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 14px;
+    border-radius: 16px;
+    border: none;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.start-button:active {
+    background-color: #0062cc;
+    transform: scale(0.98);
+}
+
+/* 主遊戲區域 */
+.game-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.time-display {
+    display: inline-block;
+    background-color: var(--ios-primary);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 122, 255, 0.2);
+}
+
+.scene-image {
+    width: 100%;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    background-image: url('../images/scenes/morning-home.jpg');
+}
+
+.scene-question {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ios-text-primary);
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+/* 遊戲結果頁面 */
+.game-result {
+    padding: 20px;
+    max-width: 100%;
+}
+
+.result-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.result-content {
+    background-color: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.result-summary {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--ios-text-secondary);
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.result-feedback {
+    background-color: var(--ios-gray6);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.result-feedback h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--ios-text-primary);
+}
+
+.result-feedback ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.result-feedback li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--ios-text-secondary);
+}
+
+.result-feedback li:before {
+    content: '•';
+    color: var(--ios-primary);
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.feedback-positive {
+    color: var(--ios-success);
+}
+
+.feedback-negative {
+    color: var(--ios-danger);
+}
+
+.result-tip {
+    background-color: rgba(0, 122, 255, 0.1);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.result-tip i {
+    color: var(--ios-primary);
+    font-size: 18px;
+    margin-top: 2px;
+}
+
+.result-tip div {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ios-primary);
+}
+
+.result-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.result-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* 響應式調整 */
+@media (max-width: 360px) {
+    .intro-description,
+    .result-feedback,
+    .result-tip {
+        padding: 16px;
+    }
+    
+    .instruction-text,
+    .intro-description p,
+    .result-feedback li {
+        font-size: 14px;
+    }
 }
 
 /* 角色狀態 */
@@ -189,19 +436,6 @@
     margin-bottom: 24px;
 }
 
-.time-display {
-    background-color: white;
-    border-radius: 16px;
-    padding: 12px 20px;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--ios-text-primary);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    margin: 0 16px;
-    min-width: 100px;
-    text-align: center;
-}
-
 .time-btn {
     width: 50px;
     height: 50px;
@@ -227,14 +461,6 @@
     overflow: hidden;
     margin-bottom: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.scene-image {
-    width: 100%;
-    height: 180px;
-    background-size: cover;
-    background-position: center;
-    position: relative;
 }
 
 .scene-overlay {
@@ -266,13 +492,6 @@
     color: var(--ios-text-primary);
     line-height: 1.5;
     margin-bottom: 16px;
-}
-
-.scene-question {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--ios-text-primary);
-    margin-bottom: 20px;
 }
 
 /* 活動選項 */
@@ -427,24 +646,6 @@
     pointer-events: auto;
 }
 
-.result-content {
-    background-color: white;
-    border-radius: 20px;
-    width: 85%;
-    max-width: 350px;
-    padding: 25px;
-    text-align: center;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    transform: translateY(20px);
-    transition: transform 0.3s ease;
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-.result-modal.active .result-content {
-    transform: translateY(0);
-}
-
 .result-icon {
     width: 80px;
     height: 80px;
@@ -563,14 +764,6 @@
     border-radius: 4px;
     transition: width 0.3s ease;
     background-color: var(--ios-primary);
-}
-
-.result-summary {
-    font-size: 14px;
-    color: var(--ios-text-secondary);
-    line-height: 1.6;
-    text-align: left;
-    margin-bottom: 20px;
 }
 
 .result-tip {

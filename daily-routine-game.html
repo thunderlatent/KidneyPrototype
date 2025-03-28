@@ -632,229 +632,112 @@
         
         <!-- 內容區域 -->
         <div class="content-container" style="padding-bottom: 80px; overflow-y: auto; overflow-x: hidden;">
-            <div class="game-container">
-                <!-- 遊戲頭部 -->
-                <div class="game-header">
+            <!-- 遊戲開始頁面 -->
+            <div class="game-intro" id="gameIntro">
+                <div class="intro-header">
                     <div class="game-title">時間序列照護模擬</div>
                     <div class="game-subtitle">跟隨小明的一天，在不同時間點做出關鍵照護決策</div>
                 </div>
                 
-                <!-- 角色狀態 -->
-                <div class="character-status">
-                    <div class="status-header">
+                <div class="intro-content">
+                    <div class="character-card">
                         <div class="character-avatar"></div>
                         <div class="character-info">
                             <div class="character-name">小明</div>
-                            <div class="character-description">第三期慢性腎臟病患者，需要謹慎管理生活習慣</div>
+                            <div class="character-description">第三期慢性腎臟病患者</div>
                         </div>
                     </div>
-                    <div class="status-bars">
-                        <!-- 健康狀態 -->
-                        <div class="status-bar-item">
-                            <div class="status-icon health-icon">
+                    
+                    <div class="intro-description">
+                        <h3>遊戲說明</h3>
+                        <p>小明是一位慢性腎臟病第三期患者，他需要你的幫助來度過這一天。</p>
+                        <p>他的腎功能已下降至正常值的45%左右，需要小心管理飲食、水分、藥物和活動。</p>
+                        <p>在遊戲中，你將面臨一系列時間點的選擇，每個選擇都會影響他的健康狀況。</p>
+                        <p>做出正確的決策，協助小明安全度過這一天吧！</p>
+                    </div>
+                    
+                    <div class="intro-instructions">
+                        <div class="instruction-item">
+                            <div class="instruction-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="instruction-text">遊戲將按照時間順序進行，從早晨到晚上</div>
+                        </div>
+                        <div class="instruction-item">
+                            <div class="instruction-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="instruction-text">每個時間點你需要作出一個選擇</div>
+                        </div>
+                        <div class="instruction-item">
+                            <div class="instruction-icon">
                                 <i class="fas fa-heart"></i>
                             </div>
-                            <div class="status-bar-info">
-                                <div class="status-bar-label">
-                                    <div class="status-name">健康</div>
-                                    <div class="status-value">75%</div>
-                                </div>
-                                <div class="status-progress">
-                                    <div class="status-fill health-fill" style="width: 75%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 水合狀態 -->
-                        <div class="status-bar-item">
-                            <div class="status-icon hydration-icon">
-                                <i class="fas fa-tint"></i>
-                            </div>
-                            <div class="status-bar-info">
-                                <div class="status-bar-label">
-                                    <div class="status-name">水分</div>
-                                    <div class="status-value">60%</div>
-                                </div>
-                                <div class="status-progress">
-                                    <div class="status-fill hydration-fill" style="width: 60%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 能量狀態 -->
-                        <div class="status-bar-item">
-                            <div class="status-icon energy-icon">
-                                <i class="fas fa-bolt"></i>
-                            </div>
-                            <div class="status-bar-info">
-                                <div class="status-bar-label">
-                                    <div class="status-name">能量</div>
-                                    <div class="status-value">80%</div>
-                                </div>
-                                <div class="status-progress">
-                                    <div class="status-fill energy-fill" style="width: 80%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 腎臟功能 -->
-                        <div class="status-bar-item">
-                            <div class="status-icon kidney-icon">
-                                <i class="fas fa-kidneys"></i>
-                            </div>
-                            <div class="status-bar-info">
-                                <div class="status-bar-label">
-                                    <div class="status-name">腎功能</div>
-                                    <div class="status-value">70%</div>
-                                </div>
-                                <div class="status-progress">
-                                    <div class="status-fill kidney-fill" style="width: 70%"></div>
-                                </div>
-                            </div>
+                            <div class="instruction-text">你的選擇將影響小明的整體健康狀況</div>
                         </div>
                     </div>
+                    
+                    <button class="start-button" id="startGameBtn">開始照護</button>
                 </div>
-                
-                <!-- 時間控制 -->
-                <div class="time-control">
-                    <div class="time-btn" id="timeBack">
-                        <i class="fas fa-chevron-left"></i>
-                    </div>
+            </div>
+
+            <!-- 主遊戲畫面 -->
+            <div class="game-container" id="gameContainer" style="display: none;">
+                <!-- 遊戲頭部 -->
+                <div class="game-header">
                     <div class="time-display" id="timeDisplay">上午 8:00</div>
-                    <div class="time-btn" id="timeForward">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
                 </div>
                 
                 <!-- 場景顯示 -->
                 <div class="scene-display">
-                    <div class="scene-image" style="background-image: url('images/scenes/morning-home.jpg')">
+                    <div class="scene-image" id="sceneImage">
                         <div class="scene-overlay">
-                            <div class="scene-title">早晨 · 家裡</div>
-                            <div class="scene-description">新的一天開始了</div>
+                            <div class="scene-title" id="sceneTitle">早晨 · 家裡</div>
+                            <div class="scene-description" id="sceneDescription">新的一天開始了</div>
                         </div>
-                        <div class="scene-tooltip" id="sceneTooltip"></div>
                     </div>
                     <div class="scene-content">
-                        <div class="scene-message">早上好！現在是早晨8點，你需要為這一天做好準備。你感覺有些口渴，也許應該先喝些水？</div>
-                        
-                        <!-- 新增問題提示 -->
-                        <div class="scene-question">你現在應該先做什麼？</div>
+                        <div class="scene-question" id="sceneQuestion">你現在應該先做什麼？</div>
                         
                         <!-- 活動選項 -->
-                        <div class="activity-options">
+                        <div class="activity-options" id="activityOptions">
                             <!-- 選項將由JS動態生成 -->
                         </div>
                     </div>
                 </div>
-                
-                <!-- 事件記錄 -->
-                <div class="event-log">
-                    <div class="event-log-title">
-                        <i class="fas fa-clipboard-list"></i>
-                        今日記錄
-                    </div>
-                    <div class="event-list" id="eventList">
-                        <!-- 事件將由JS動態生成 -->
-                    </div>
-                </div>
             </div>
-        </div>
-        
-        <!-- 結果彈窗 -->
-        <div class="result-modal" id="resultModal">
-            <div class="result-content">
-                <div class="result-icon success" id="resultIcon">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <div class="result-title" id="resultTitle">一天結束了！</div>
-                <div class="result-score" id="resultScore">85</div>
-                <div class="result-message" id="resultMessage">你很好地管理了自己的健康！</div>
-                
-                <div class="result-stats">
-                    <div class="stat-item">
-                        <div class="stat-label">健康狀態</div>
-                        <div class="stat-value" id="finalHealth">75%</div>
+            
+            <!-- 遊戲結果頁面 -->
+            <div class="game-result" id="gameResult" style="display: none;">
+                <div class="result-header">
+                    <div class="result-icon success" id="resultIcon">
+                        <i class="fas fa-trophy"></i>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-label">水分平衡</div>
-                        <div class="stat-value" id="finalHydration">80%</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">能量水平</div>
-                        <div class="stat-value" id="finalEnergy">65%</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">腎臟功能</div>
-                        <div class="stat-value" id="finalKidney">72%</div>
-                    </div>
+                    <div class="result-title" id="resultTitle">一天結束了！</div>
+                    <div class="result-score" id="resultScore">85</div>
                 </div>
                 
-                <!-- 營養攝入模塊 -->
-                <div class="nutrition-intake">
-                    <div class="intake-item">
-                        <div class="intake-header">
-                            <div class="intake-label">水分攝入</div>
-                            <div class="intake-value" id="waterIntakeInfo">1200 / 1500 ml</div>
-                        </div>
-                        <div class="intake-progress">
-                            <div class="intake-fill" id="waterIntakeBar" style="width: 80%; background-color: var(--ios-primary);"></div>
-                        </div>
+                <div class="result-content">
+                    <div class="result-summary" id="resultSummary">
+                        今天你做了許多有益健康的選擇，很好地幫助小明管理了他的健康狀況。
                     </div>
                     
-                    <div class="intake-item">
-                        <div class="intake-header">
-                            <div class="intake-label">鈉攝入</div>
-                            <div class="intake-value" id="sodiumIntakeInfo">1800 / 2000 mg</div>
-                        </div>
-                        <div class="intake-progress">
-                            <div class="intake-fill" style="width: 90%; background-color: var(--ios-warning);"></div>
-                        </div>
+                    <div class="result-feedback" id="resultFeedback">
+                        <h3>今日照護回顧</h3>
+                        <ul id="feedbackList">
+                            <!-- 由JS動態生成 -->
+                        </ul>
                     </div>
                     
-                    <div class="intake-item">
-                        <div class="intake-header">
-                            <div class="intake-label">蛋白質攝入</div>
-                            <div class="intake-value" id="proteinIntakeInfo">50 / 60 g</div>
-                        </div>
-                        <div class="intake-progress">
-                            <div class="intake-fill" style="width: 83%; background-color: var(--ios-success);"></div>
-                        </div>
+                    <div class="result-tip">
+                        <i class="fas fa-lightbulb"></i>
+                        <div id="resultTip">記住定期監測血壓和進行腎功能檢查也是腎臟保健的重要部分。</div>
                     </div>
                     
-                    <div class="intake-item">
-                        <div class="intake-header">
-                            <div class="intake-label">磷攝入</div>
-                            <div class="intake-value" id="phosphateIntakeInfo">650 / 800 mg</div>
-                        </div>
-                        <div class="intake-progress">
-                            <div class="intake-fill" style="width: 81%; background-color: var(--ios-primary);"></div>
-                        </div>
+                    <div class="result-buttons">
+                        <div class="result-btn secondary" id="backBtn">返回</div>
+                        <div class="result-btn primary" id="playAgainBtn">再玩一次</div>
                     </div>
-                    
-                    <div class="intake-item">
-                        <div class="intake-header">
-                            <div class="intake-label">鉀攝入</div>
-                            <div class="intake-value" id="potassiumIntakeInfo">1600 / 2000 mg</div>
-                        </div>
-                        <div class="intake-progress">
-                            <div class="intake-fill" style="width: 80%; background-color: var(--ios-success);"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="result-summary" id="resultSummary">
-                    今天你做了許多有益健康的選擇：按時服藥、控制飲食鹽分和蛋白質、適量運動。這些習慣對維護腎臟功能很重要。
-                </div>
-                
-                <div class="result-tip">
-                    <i class="fas fa-lightbulb"></i>
-                    <div>記住定期監測血壓和進行腎功能檢查也是腎臟保健的重要部分。</div>
-                </div>
-                
-                <div class="result-buttons">
-                    <div class="result-btn secondary" id="backBtn">返回</div>
-                    <div class="result-btn primary" id="playAgainBtn">再玩一次</div>
                 </div>
             </div>
         </div>
