@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="light">
     <title>腎好康 - 腎臟保健日常模擬</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="css/daily-routine-game.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -626,7 +626,7 @@
             <div class="nav-back" onclick="history.back()">
                 <i class="fas fa-chevron-left"></i>
             </div>
-            <div class="nav-title">腎臟保健日常</div>
+            <div class="nav-title">時間序列照護</div>
             <div class="nav-action"></div>
         </div>
         
@@ -635,8 +635,8 @@
             <div class="game-container">
                 <!-- 遊戲頭部 -->
                 <div class="game-header">
-                    <div class="game-title">日常生活模擬</div>
-                    <div class="game-subtitle">體驗腎臟病患者的一天生活</div>
+                    <div class="game-title">時間序列照護模擬</div>
+                    <div class="game-subtitle">跟隨小明的一天，在不同時間點做出關鍵照護決策</div>
                 </div>
                 
                 <!-- 角色狀態 -->
@@ -645,7 +645,7 @@
                         <div class="character-avatar"></div>
                         <div class="character-info">
                             <div class="character-name">小明</div>
-                            <div class="character-description">初期腎病患者，需要謹慎管理生活習慣</div>
+                            <div class="character-description">第三期慢性腎臟病患者，需要謹慎管理生活習慣</div>
                         </div>
                     </div>
                     <div class="status-bars">
@@ -738,37 +738,12 @@
                     <div class="scene-content">
                         <div class="scene-message">早上好！現在是早晨8點，你需要為這一天做好準備。你感覺有些口渴，也許應該先喝些水？</div>
                         
+                        <!-- 新增問題提示 -->
+                        <div class="scene-question">你現在應該先做什麼？</div>
+                        
                         <!-- 活動選項 -->
                         <div class="activity-options">
-                            <div class="activity-option" data-activity="drink_water">
-                                <div class="activity-icon">
-                                    <i class="fas fa-glass-water"></i>
-                                </div>
-                                <div class="activity-info">
-                                    <div class="activity-title">喝水</div>
-                                    <div class="activity-description">控制飲水量，保持適當水分</div>
-                                </div>
-                            </div>
-                            
-                            <div class="activity-option" data-activity="take_medicine">
-                                <div class="activity-icon">
-                                    <i class="fas fa-pills"></i>
-                                </div>
-                                <div class="activity-info">
-                                    <div class="activity-title">服藥</div>
-                                    <div class="activity-description">按醫囑服用藥物</div>
-                                </div>
-                            </div>
-                            
-                            <div class="activity-option" data-activity="prepare_breakfast">
-                                <div class="activity-icon">
-                                    <i class="fas fa-utensils"></i>
-                                </div>
-                                <div class="activity-info">
-                                    <div class="activity-title">準備早餐</div>
-                                    <div class="activity-description">選擇健康的食物</div>
-                                </div>
-                            </div>
+                            <!-- 選項將由JS動態生成 -->
                         </div>
                     </div>
                 </div>
@@ -780,10 +755,7 @@
                         今日記錄
                     </div>
                     <div class="event-list" id="eventList">
-                        <div class="event-item">
-                            <div class="event-time">8:00</div>
-                            <div class="event-content">你醒來了，感覺有些口渴。</div>
-                        </div>
+                        <!-- 事件將由JS動態生成 -->
                     </div>
                 </div>
             </div>
@@ -815,6 +787,59 @@
                     <div class="stat-item">
                         <div class="stat-label">腎臟功能</div>
                         <div class="stat-value" id="finalKidney">72%</div>
+                    </div>
+                </div>
+                
+                <!-- 營養攝入模塊 -->
+                <div class="nutrition-intake">
+                    <div class="intake-item">
+                        <div class="intake-header">
+                            <div class="intake-label">水分攝入</div>
+                            <div class="intake-value" id="waterIntakeInfo">1200 / 1500 ml</div>
+                        </div>
+                        <div class="intake-progress">
+                            <div class="intake-fill" id="waterIntakeBar" style="width: 80%; background-color: var(--ios-primary);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="intake-item">
+                        <div class="intake-header">
+                            <div class="intake-label">鈉攝入</div>
+                            <div class="intake-value" id="sodiumIntakeInfo">1800 / 2000 mg</div>
+                        </div>
+                        <div class="intake-progress">
+                            <div class="intake-fill" style="width: 90%; background-color: var(--ios-warning);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="intake-item">
+                        <div class="intake-header">
+                            <div class="intake-label">蛋白質攝入</div>
+                            <div class="intake-value" id="proteinIntakeInfo">50 / 60 g</div>
+                        </div>
+                        <div class="intake-progress">
+                            <div class="intake-fill" style="width: 83%; background-color: var(--ios-success);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="intake-item">
+                        <div class="intake-header">
+                            <div class="intake-label">磷攝入</div>
+                            <div class="intake-value" id="phosphateIntakeInfo">650 / 800 mg</div>
+                        </div>
+                        <div class="intake-progress">
+                            <div class="intake-fill" style="width: 81%; background-color: var(--ios-primary);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="intake-item">
+                        <div class="intake-header">
+                            <div class="intake-label">鉀攝入</div>
+                            <div class="intake-value" id="potassiumIntakeInfo">1600 / 2000 mg</div>
+                        </div>
+                        <div class="intake-progress">
+                            <div class="intake-fill" style="width: 80%; background-color: var(--ios-success);"></div>
+                        </div>
                     </div>
                 </div>
                 
@@ -854,468 +879,11 @@
             </a>
         </div>
     </div>
+    
+    <!-- 載入遊戲數據 -->
+    <script src="js/daily-routine-data.js"></script>
+    
+    <!-- 載入遊戲邏輯 -->
+    <script src="js/daily-routine-game.js"></script>
 </body>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 狀態變數
-        const gameState = {
-            health: 75,
-            hydration: 60,
-            energy: 80,
-            kidney: 70,
-            time: '8:00',
-            period: '上午',
-            events: [],
-            currentScene: 'morning-home'
-        };
-        
-        // DOM元素
-        const healthFill = document.querySelector('.health-fill');
-        const hydrationFill = document.querySelector('.hydration-fill');
-        const energyFill = document.querySelector('.energy-fill');
-        const kidneyFill = document.querySelector('.kidney-fill');
-        const timeDisplay = document.getElementById('timeDisplay');
-        const timeBack = document.getElementById('timeBack');
-        const timeForward = document.getElementById('timeForward');
-        const sceneImage = document.querySelector('.scene-image');
-        const sceneTitle = document.querySelector('.scene-title');
-        const sceneDescription = document.querySelector('.scene-description');
-        const sceneMessage = document.querySelector('.scene-message');
-        const activityOptions = document.querySelector('.activity-options');
-        const eventList = document.getElementById('eventList');
-        const resultModal = document.getElementById('resultModal');
-        const sceneTooltip = document.getElementById('sceneTooltip');
-        
-        // 時間設置
-        const timeSlots = [
-            { time: '8:00', period: '上午', scene: 'morning-home' },
-            { time: '10:00', period: '上午', scene: 'morning-activities' },
-            { time: '12:00', period: '中午', scene: 'lunch' },
-            { time: '14:00', period: '下午', scene: 'afternoon-activities' },
-            { time: '17:00', period: '傍晚', scene: 'evening-meal' },
-            { time: '20:00', period: '晚上', scene: 'evening-activities' },
-            { time: '22:00', period: '夜晚', scene: 'night-routine' }
-        ];
-        
-        let currentTimeIndex = 0;
-        
-        // 場景數據
-        const scenes = {
-            'morning-home': {
-                title: '早晨 · 家裡',
-                description: '新的一天開始了',
-                message: '早上好！現在是早晨8點，你需要為這一天做好準備。你感覺有些口渴，也許應該先喝些水？',
-                activities: ['drink_water', 'take_medicine', 'prepare_breakfast']
-            },
-            'morning-activities': {
-                title: '上午 · 日常活動',
-                description: '安排你的上午時間',
-                message: '早餐後，你有一些時間可以進行活動。考慮一下如何度過上午？',
-                activities: ['light_exercise', 'doctor_visit', 'rest']
-            },
-            'lunch': {
-                title: '中午 · 午餐時間',
-                description: '選擇健康的午餐',
-                message: '到了午餐時間，選擇合適的食物對腎臟健康很重要。',
-                activities: ['healthy_meal', 'fast_food', 'skip_meal']
-            },
-            'afternoon-activities': {
-                title: '下午 · 活動選擇',
-                description: '合理安排下午活動',
-                message: '下午時間到了，你應該如何安排接下來的時間？',
-                activities: ['work', 'monitor_vitals', 'moderate_exercise']
-            },
-            'evening-meal': {
-                title: '傍晚 · 晚餐時間',
-                description: '準備晚餐',
-                message: '晚餐時間到了，考慮一下今晚吃什麼？',
-                activities: ['light_dinner', 'protein_rich', 'social_dinner']
-            },
-            'evening-activities': {
-                title: '晚上 · 休閒時間',
-                description: '放鬆的時間',
-                message: '晚餐後，你有一些時間可以放鬆。選擇一個適合的活動？',
-                activities: ['watch_tv', 'read_book', 'social_activity']
-            },
-            'night-routine': {
-                title: '夜晚 · 睡前準備',
-                description: '為睡眠做好準備',
-                message: '接近睡覺時間了，做好適當的睡前準備能幫助你有個良好的休息。',
-                activities: ['medication_check', 'sleep_early', 'night_snack']
-            }
-        };
-        
-        // 活動數據
-        const activities = {
-            'drink_water': {
-                title: '喝水',
-                description: '控制飲水量，保持適當水分',
-                icon: 'glass-water',
-                effects: { health: 5, hydration: 15, energy: 0, kidney: 5 },
-                message: '你喝了適量的水，有助於保持水分平衡。'
-            },
-            'take_medicine': {
-                title: '服藥',
-                description: '按醫囑服用藥物',
-                icon: 'pills',
-                effects: { health: 10, hydration: 0, energy: -5, kidney: 15 },
-                message: '你按時服用了醫生開的藥，這對腎臟功能維護很重要。'
-            },
-            'prepare_breakfast': {
-                title: '準備早餐',
-                description: '選擇健康的食物',
-                icon: 'utensils',
-                effects: { health: 5, hydration: 0, energy: 20, kidney: 0 },
-                message: '你準備了低鹽、低蛋白的健康早餐，這是一個好的開始。'
-            },
-            'light_exercise': {
-                title: '輕度運動',
-                description: '進行適當強度的運動',
-                icon: 'walking',
-                effects: { health: 10, hydration: -10, energy: -5, kidney: 5 },
-                message: '適度的輕度運動有助於整體健康，但記得補充水分。'
-            },
-            'doctor_visit': {
-                title: '看醫生',
-                description: '定期健康檢查',
-                icon: 'user-doctor',
-                effects: { health: 15, hydration: 0, energy: -15, kidney: 10 },
-                message: '你去看了醫生，獲得了專業建議和及時的治療調整。'
-            },
-            'rest': {
-                title: '休息',
-                description: '適當休息恢復精力',
-                icon: 'bed',
-                effects: { health: 5, hydration: -5, energy: 25, kidney: 5 },
-                message: '你選擇休息一會，這有助於恢復精力。'
-            },
-            'healthy_meal': {
-                title: '健康午餐',
-                description: '選擇腎友善食物',
-                icon: 'bowl-food',
-                effects: { health: 15, hydration: 5, energy: 20, kidney: 10 },
-                message: '你選擇了低鹽、適量蛋白質的健康午餐，對腎臟很友好。'
-            },
-            'fast_food': {
-                title: '速食',
-                description: '方便但不健康',
-                icon: 'burger',
-                effects: { health: -10, hydration: -5, energy: 15, kidney: -15 },
-                message: '速食通常含有高鹽分和磷，對腎臟不好，應儘量避免。'
-            },
-            'skip_meal': {
-                title: '跳過午餐',
-                description: '不吃可能影響血糖',
-                icon: 'xmark',
-                effects: { health: -5, hydration: -5, energy: -20, kidney: -5 },
-                message: '跳過午餐可能導致能量不足，不是健康的選擇。'
-            },
-            'work': {
-                title: '工作',
-                description: '專注工作任務',
-                icon: 'briefcase',
-                effects: { health: 0, hydration: -10, energy: -15, kidney: 0 },
-                message: '工作時也要記得適當休息和補水。'
-            },
-            'monitor_vitals': {
-                title: '監測健康',
-                description: '檢查血壓和體重',
-                icon: 'heart-pulse',
-                effects: { health: 10, hydration: 0, energy: -5, kidney: 10 },
-                message: '定期監測健康指標對管理腎臟疾病很重要。'
-            },
-            'moderate_exercise': {
-                title: '適度運動',
-                description: '進行30分鐘慢走',
-                icon: 'person-running',
-                effects: { health: 15, hydration: -15, energy: -10, kidney: 5 },
-                message: '適度運動有益心血管健康，但別忘了補充水分。'
-            },
-            'light_dinner': {
-                title: '清淡晚餐',
-                description: '低鹽、低磷的晚餐',
-                icon: 'plate-wheat',
-                effects: { health: 10, hydration: 5, energy: 10, kidney: 15 },
-                message: '清淡的晚餐有助於減輕腎臟負擔，有益睡眠。'
-            },
-            'protein_rich': {
-                title: '高蛋白晚餐',
-                description: '大量蛋白質攝入',
-                icon: 'drumstick-bite',
-                effects: { health: 5, hydration: -5, energy: 15, kidney: -10 },
-                message: '過多蛋白質會增加腎臟負擔，腎病患者應控制攝入量。'
-            },
-            'social_dinner': {
-                title: '社交晚餐',
-                description: '與朋友共進晚餐',
-                icon: 'users',
-                effects: { health: 5, hydration: -5, energy: -5, kidney: -5 },
-                message: '社交活動對心理健康有益，但注意控制餐廳食物的鹽分攝入。'
-            },
-            'watch_tv': {
-                title: '看電視',
-                description: '放鬆休息',
-                icon: 'tv',
-                effects: { health: 0, hydration: -5, energy: 5, kidney: 0 },
-                message: '看電視放鬆是不錯的選擇，但別忘了早點休息。'
-            },
-            'read_book': {
-                title: '閱讀',
-                description: '閱讀有益健康',
-                icon: 'book',
-                effects: { health: 5, hydration: -5, energy: -5, kidney: 0 },
-                message: '閱讀能幫助放鬆心情，減輕壓力，對整體健康有益。'
-            },
-            'social_activity': {
-                title: '社交活動',
-                description: '與家人朋友交流',
-                icon: 'people-group',
-                effects: { health: 10, hydration: -5, energy: -10, kidney: 0 },
-                message: '良好的社交關係對心理健康有益，但注意不要過度勞累。'
-            },
-            'medication_check': {
-                title: '檢查藥物',
-                description: '確保按時服藥',
-                icon: 'prescription-bottle',
-                effects: { health: 10, hydration: 0, energy: -5, kidney: 15 },
-                message: '你檢查並確保服用了所有晚間藥物，這對疾病管理至關重要。'
-            },
-            'sleep_early': {
-                title: '早睡',
-                description: '保證充足睡眠',
-                icon: 'moon',
-                effects: { health: 15, hydration: 0, energy: 25, kidney: 10 },
-                message: '充足的睡眠對身體恢復和腎臟健康很重要。'
-            },
-            'night_snack': {
-                title: '夜宵',
-                description: '睡前小吃',
-                icon: 'cookie-bite',
-                effects: { health: -5, hydration: 0, energy: 5, kidney: -10 },
-                message: '睡前進食可能影響腎臟休息和睡眠質量，應儘量避免。'
-            }
-        };
-        
-        // 更新狀態顯示
-        function updateStatusDisplay() {
-            healthFill.style.width = `${gameState.health}%`;
-            hydrationFill.style.width = `${gameState.hydration}%`;
-            energyFill.style.width = `${gameState.energy}%`;
-            kidneyFill.style.width = `${gameState.kidney}%`;
-            
-            document.querySelector('.status-bar-item:nth-child(1) .status-value').textContent = `${gameState.health}%`;
-            document.querySelector('.status-bar-item:nth-child(2) .status-value').textContent = `${gameState.hydration}%`;
-            document.querySelector('.status-bar-item:nth-child(3) .status-value').textContent = `${gameState.energy}%`;
-            document.querySelector('.status-bar-item:nth-child(4) .status-value').textContent = `${gameState.kidney}%`;
-        }
-        
-        // 更新時間顯示
-        function updateTimeDisplay() {
-            timeDisplay.textContent = `${gameState.period} ${gameState.time}`;
-        }
-        
-        // 添加事件到日誌
-        function addEvent(time, content) {
-            const eventItem = document.createElement('div');
-            eventItem.className = 'event-item';
-            eventItem.innerHTML = `
-                <div class="event-time">${time}</div>
-                <div class="event-content">${content}</div>
-            `;
-            eventList.prepend(eventItem);
-            gameState.events.push({ time, content });
-        }
-        
-        // 更新場景
-        function updateScene(sceneName) {
-            const scene = scenes[sceneName];
-            gameState.currentScene = sceneName;
-            
-            // 更新場景顯示
-            sceneImage.style.backgroundImage = `url('images/scenes/${sceneName}.jpg')`;
-            sceneTitle.textContent = scene.title;
-            sceneDescription.textContent = scene.description;
-            sceneMessage.textContent = scene.message;
-            
-            // 更新活動選項
-            activityOptions.innerHTML = '';
-            scene.activities.forEach(activityId => {
-                const activity = activities[activityId];
-                const activityElement = document.createElement('div');
-                activityElement.className = 'activity-option';
-                activityElement.setAttribute('data-activity', activityId);
-                activityElement.innerHTML = `
-                    <div class="activity-icon">
-                        <i class="fas fa-${activity.icon}"></i>
-                    </div>
-                    <div class="activity-info">
-                        <div class="activity-title">${activity.title}</div>
-                        <div class="activity-description">${activity.description}</div>
-                    </div>
-                `;
-                activityOptions.appendChild(activityElement);
-                
-                // 添加點擊事件
-                activityElement.addEventListener('click', () => handleActivity(activityId));
-            });
-        }
-        
-        // 處理活動選擇
-        function handleActivity(activityId) {
-            const activity = activities[activityId];
-            const timeData = timeSlots[currentTimeIndex];
-            
-            // 應用活動效果
-            gameState.health = Math.max(0, Math.min(100, gameState.health + activity.effects.health));
-            gameState.hydration = Math.max(0, Math.min(100, gameState.hydration + activity.effects.hydration));
-            gameState.energy = Math.max(0, Math.min(100, gameState.energy + activity.effects.energy));
-            gameState.kidney = Math.max(0, Math.min(100, gameState.kidney + activity.effects.kidney));
-            
-            // 更新顯示
-            updateStatusDisplay();
-            
-            // 添加事件
-            addEvent(timeData.time, activity.message);
-            
-            // 顯示提示
-            showTooltip(activity.message);
-            
-            // 如果是最後一個時間段，顯示結果
-            if (currentTimeIndex === timeSlots.length - 1) {
-                setTimeout(showResults, 1500);
-            } else {
-                // 自動前進到下一個時間段
-                setTimeout(() => {
-                    currentTimeIndex++;
-                    updateTimeSlot();
-                }, 1500);
-            }
-        }
-        
-        // 顯示提示
-        function showTooltip(message) {
-            sceneTooltip.textContent = message;
-            sceneTooltip.classList.add('visible');
-            
-            setTimeout(() => {
-                sceneTooltip.classList.remove('visible');
-            }, 3000);
-        }
-        
-        // 顯示結果
-        function showResults() {
-            const finalScore = calculateScore();
-            const resultIcon = document.getElementById('resultIcon');
-            const resultTitle = document.getElementById('resultTitle');
-            const resultScore = document.getElementById('resultScore');
-            const resultMessage = document.getElementById('resultMessage');
-            const finalHealth = document.getElementById('finalHealth');
-            const finalHydration = document.getElementById('finalHydration');
-            const finalEnergy = document.getElementById('finalEnergy');
-            const finalKidney = document.getElementById('finalKidney');
-            const resultSummary = document.getElementById('resultSummary');
-            
-            // 設置結果數據
-            finalHealth.textContent = `${gameState.health}%`;
-            finalHydration.textContent = `${gameState.hydration}%`;
-            finalEnergy.textContent = `${gameState.energy}%`;
-            finalKidney.textContent = `${gameState.kidney}%`;
-            resultScore.textContent = finalScore;
-            
-            // 根據分數設置不同的結果訊息
-            if (finalScore >= 80) {
-                resultIcon.className = 'result-icon success';
-                resultIcon.innerHTML = '<i class="fas fa-trophy"></i>';
-                resultTitle.textContent = '做得太棒了！';
-                resultMessage.textContent = '你出色地管理了自己的健康！';
-                resultSummary.textContent = '你做出了許多有益腎臟健康的選擇：控制水分、合理飲食、按時服藥、適量運動。繼續保持這些好習慣！';
-            } else if (finalScore >= 60) {
-                resultIcon.className = 'result-icon warning';
-                resultIcon.innerHTML = '<i class="fas fa-medal"></i>';
-                resultTitle.textContent = '做得不錯！';
-                resultMessage.textContent = '你的健康管理還有改進空間。';
-                resultSummary.textContent = '你做出了一些好的選擇，但也有一些可以改進的地方。注意控制飲食鹽分和蛋白質，按時服藥，保持適量運動。';
-            } else {
-                resultIcon.className = 'result-icon error';
-                resultIcon.innerHTML = '<i class="fas fa-heart-crack"></i>';
-                resultTitle.textContent = '需要改進';
-                resultMessage.textContent = '你的健康管理需要更多關注。';
-                resultSummary.textContent = '你的一些選擇可能對腎臟健康不利。建議更加注意飲食控制、水分平衡、按時服藥，並諮詢醫生獲取更多指導。';
-            }
-            
-            // 顯示結果
-            resultModal.classList.add('active');
-        }
-        
-        // 計算最終得分
-        function calculateScore() {
-            const healthWeight = 0.25;
-            const hydrationWeight = 0.2;
-            const energyWeight = 0.15;
-            const kidneyWeight = 0.4;
-            
-            const weightedScore = (
-                gameState.health * healthWeight +
-                gameState.hydration * hydrationWeight +
-                gameState.energy * energyWeight +
-                gameState.kidney * kidneyWeight
-            );
-            
-            return Math.round(weightedScore);
-        }
-        
-        // 更新時間段
-        function updateTimeSlot() {
-            const timeData = timeSlots[currentTimeIndex];
-            gameState.time = timeData.time;
-            gameState.period = timeData.period;
-            updateTimeDisplay();
-            updateScene(timeData.scene);
-        }
-        
-        // 初始化遊戲
-        function initGame() {
-            // 設置初始狀態
-            updateStatusDisplay();
-            updateTimeDisplay();
-            updateScene(timeSlots[0].scene);
-            
-            // 時間控制按鈕
-            timeBack.addEventListener('click', () => {
-                if (currentTimeIndex > 0) {
-                    currentTimeIndex--;
-                    updateTimeSlot();
-                }
-            });
-            
-            timeForward.addEventListener('click', () => {
-                if (currentTimeIndex < timeSlots.length - 1) {
-                    currentTimeIndex++;
-                    updateTimeSlot();
-                } else {
-                    showResults();
-                }
-            });
-            
-            // 結果彈窗按鈕
-            document.getElementById('backBtn').addEventListener('click', () => {
-                window.location.href = 'game-mode.html';
-            });
-            
-            document.getElementById('playAgainBtn').addEventListener('click', () => {
-                window.location.reload();
-            });
-            
-            // 為每個活動選項添加點擊事件
-            const activityElements = document.querySelectorAll('.activity-option');
-            activityElements.forEach(element => {
-                const activityId = element.getAttribute('data-activity');
-                element.addEventListener('click', () => handleActivity(activityId));
-            });
-        }
-        
-        // 啟動遊戲
-        initGame();
-    });
-</script>
 </html> 

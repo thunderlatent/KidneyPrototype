@@ -1,0 +1,712 @@
+/* 腎臟保健日常模擬遊戲樣式 */
+:root {
+    --ios-primary: #007AFF;
+    --ios-success: #34C759;
+    --ios-warning: #FF9500;
+    --ios-danger: #FF3B30;
+    --ios-purple: #AF52DE;
+    --ios-gray1: #8E8E93;
+    --ios-gray2: #AEAEB2;
+    --ios-gray3: #C7C7CC;
+    --ios-gray4: #D1D1D6;
+    --ios-gray5: #E5E5EA;
+    --ios-gray6: #F2F2F7;
+    --ios-background: #F9F9F9;
+    --ios-text-primary: #000000;
+    --ios-text-secondary: #3C3C43;
+    --ios-text-tertiary: #8E8E93;
+}
+
+/* 遊戲容器樣式 */
+.game-container {
+    padding: 20px;
+    max-width: 100%;
+    overflow-x: hidden;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 遊戲頭部信息 */
+.game-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.game-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--ios-text-primary);
+    margin-bottom: 6px;
+}
+
+.game-subtitle {
+    font-size: 16px;
+    color: var(--ios-text-secondary);
+    margin-bottom: 12px;
+}
+
+/* 角色狀態 */
+.character-status {
+    background-color: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.status-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.character-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    background-color: var(--ios-gray5);
+    margin-right: 16px;
+    background-size: cover;
+    background-position: center;
+    background-image: url('../images/character-avatar.jpg');
+}
+
+.character-info {
+    flex: 1;
+}
+
+.character-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ios-text-primary);
+    margin-bottom: 4px;
+}
+
+.character-description {
+    font-size: 14px;
+    color: var(--ios-text-secondary);
+}
+
+.status-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.status-bar-item {
+    display: flex;
+    align-items: center;
+}
+
+.status-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    margin-right: 12px;
+}
+
+.health-icon {
+    background-color: rgba(52, 199, 89, 0.15);
+    color: var(--ios-success);
+}
+
+.hydration-icon {
+    background-color: rgba(0, 122, 255, 0.15);
+    color: var(--ios-primary);
+}
+
+.energy-icon {
+    background-color: rgba(255, 149, 0, 0.15);
+    color: var(--ios-warning);
+}
+
+.kidney-icon {
+    background-color: rgba(175, 82, 222, 0.15);
+    color: var(--ios-purple);
+}
+
+.status-bar-info {
+    flex: 1;
+}
+
+.status-bar-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.status-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ios-text-primary);
+}
+
+.status-value {
+    font-size: 14px;
+    color: var(--ios-text-secondary);
+}
+
+.status-progress {
+    height: 8px;
+    background-color: var(--ios-gray5);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.status-fill {
+    height: 100%;
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.health-fill {
+    background-color: var(--ios-success);
+}
+
+.hydration-fill {
+    background-color: var(--ios-primary);
+}
+
+.energy-fill {
+    background-color: var(--ios-warning);
+}
+
+.kidney-fill {
+    background-color: var(--ios-purple);
+}
+
+/* 時間控制 */
+.time-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.time-display {
+    background-color: white;
+    border-radius: 16px;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ios-text-primary);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    margin: 0 16px;
+    min-width: 100px;
+    text-align: center;
+}
+
+.time-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: var(--ios-gray6);
+    color: var(--ios-text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.time-btn:active {
+    background-color: var(--ios-gray5);
+    transform: scale(0.95);
+}
+
+/* 場景顯示 */
+.scene-display {
+    background-color: white;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.scene-image {
+    width: 100%;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.scene-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    color: white;
+}
+
+.scene-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.scene-description {
+    font-size: 14px;
+}
+
+.scene-content {
+    padding: 20px;
+}
+
+.scene-message {
+    font-size: 16px;
+    color: var(--ios-text-primary);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.scene-question {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ios-text-primary);
+    margin-bottom: 20px;
+}
+
+/* 活動選項 */
+.activity-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.activity-option {
+    background-color: var(--ios-gray6);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.activity-option:active {
+    background-color: var(--ios-gray5);
+    transform: scale(0.98);
+}
+
+.activity-option.selected-option {
+    background-color: rgba(0, 122, 255, 0.1);
+    border: 1px solid var(--ios-primary);
+}
+
+.activity-option.disabled-option {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--ios-primary);
+}
+
+.activity-info {
+    flex: 1;
+}
+
+.activity-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ios-text-primary);
+    margin-bottom: 4px;
+}
+
+.activity-description {
+    font-size: 14px;
+    color: var(--ios-text-secondary);
+}
+
+/* 事件記錄 */
+.event-log {
+    background-color: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.event-log-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ios-text-primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.event-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--ios-gray5);
+}
+
+.event-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.event-time {
+    font-size: 12px;
+    color: var(--ios-text-tertiary);
+    min-width: 50px;
+}
+
+.event-content {
+    flex: 1;
+    font-size: 14px;
+    color: var(--ios-text-secondary);
+    line-height: 1.4;
+}
+
+.event-impact {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    margin-left: 5px;
+    font-weight: 600;
+}
+
+.event-impact.positive {
+    color: var(--ios-success);
+}
+
+.event-impact.negative {
+    color: var(--ios-danger);
+}
+
+/* 結果彈窗 */
+.result-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.result-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.result-content {
+    background-color: white;
+    border-radius: 20px;
+    width: 85%;
+    max-width: 350px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.result-modal.active .result-content {
+    transform: translateY(0);
+}
+
+.result-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+}
+
+.result-icon.success {
+    background-color: rgba(52, 199, 89, 0.2);
+    color: var(--ios-success);
+}
+
+.result-icon.warning {
+    background-color: rgba(255, 149, 0, 0.2);
+    color: var(--ios-warning);
+}
+
+.result-icon.error {
+    background-color: rgba(255, 59, 48, 0.2);
+    color: var(--ios-danger);
+}
+
+.result-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--ios-text-primary);
+}
+
+.result-score {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--ios-primary);
+}
+
+.result-message {
+    font-size: 16px;
+    color: var(--ios-text-secondary);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.result-stats {
+    background-color: var(--ios-gray6);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.stat-item:last-child {
+    margin-bottom: 0;
+}
+
+.stat-label {
+    color: var(--ios-text-secondary);
+}
+
+.stat-value {
+    font-weight: 600;
+    color: var(--ios-text-primary);
+}
+
+.nutrition-intake {
+    background-color: var(--ios-gray6);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.intake-item {
+    margin-bottom: 12px;
+}
+
+.intake-item:last-child {
+    margin-bottom: 0;
+}
+
+.intake-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.intake-label {
+    font-size: 14px;
+    color: var(--ios-text-secondary);
+}
+
+.intake-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ios-text-primary);
+}
+
+.intake-progress {
+    height: 8px;
+    background-color: var(--ios-gray5);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.intake-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    background-color: var(--ios-primary);
+}
+
+.result-summary {
+    font-size: 14px;
+    color: var(--ios-text-secondary);
+    line-height: 1.6;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.result-tip {
+    background-color: rgba(0, 122, 255, 0.1);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: left;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.result-tip i {
+    color: var(--ios-primary);
+    font-size: 18px;
+    margin-top: 2px;
+}
+
+.result-tip div {
+    font-size: 14px;
+    color: var(--ios-text-secondary);
+    line-height: 1.5;
+    flex: 1;
+}
+
+.result-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.result-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.result-btn:active {
+    transform: scale(0.95);
+}
+
+.result-btn.primary {
+    background-color: var(--ios-primary);
+    color: white;
+}
+
+.result-btn.secondary {
+    background-color: var(--ios-gray5);
+    color: var(--ios-text-primary);
+}
+
+/* 提示工具 */
+.scene-tooltip {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    max-width: 80%;
+    text-align: center;
+    z-index: 10;
+}
+
+.scene-tooltip.visible {
+    opacity: 1;
+}
+
+/* 載入提示 */
+.loading-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-size: 18px;
+    color: var(--ios-text-primary);
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--ios-gray5);
+    border-top: 5px solid var(--ios-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* 動畫 */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+.slide-in {
+    animation: slideIn 0.5s ease;
+}
+
+.pulse {
+    animation: pulse 1s infinite;
+} 
