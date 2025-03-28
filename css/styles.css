@@ -147,19 +147,8 @@ input, select, textarea {
     align-items: center;
 }
 
-/* 移除 .nav-back::before 偽元素 */
-/* .nav-back::before {
-    content: "";
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-left: 2px solid var(--ios-primary);
-    border-bottom: 2px solid var(--ios-primary);
-    transform: rotate(45deg);
-    margin-right: 6px;
-} */
-
 /* 使用 i 元素而非 ::before 偽元素 */
+/* 這是修復導航欄返回按鈕重複顯示的關鍵修改 */
 .nav-back > i {
     margin-right: 6px;
 }
