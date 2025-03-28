@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 記憶配對</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --ios-primary: #007AFF;
+            --ios-success: #34C759;
+            --ios-warning: #FF9500;
+            --ios-danger: #FF3B30;
+            --ios-purple: #AF52DE;
+            --ios-gray1: #8E8E93;
+            --ios-gray2: #AEAEB2;
+            --ios-gray3: #C7C7CC;
+            --ios-gray4: #D1D1D6;
+            --ios-gray5: #E5E5EA;
+            --ios-gray6: #F2F2F7;
+            --ios-background: #F9F9F9;
+            --ios-text-primary: #000000;
+            --ios-text-secondary: #3C3C43;
+            --ios-text-tertiary: #8E8E93;
+        }
+
+        /* 遊戲容器樣式 */
+        .game-container {
+            padding: 20px;
+            max-width: 100%;
+            overflow-x: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 遊戲信息 */
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+        }
+
+        /* 遊戲區域 */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 360px) {
+            .memory-grid {
+                gap: 12px;
+            }
+        }
+
+        @media (min-width: 400px) {
+            .memory-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .memory-card {
+            position: relative;
+            aspect-ratio: 3/4;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .memory-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .memory-card.flipped .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .memory-card-front, .memory-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .memory-card-front {
+            background-color: #007AFF;
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .memory-card-back {
+            background: linear-gradient(145deg, #e6e9ef, #ffffff);
+            border: 1px solid var(--ios-gray5);
+        }
+
+        .memory-card.matched .memory-card-front {
+            background-color: var(--ios-success);
+            animation: pulse 0.5s;
+        }
+
+        .memory-card-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .memory-card-text {
+            font-size: 10px;
+            text-align: center;
+            line-height: 1.2;
+            max-height: 60%;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+        }
+
+        .card-back-logo {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 122, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ios-primary);
+            font-size: 24px;
+        }
+
+        /* 遊戲控制 */
+        .game-controls {
+            display: flex;
+            justify-content: space-evenly;
+            margin-top: 20px;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            border-radius: 20px;
+            font-weight: 600;
+            border: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .control-btn.primary {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+
+        .control-btn.danger {
+            background-color: var(--ios-danger);
+            color: white;
+        }
+
+        /* 結果彈窗 */
+        .result-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+        }
+
+        .result-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .result-content {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px 20px;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.3s;
+        }
+
+        .result-modal.show .result-content {
+            transform: scale(1);
+        }
+
+        .result-icon {
+            font-size: 60px;
+            color: var(--ios-warning);
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--ios-text-primary);
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--ios-primary);
+            margin-bottom: 20px;
+        }
+
+        .result-message {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .result-rewards {
+            background-color: var(--ios-gray6);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .reward-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .reward-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 149, 0, 0.1);
+            color: var(--ios-warning);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+
+        .reward-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+        }
+
+        .result-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .result-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            border: none;
+            font-size: 14px;
+        }
+
+        .result-btn.primary {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+
+        .result-btn.secondary {
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+        }
+
+        /* 動畫效果 */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .game-container {
+            animation: fadein 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <!-- 頂部狀態欄 -->
+        <div class="status-bar">
+            <div class="status-time" id="statusTime">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">
+                    <i class="fas fa-signal"></i>
+                </div>
+                <div class="status-icon">
+                    <i class="fas fa-wifi"></i>
+                </div>
+                <div class="status-icon">
+                    <i class="fas fa-battery-full"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="nav-title">記憶配對</div>
+            <div class="nav-back" style="visibility: hidden;"></div>
+        </div>
+
+        <!-- 遊戲主容器 -->
+        <div class="game-container">
+            <!-- 遊戲信息 -->
+            <div class="game-info">
+                <div class="info-item">
+                    <div class="info-label">嘗試次數</div>
+                    <div class="info-value" id="moves">0</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">配對成功</div>
+                    <div class="info-value" id="pairs">0</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">剩餘時間</div>
+                    <div class="info-value" id="timer">120</div>
+                </div>
+            </div>
+
+            <!-- 遊戲區域 -->
+            <div class="memory-grid" id="gameGrid">
+                <!-- 卡片將通過 JavaScript 動態生成 -->
+            </div>
+
+            <!-- 遊戲控制 -->
+            <div class="game-controls">
+                <button class="control-btn" id="hintBtn">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>提示</span>
+                </button>
+                <button class="control-btn primary" id="restartBtn">
+                    <i class="fas fa-redo-alt"></i>
+                    <span>重新開始</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 結果彈窗 -->
+        <div class="result-modal" id="resultModal">
+            <div class="result-content">
+                <div class="result-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="result-title">遊戲結束</div>
+                <div class="result-score" id="finalScore">0</div>
+                <div class="result-message" id="resultMessage">恭喜您完成記憶配對挑戰！</div>
+                <div class="result-rewards">
+                    <div class="reward-item">
+                        <div class="reward-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div class="reward-label">積分</div>
+                        <div class="reward-value" id="pointsReward">+200</div>
+                    </div>
+                    <div class="reward-item">
+                        <div class="reward-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="reward-label">記憶力</div>
+                        <div class="reward-value" id="memoryReward">+10</div>
+                    </div>
+                </div>
+                <div class="result-buttons">
+                    <button class="result-btn secondary" id="returnBtn">返回</button>
+                    <button class="result-btn primary" id="playAgainBtn">再玩一次</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <div class="tab-item" onclick="navigateToMain()">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </div>
+            <div class="tab-item active" onclick="navigateTo('game-mode.html')">
+                <i class="fas fa-gamepad"></i>
+                <span>遊戲</span>
+            </div>
+            <div class="tab-item" onclick="navigateTo('learning-resources.html')">
+                <i class="fas fa-book"></i>
+                <span>資源</span>
+            </div>
+            <div class="tab-item" onclick="navigateTo('profile.html')">
+                <i class="fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 記憶卡片數據 - 包含腎臟健康相關知識的配對
+        const cardData = [
+            { 
+                id: 1, 
+                icon: 'fa-tint', 
+                text: '水是重要的，但腎病患者需控制液體攝入量',
+                pair: 2
+            },
+            { 
+                id: 2, 
+                icon: 'fa-glass-water', 
+                text: '根據醫生建議限制飲水量，避免水腫和血液稀釋',
+                pair: 1
+            },
+            { 
+                id: 3, 
+                icon: 'fa-utensils', 
+                text: '低鹽飲食可以控制血壓和減少水分滯留',
+                pair: 4
+            },
+            { 
+                id: 4, 
+                icon: 'fa-salt-shaker', 
+                text: '每日鈉攝入量應控制在2000mg以下',
+                pair: 3
+            },
+            { 
+                id: 5, 
+                icon: 'fa-apple-whole', 
+                text: '水果中含有鉀，腎病患者應謹慎選擇水果種類',
+                pair: 6
+            },
+            { 
+                id: 6, 
+                icon: 'fa-banana', 
+                text: '香蕉、橙子等高鉀水果應限量食用',
+                pair: 5
+            },
+            { 
+                id: 7, 
+                icon: 'fa-pills', 
+                text: '磷結合劑可幫助控制體內磷水平',
+                pair: 8
+            },
+            { 
+                id: 8, 
+                icon: 'fa-prescription-bottle-medical', 
+                text: '服用磷結合劑時間應與進餐同時',
+                pair: 7
+            },
+            { 
+                id: 9, 
+                icon: 'fa-heartbeat', 
+                text: '高血壓是腎臟疾病的主要風險因素',
+                pair: 10
+            },
+            { 
+                id: 10, 
+                icon: 'fa-heart-pulse', 
+                text: '控制血壓有助於延緩腎臟疾病進展',
+                pair: 9
+            },
+            { 
+                id: 11, 
+                icon: 'fa-person-walking', 
+                text: '適度運動有助於改善心肺功能和降低血壓',
+                pair: 12
+            },
+            { 
+                id: 12, 
+                icon: 'fa-dumbbell', 
+                text: '每週至少進行150分鐘的中等強度運動',
+                pair: 11
+            }
+        ];
+
+        // 遊戲變量
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+        let timer = 120;
+        let timerInterval = null;
+        let score = 0;
+        let isGameActive = true;
+        let gameCards = [];
+
+        // DOM 元素
+        const gameGrid = document.getElementById('gameGrid');
+        const movesElement = document.getElementById('moves');
+        const pairsElement = document.getElementById('pairs');
+        const timerElement = document.getElementById('timer');
+        const hintBtn = document.getElementById('hintBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const resultModal = document.getElementById('resultModal');
+        const finalScoreElement = document.getElementById('finalScore');
+        const resultMessageElement = document.getElementById('resultMessage');
+        const pointsRewardElement = document.getElementById('pointsReward');
+        const memoryRewardElement = document.getElementById('memoryReward');
+        const returnBtn = document.getElementById('returnBtn');
+        const playAgainBtn = document.getElementById('playAgainBtn');
+
+        // 更新狀態欄時間
+        function updateStatusTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('statusTime').textContent = hours + ':' + minutes;
+        }
+
+        // 初始化遊戲
+        function initGame() {
+            // 隨機選擇6對卡片（總共12張）
+            let selectedPairs = [];
+            let availablePairs = [...Array(cardData.length / 2).keys()].map(i => i * 2);
+            
+            for (let i = 0; i < 6; i++) {
+                if (availablePairs.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * availablePairs.length);
+                    const pairIndex = availablePairs[randomIndex];
+                    availablePairs.splice(randomIndex, 1);
+                    
+                    // 添加配對的兩張卡片
+                    selectedPairs.push(cardData[pairIndex]);
+                    selectedPairs.push(cardData[pairIndex + 1]);
+                }
+            }
+            
+            // 打亂卡片順序
+            gameCards = shuffleArray(selectedPairs);
+            
+            // 渲染卡片
+            renderCards();
+            
+            // 重置遊戲狀態
+            flippedCards = [];
+            matchedPairs = 0;
+            moves = 0;
+            score = 0;
+            timer = 120;
+            isGameActive = true;
+            
+            // 更新界面
+            movesElement.textContent = moves;
+            pairsElement.textContent = matchedPairs;
+            timerElement.textContent = timer;
+            
+            // 開始計時器
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // 打亂數組
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            
+            return array;
+        }
+
+        // 渲染卡片
+        function renderCards() {
+            gameGrid.innerHTML = '';
+            
+            gameCards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'memory-card';
+                cardElement.dataset.index = index;
+                
+                cardElement.innerHTML = `
+                    <div class="memory-card-inner">
+                        <div class="memory-card-front">
+                            <div class="memory-card-icon">
+                                <i class="fas ${card.icon}"></i>
+                            </div>
+                            <div class="memory-card-text">${card.text}</div>
+                        </div>
+                        <div class="memory-card-back">
+                            <div class="card-back-logo">
+                                <i class="fas fa-kidney"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                cardElement.addEventListener('click', () => flipCard(index));
+                gameGrid.appendChild(cardElement);
+            });
+        }
+
+        // 翻卡片
+        function flipCard(index) {
+            // 如果遊戲已結束或卡片已配對，則不處理
+            if (!isGameActive || flippedCards.length >= 2) return;
+            
+            const cardElement = document.querySelector(`.memory-card[data-index="${index}"]`);
+            
+            // 如果卡片已經翻開或已配對，則不處理
+            if (cardElement.classList.contains('flipped') || cardElement.classList.contains('matched')) return;
+            
+            // 翻開卡片
+            cardElement.classList.add('flipped');
+            flippedCards.push({ index, id: gameCards[index].id, pair: gameCards[index].pair });
+            
+            // 如果翻開了兩張卡片，檢查是否配對
+            if (flippedCards.length === 2) {
+                moves++;
+                movesElement.textContent = moves;
+                
+                // 檢查是否配對
+                checkForMatch();
+            }
+        }
+
+        // 檢查配對
+        function checkForMatch() {
+            const [card1, card2] = flippedCards;
+            
+            // 延遲執行，以便玩家可以看到兩張翻開的卡片
+            setTimeout(() => {
+                if (card1.id === card2.pair || card2.id === card1.pair) {
+                    // 配對成功
+                    const card1Element = document.querySelector(`.memory-card[data-index="${card1.index}"]`);
+                    const card2Element = document.querySelector(`.memory-card[data-index="${card2.index}"]`);
+                    
+                    card1Element.classList.add('matched');
+                    card2Element.classList.add('matched');
+                    
+                    matchedPairs++;
+                    pairsElement.textContent = matchedPairs;
+                    
+                    // 計算分數：基礎分 + 時間獎勵 + 少嘗試獎勵
+                    score += 100 + Math.max(0, 20 - 2 * (moves - matchedPairs));
+                    
+                    // 檢查遊戲是否完成
+                    if (matchedPairs === gameCards.length / 2) {
+                        endGame(true);
+                    }
+                } else {
+                    // 配對失敗，將卡片翻回背面
+                    const card1Element = document.querySelector(`.memory-card[data-index="${card1.index}"]`);
+                    const card2Element = document.querySelector(`.memory-card[data-index="${card2.index}"]`);
+                    
+                    card1Element.classList.remove('flipped');
+                    card2Element.classList.remove('flipped');
+                }
+                
+                // 重置已翻開的卡片
+                flippedCards = [];
+            }, 1000);
+        }
+
+        // 更新計時器
+        function updateTimer() {
+            if (timer > 0 && isGameActive) {
+                timer--;
+                timerElement.textContent = timer;
+                
+                // 時間少於30秒時顯示紅色提醒
+                if (timer <= 30) {
+                    timerElement.style.color = 'var(--ios-danger)';
+                }
+                
+                // 時間結束，遊戲結束
+                if (timer === 0) {
+                    endGame(false);
+                }
+            }
+        }
+
+        // 結束遊戲
+        function endGame(isWin) {
+            isGameActive = false;
+            clearInterval(timerInterval);
+            
+            // 計算最終得分
+            const timeBonus = timer * 2;
+            const movesBonus = Math.max(0, 100 - (moves - matchedPairs) * 5);
+            const finalScore = score + timeBonus + movesBonus;
+            
+            // 設置獎勵
+            let pointsReward = 50 + matchedPairs * 20 + (isWin ? 100 : 0);
+            let memoryReward = Math.floor(finalScore / 50);
+            
+            // 更新結果界面
+            finalScoreElement.textContent = finalScore;
+            
+            if (isWin) {
+                resultMessageElement.textContent = '恭喜您完成所有配對！您的記憶力非常出色！';
+            } else {
+                resultMessageElement.textContent = `時間到！您成功配對了 ${matchedPairs} 對卡片。`;
+            }
+            
+            pointsRewardElement.textContent = `+${pointsReward}`;
+            memoryRewardElement.textContent = `+${memoryReward}`;
+            
+            // 顯示結果彈窗
+            resultModal.classList.add('show');
+            
+            // 模擬更新用戶積分
+            if (typeof updateUserPoints === 'function') {
+                updateUserPoints(pointsReward);
+            }
+        }
+
+        // 提示功能
+        function showHint() {
+            // 如果遊戲已結束或有兩張卡片已翻開，則不處理
+            if (!isGameActive || flippedCards.length >= 2) return;
+            
+            // 找出未配對的卡片
+            const unmatched = [];
+            document.querySelectorAll('.memory-card').forEach((card, index) => {
+                if (!card.classList.contains('matched') && !card.classList.contains('flipped')) {
+                    unmatched.push(index);
+                }
+            });
+            
+            if (unmatched.length === 0) return;
+            
+            // 隨機翻開一張未配對的卡片
+            const randomIndex = Math.floor(Math.random() * unmatched.length);
+            const hintIndex = unmatched[randomIndex];
+            
+            // 短暫顯示卡片
+            const hintCard = document.querySelector(`.memory-card[data-index="${hintIndex}"]`);
+            hintCard.classList.add('flipped');
+            
+            // 2秒後翻回
+            setTimeout(() => {
+                if (!hintCard.classList.contains('matched')) {
+                    hintCard.classList.remove('flipped');
+                }
+            }, 2000);
+            
+            // 使用提示會減少最終得分
+            score = Math.max(0, score - 50);
+        }
+
+        // 重新開始遊戲
+        function restartGame() {
+            // 隱藏結果彈窗
+            resultModal.classList.remove('show');
+            
+            // 初始化遊戲
+            initGame();
+        }
+
+        // 返回遊戲模式選擇頁面
+        function returnToGameMode() {
+            window.location.href = 'game-mode.html';
+        }
+
+        // 導航至指定頁面
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+        
+        // 導航至主頁
+        function navigateToMain() {
+            window.location.href = 'main.html';
+        }
+
+        // 事件監聽器
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新狀態欄時間
+            updateStatusTime();
+            setInterval(updateStatusTime, 60000);
+            
+            // 初始化遊戲
+            initGame();
+            
+            // 按鈕點擊事件
+            hintBtn.addEventListener('click', showHint);
+            restartBtn.addEventListener('click', restartGame);
+            returnBtn.addEventListener('click', returnToGameMode);
+            playAgainBtn.addEventListener('click', restartGame);
+        });
+    </script>
+</body>
+</html> 

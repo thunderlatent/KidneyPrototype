@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 積分商城</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --ios-primary: #007AFF;
+            --ios-success: #34C759;
+            --ios-warning: #FF9500;
+            --ios-danger: #FF3B30;
+            --ios-purple: #AF52DE;
+            --ios-pink: #FF2D55;
+            --ios-teal: #5AC8FA;
+            --ios-gray1: #8E8E93;
+            --ios-gray2: #AEAEB2;
+            --ios-gray3: #C7C7CC;
+            --ios-gray4: #D1D1D6;
+            --ios-gray5: #E5E5EA;
+            --ios-gray6: #F2F2F7;
+            --ios-background: #F9F9F9;
+            --ios-text-primary: #000000;
+            --ios-text-secondary: #3C3C43;
+            --ios-text-tertiary: #8E8E93;
+        }
+
+        /* 主容器樣式 */
+        .shop-container {
+            padding: 20px;
+            max-width: 100%;
+            overflow-x: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 頭部積分顯示區域 */
+        .points-header {
+            background: linear-gradient(135deg, var(--ios-primary), var(--ios-purple));
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            color: white;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .points-header::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .points-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 120px;
+            height: 120px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .points-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .points-value {
+            display: flex;
+            align-items: center;
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .points-icon {
+            width: 32px;
+            height: 32px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+
+        .points-history {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .points-history i {
+            margin-right: 6px;
+        }
+
+        /* 商品分類導航 */
+        .shop-tabs {
+            display: flex;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 8px;
+        }
+
+        .shop-tab {
+            flex: 0 0 auto;
+            padding: 8px 16px;
+            margin-right: 10px;
+            background-color: var(--ios-gray6);
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            scroll-snap-align: start;
+        }
+
+        .shop-tab.active {
+            background-color: var(--ios-primary);
+            color: white;
+            font-weight: 500;
+        }
+
+        /* 商品卡片排序 */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        @media (min-width: 480px) {
+            .shop-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* 商品卡片樣式 */
+        .shop-item {
+            background-color: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .shop-item:active {
+            transform: scale(0.97);
+        }
+
+        .item-image {
+            height: 120px;
+            background-color: var(--ios-gray6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .item-image i {
+            font-size: 40px;
+            color: var(--ios-primary);
+        }
+
+        .item-info {
+            padding: 12px;
+        }
+
+        .item-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-desc {
+            font-size: 12px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 8px;
+            height: 32px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .item-price {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .price-value {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: var(--ios-primary);
+        }
+
+        .price-value i {
+            margin-right: 4px;
+            font-size: 12px;
+        }
+
+        .buy-button {
+            background-color: var(--ios-primary);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .buy-button:disabled {
+            background-color: var(--ios-gray3);
+            color: var(--ios-gray1);
+        }
+
+        /* 標籤和分類樣式 */
+        .item-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: var(--ios-danger);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        /* 熱門商品區 */
+        .featured-section {
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+        }
+
+        .featured-item {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 6px 16px rgba(255, 165, 0, 0.25);
+        }
+
+        .featured-icon {
+            font-size: 40px;
+            margin-right: 20px;
+            width: 70px;
+            height: 70px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .featured-details {
+            flex: 1;
+        }
+
+        .featured-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .featured-desc {
+            font-size: 14px;
+            margin-bottom: 12px;
+            opacity: 0.9;
+        }
+
+        .featured-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .featured-points {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .featured-points i {
+            margin-right: 6px;
+        }
+
+        .featured-button {
+            background-color: white;
+            color: #FF9500;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-weight: 600;
+        }
+
+        /* 動畫效果 */
+        @keyframes shine {
+            0% {
+                background-position: -100px;
+            }
+            40%, 100% {
+                background-position: 300px;
+            }
+        }
+
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shine-effect::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 4s infinite;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <!-- 頂部狀態欄 -->
+        <div class="status-bar">
+            <div class="status-time" id="statusTime">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">
+                    <i class="fas fa-signal"></i>
+                </div>
+                <div class="status-icon">
+                    <i class="fas fa-wifi"></i>
+                </div>
+                <div class="status-icon">
+                    <i class="fas fa-battery-full"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="nav-title">積分商城</div>
+            <div class="nav-back" style="visibility: hidden;"></div>
+        </div>
+
+        <!-- 商城主容器 -->
+        <div class="shop-container">
+            <!-- 積分顯示區域 -->
+            <div class="points-header">
+                <div class="points-title">我的積分</div>
+                <div class="points-value">
+                    <div class="points-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <span>3,250</span>
+                </div>
+                <div class="points-history" onclick="showPointsHistory()">
+                    <i class="fas fa-clock"></i>
+                    <span>積分記錄</span>
+                </div>
+            </div>
+
+            <!-- 特色商品區 -->
+            <div class="featured-section">
+                <div class="section-header">
+                    <div class="section-title">特色商品</div>
+                </div>
+                <div class="featured-item shine-effect">
+                    <div class="featured-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="featured-details">
+                        <div class="featured-name">腎臟專家認證</div>
+                        <div class="featured-desc">獲得專家徽章和獨家高級內容，解鎖所有進階知識</div>
+                        <div class="featured-price">
+                            <div class="featured-points">
+                                <i class="fas fa-gem"></i>
+                                <span>5,000</span>
+                            </div>
+                            <button class="featured-button">兌換</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品分類導航 -->
+            <div class="shop-tabs">
+                <div class="shop-tab active" onclick="filterItems('all')">全部商品</div>
+                <div class="shop-tab" onclick="filterItems('theme')">主題皮膚</div>
+                <div class="shop-tab" onclick="filterItems('badge')">成就徽章</div>
+                <div class="shop-tab" onclick="filterItems('content')">知識內容</div>
+                <div class="shop-tab" onclick="filterItems('tool')">實用工具</div>
+            </div>
+
+            <!-- 商品列表 -->
+            <div class="shop-grid">
+                <!-- 商品1: 暗黑主題 -->
+                <div class="shop-item" data-category="theme">
+                    <div class="item-image" style="background-color: #1C1C1E;">
+                        <i class="fas fa-moon" style="color: #FFFFFF;"></i>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">暗黑主題</div>
+                        <div class="item-desc">時尚暗黑模式，保護眼睛減少疲勞</div>
+                        <div class="item-price">
+                            <div class="price-value">
+                                <i class="fas fa-gem"></i>
+                                <span>600</span>
+                            </div>
+                            <button class="buy-button">兌換</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品2: 腎友達人徽章 -->
+                <div class="shop-item" data-category="badge">
+                    <div class="item-image" style="background-color: rgba(255, 204, 0, 0.15);">
+                        <i class="fas fa-medal" style="color: #FFCC00;"></i>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">腎友達人徽章</div>
+                        <div class="item-desc">在個人資料頁顯示特殊徽章</div>
+                        <div class="item-price">
+                            <div class="price-value">
+                                <i class="fas fa-gem"></i>
+                                <span>800</span>
+                            </div>
+                            <button class="buy-button">兌換</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品3: 專家指導視頻 -->
+                <div class="shop-item" data-category="content">
+                    <div class="item-image" style="background-color: rgba(0, 122, 255, 0.15);">
+                        <i class="fas fa-video" style="color: var(--ios-primary);"></i>
+                        <div class="item-badge">熱門</div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">專家指導視頻</div>
+                        <div class="item-desc">腎臟專家深度講解腎臟保健知識</div>
+                        <div class="item-price">
+                            <div class="price-value">
+                                <i class="fas fa-gem"></i>
+                                <span>1,200</span>
+                            </div>
+                            <button class="buy-button">兌換</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品4: 藍海主題 -->
+                <div class="shop-item" data-category="theme">
+                    <div class="item-image" style="background: linear-gradient(135deg, #5AC8FA, #007AFF);">
+                        <i class="fas fa-water" style="color: white;"></i>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">藍海主題</div>
+                        <div class="item-desc">清新藍色海洋風格，舒適界面</div>
+                        <div class="item-price">
+                            <div class="price-value">
+                                <i class="fas fa-gem"></i>
+                                <span>600</span>
+                            </div>
+                            <button class="buy-button">兌換</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品5: 腎臟病飲食指南 -->
+                <div class="shop-item" data-category="content">
+                    <div class="item-image" style="background-color: rgba(52, 199, 89, 0.15);">
+                        <i class="fas fa-utensils" style="color: var(--ios-success);"></i>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">腎臟病飲食指南</div>
+                        <div class="item-desc">詳細的飲食建議和食譜推薦</div>
+                        <div class="item-price">
+                            <div class="price-value">
+                                <i class="fas fa-gem"></i>
+                                <span>950</span>
+                            </div>
+                            <button class="buy-button">兌換</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品6: 腎友日記模板 -->
+                <div class="shop-item" data-category="tool">
+                    <div class="item-image" style="background-color: rgba(175, 82, 222, 0.15);">
+                        <i class="fas fa-book" style="color: var(--ios-purple);"></i>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">腎友日記模板</div>
+                        <div class="item-desc">可打印的日記模板，記錄健康狀況</div>
+                        <div class="item-price">
+                            <div class="price-value">
+                                <i class="fas fa-gem"></i>
+                                <span>500</span>
+                            </div>
+                            <button class="buy-button">兌換</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品7: 知識達人徽章 -->
+                <div class="shop-item" data-category="badge">
+                    <div class="item-image" style="background-color: rgba(255, 45, 85, 0.15);">
+                        <i class="fas fa-award" style="color: var(--ios-pink);"></i>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">知識達人徽章</div>
+                        <div class="item-desc">在討論區顯示特殊知識專家標誌</div>
+                        <div class="item-price">
+                            <div class="price-value">
+                                <i class="fas fa-gem"></i>
+                                <span>750</span>
+                            </div>
+                            <button class="buy-button">兌換</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品8: 個人健康報告 -->
+                <div class="shop-item" data-category="tool">
+                    <div class="item-image" style="background-color: rgba(255, 149, 0, 0.15);">
+                        <i class="fas fa-chart-line" style="color: var(--ios-warning);"></i>
+                        <div class="item-badge">新品</div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">個人健康報告</div>
+                        <div class="item-desc">根據您的數據生成詳細健康報告</div>
+                        <div class="item-price">
+                            <div class="price-value">
+                                <i class="fas fa-gem"></i>
+                                <span>1,500</span>
+                            </div>
+                            <button class="buy-button">兌換</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <div class="tab-item" onclick="navigateToMain()">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </div>
+            <div class="tab-item" onclick="navigateTo('game-mode.html')">
+                <i class="fas fa-gamepad"></i>
+                <span>遊戲</span>
+            </div>
+            <div class="tab-item" onclick="navigateTo('learning-resources.html')">
+                <i class="fas fa-book"></i>
+                <span>資源</span>
+            </div>
+            <div class="tab-item" onclick="navigateTo('profile.html')">
+                <i class="fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 更新狀態欄時間
+        function updateStatusTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('statusTime').textContent = hours + ':' + minutes;
+        }
+        
+        // 導航至指定頁面
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+        
+        // 導航至主頁
+        function navigateToMain() {
+            window.location.href = 'main.html';
+        }
+        
+        // 顯示積分歷史記錄
+        function showPointsHistory() {
+            alert('積分記錄功能即將推出！');
+        }
+        
+        // 篩選商品類別
+        function filterItems(category) {
+            // 更新標籤樣式
+            document.querySelectorAll('.shop-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.textContent.includes(getCategoryName(category)) || 
+                   (category === 'all' && tab.textContent.includes('全部'))) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // 過濾商品
+            const items = document.querySelectorAll('.shop-item');
+            
+            if (category === 'all') {
+                items.forEach(item => {
+                    item.style.display = 'flex';
+                });
+            } else {
+                items.forEach(item => {
+                    if (item.dataset.category === category) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+        }
+        
+        // 獲取類別名稱
+        function getCategoryName(category) {
+            switch(category) {
+                case 'theme': return '主題';
+                case 'badge': return '徽章';
+                case 'content': return '知識';
+                case 'tool': return '工具';
+                default: return '全部';
+            }
+        }
+        
+        // 兌換商品
+        function buyItem(itemName, itemPrice) {
+            // 獲取當前積分
+            const currentPoints = parseInt(document.querySelector('.points-value span').textContent.replace(',', ''));
+            
+            if (currentPoints >= itemPrice) {
+                // 確認購買對話框
+                if (confirm(`確定要使用 ${itemPrice} 積分兌換 "${itemName}" 嗎？`)) {
+                    // 模擬購買流程
+                    // 減少積分
+                    const newPoints = currentPoints - itemPrice;
+                    document.querySelector('.points-value span').textContent = newPoints.toLocaleString();
+                    
+                    // 顯示成功訊息
+                    alert(`恭喜您成功兌換 "${itemName}"！`);
+                    
+                    // 這裡可以添加更新商品狀態和儲存到後端的邏輯
+                }
+            } else {
+                alert('積分不足，無法兌換該商品。請繼續遊戲獲取更多積分！');
+            }
+        }
+        
+        // 頁面載入時執行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新狀態欄時間
+            updateStatusTime();
+            setInterval(updateStatusTime, 60000);
+            
+            // 設置兌換按鈕點擊事件
+            document.querySelectorAll('.buy-button').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const itemCard = this.closest('.shop-item') || this.closest('.featured-item');
+                    const itemName = itemCard.querySelector('.item-name')?.textContent || itemCard.querySelector('.featured-name')?.textContent;
+                    const itemPrice = parseInt(itemCard.querySelector('.price-value span')?.textContent || itemCard.querySelector('.featured-points span')?.textContent);
+                    
+                    buyItem(itemName, itemPrice);
+                });
+            });
+            
+            // 設置特色按鈕點擊事件
+            document.querySelector('.featured-button').addEventListener('click', function(e) {
+                e.stopPropagation();
+                const featuredItem = this.closest('.featured-item');
+                const itemName = featuredItem.querySelector('.featured-name').textContent;
+                const itemPrice = parseInt(featuredItem.querySelector('.featured-points span').textContent);
+                
+                buyItem(itemName, itemPrice);
+            });
+        });
+    </script>
+</body>
+</html> 

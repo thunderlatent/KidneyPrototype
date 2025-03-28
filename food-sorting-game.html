@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 健康飲食分類遊戲</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --ios-primary: #007AFF;
+            --ios-success: #34C759;
+            --ios-warning: #FF9500;
+            --ios-danger: #FF3B30;
+            --ios-gray1: #8E8E93;
+            --ios-gray2: #AEAEB2;
+            --ios-gray3: #C7C7CC;
+            --ios-gray4: #D1D1D6;
+            --ios-gray5: #E5E5EA;
+            --ios-gray6: #F2F2F7;
+            --ios-background: #F9F9F9;
+            --ios-text-primary: #000000;
+            --ios-text-secondary: #3C3C43;
+            --ios-text-tertiary: #8E8E93;
+        }
+
+        /* 遊戲容器樣式 */
+        .game-container {
+            padding: 20px;
+            max-width: 100%;
+            overflow-x: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 遊戲頭部信息 */
+        .game-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .game-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+            margin-bottom: 6px;
+        }
+
+        .game-subtitle {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 12px;
+        }
+
+        /* 遊戲信息 */
+        .game-info {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: var(--ios-text-tertiary);
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+        }
+
+        /* 食物展示區 */
+        .food-display-container {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .food-question-number {
+            font-size: 14px;
+            color: var(--ios-text-tertiary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .food-display-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .food-image-large {
+            width: 100%;
+            height: 200px;
+            border-radius: 12px;
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .food-details-large {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .food-name-large {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .food-description-large {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 12px;
+            display: none; /* 初始隱藏食物描述 */
+        }
+        
+        .food-nutrients {
+            display: none; /* 初始隱藏營養成分 */
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .timer-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: var(--ios-gray5);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .timer-bar {
+            height: 100%;
+            background-color: var(--ios-primary);
+            width: 100%;
+            border-radius: 4px;
+            transition: width linear;
+        }
+        
+        .answer-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        /* 答案按鈕樣式 - 改用中性顏色，不再使用紅綠表示選項類型 */
+        .answer-btn {
+            position: relative;
+            flex: 1;
+            padding: 15px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            background-color: white;
+            border: 2px solid var(--ios-gray4);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .answer-btn:active {
+            transform: scale(0.97);
+        }
+        
+        /* 按鈕內容樣式 - 使用深淺藍色區分兩個按鈕 */
+        .answer-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        
+        .answer-btn.good .answer-icon {
+            background-color: rgba(52, 120, 246, 0.15);
+            color: #3478f6;
+        }
+        
+        .answer-btn.bad .answer-icon {
+            background-color: rgba(64, 156, 255, 0.15);
+            color: #409cff;
+        }
+        
+        .answer-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .answer-btn.good .answer-text {
+            color: #3478f6;
+        }
+        
+        .answer-btn.bad .answer-text {
+            color: #409cff;
+        }
+        
+        /* 選擇後的按鈕狀態 - 使用明確的紅綠色彩表示答題狀態 */
+        .answer-btn.selected.correct {
+            background-color: rgba(52, 199, 89, 0.3);
+            border: 2px solid var(--ios-success);
+            box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.25), 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: scale(1.03);
+        }
+        
+        .answer-btn.selected.incorrect {
+            background-color: rgba(255, 59, 48, 0.3);
+            border: 2px solid var(--ios-danger);
+            box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.25), 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: scale(1.03);
+        }
+        
+        /* 答案結果標記 - 使用明確的紅綠色彩 */
+        .answer-result-mark {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+        
+        .answer-btn.selected .answer-result-mark {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .answer-btn.selected.correct .answer-result-mark {
+            background-color: var(--ios-success);
+            color: white;
+        }
+        
+        .answer-btn.selected.incorrect .answer-result-mark {
+            background-color: var(--ios-danger);
+            color: white;
+        }
+        
+        /* 非選中按鈕變暗，突顯選中的按鈕 */
+        .answer-btn.not-selected {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+        
+        .answer-feedback {
+            background-color: var(--ios-gray6);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            display: none;
+            margin-top: 15px;
+            border: 1px solid var(--ios-gray4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+            position: relative;
+            z-index: 20 !important;
+            overflow: visible !important;
+            max-height: none !important;
+            transition: opacity 0.3s ease, transform 0.3s ease !important;
+            transform: translateY(0) !important;
+            opacity: 1 !important;
+        }
+        
+        /* 回饋卡片樣式調整 - 使用更鮮明的紅綠色彩 */
+        .answer-feedback.correct {
+            background-color: rgba(52, 199, 89, 0.15);
+            border-left: 8px solid var(--ios-success);
+        }
+        
+        .answer-feedback.incorrect {
+            background-color: rgba(255, 59, 48, 0.15);
+            border-left: 8px solid var(--ios-danger);
+        }
+        
+        .feedback-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        /* 回饋圖標樣式調整 - 使用紅綠色彩 */
+        .answer-feedback.correct .feedback-icon {
+            background-color: rgba(52, 199, 89, 0.2);
+            color: var(--ios-success);
+        }
+        
+        .answer-feedback.incorrect .feedback-icon {
+            background-color: rgba(255, 59, 48, 0.2);
+            color: var(--ios-danger);
+        }
+        
+        .feedback-text {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        /* 回饋文字樣式調整 - 使用紅綠色彩 */
+        .answer-feedback.correct .feedback-text {
+            color: var(--ios-success);
+        }
+        
+        .answer-feedback.incorrect .feedback-text {
+            color: var(--ios-danger);
+        }
+        
+        .feedback-explanation {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            line-height: 1.5;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 12px;
+        }
+        
+        .feedback-description-container,
+        .feedback-nutrients-container {
+            text-align: left !important;
+            margin-top: 15px !important;
+            margin-bottom: 15px !important;
+            display: block !important;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-top: 12px;
+            width: 100%;
+        }
+        
+        .feedback-description-container h4,
+        .feedback-nutrients-container h4 {
+            font-size: 15px !important;
+            font-weight: 600 !important;
+            margin-bottom: 8px !important;
+            color: var(--ios-text-primary) !important;
+            display: block !important;
+        }
+        
+        #feedbackDescription {
+            font-size: 14px !important;
+            color: var(--ios-text-secondary) !important;
+            line-height: 1.5 !important;
+            margin-bottom: 10px !important;
+            display: block !important;
+        }
+        
+        #feedbackNutrients {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            margin-top: 10px !important;
+        }
+        
+        .feedback-nutrient {
+            background-color: rgba(0, 0, 0, 0.05) !important;
+            padding: 6px 12px !important;
+            border-radius: 12px !important;
+            font-size: 13px !important;
+            color: var(--ios-text-secondary) !important;
+            display: inline-block !important;
+            margin: 3px !important;
+        }
+        
+        /* 下一題按鈕樣式 */
+        .next-btn {
+            display: none; /* 預設隱藏，通過JS控制顯示 */
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: var(--ios-primary);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 20px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        
+        .next-btn:active {
+            background-color: #0062cc;
+            transform: scale(0.98);
+        }
+
+        /* 結果彈窗 */
+        .result-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .result-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .result-content {
+            background-color: white;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 350px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .result-modal.active .result-content {
+            transform: translateY(0);
+        }
+
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .result-icon.success {
+            background-color: rgba(0, 122, 255, 0.2);
+            color: var(--ios-primary);
+        }
+
+        .result-icon.error {
+            background-color: rgba(255, 204, 0, 0.2);
+            color: var(--ios-warning);
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--ios-text-primary);
+        }
+
+        .result-message {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .result-score {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--ios-primary);
+        }
+
+        .result-detail {
+            background-color: var(--ios-gray6);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+        }
+
+        .detail-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+        }
+
+        .detail-value.good {
+            color: var(--ios-success);
+        }
+
+        .detail-value.bad {
+            color: var(--ios-danger);
+        }
+
+        .result-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .result-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .result-btn.primary {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+
+        .result-btn.secondary {
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+        }
+
+        /* 食物提示卡片 */
+        .tip-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .tip-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tip-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: rgba(0, 122, 255, 0.1);
+            color: var(--ios-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .tip-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+        }
+
+        .tip-content {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            line-height: 1.5;
+        }
+
+        .tip-content ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .tip-content li {
+            margin-bottom: 8px;
+        }
+
+        /* 動畫效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease;
+        }
+
+        /* 廣告容器樣式 */
+        .ad-container {
+            position: relative;
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        /* 廣告標籤 */
+        .ad-label {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(142, 142, 147, 0.2);
+            color: var(--ios-text-tertiary);
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            z-index: 2;
+        }
+        
+        /* 廣告頭部樣式 */
+        .ad-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        /* 廣告圖標 */
+        .ad-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: rgba(88, 86, 214, 0.1);
+            color: #5856D6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        /* 廣告標題 */
+        .ad-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+        }
+        
+        /* 廣告內容區域 */
+        .ad-body {
+            display: flex;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+        
+        /* 廣告圖片 */
+        .ad-image {
+            flex: 0 0 100px;
+            height: 100px;
+            background-image: url('https://via.placeholder.com/100x100');
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+        }
+        
+        /* 廣告文字 */
+        .ad-text {
+            flex: 1;
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            line-height: 1.4;
+        }
+        
+        /* 廣告特點 */
+        .ad-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .ad-features span {
+            font-size: 12px;
+            color: var(--ios-text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .ad-features i {
+            color: var(--ios-success);
+            font-size: 12px;
+        }
+        
+        /* 廣告按鈕 */
+        .ad-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: #5856D6;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            width: 100%;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        
+        .ad-button:active {
+            background-color: #4b4ab8;
+            transform: scale(0.98);
+        }
+
+        /* 廣告獎勵提示樣式 */
+        .ad-reward-toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: rgba(88, 86, 214, 0.95);
+            color: white;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        
+        .ad-reward-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .toast-message {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .ad-button.clicked {
+            background-color: #4b4ab8;
+            transform: scale(0.98);
+        }
+
+        /* 遊戲說明彈窗樣式 */
+        .instruction-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .instruction-content {
+            background-color: white;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 350px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .instruction-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            background-color: rgba(0, 122, 255, 0.1);
+            color: var(--ios-primary);
+        }
+        
+        .instruction-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--ios-text-primary);
+        }
+        
+        .instruction-text {
+            font-size: 15px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 20px;
+            text-align: left;
+            line-height: 1.5;
+        }
+        
+        .instruction-text p {
+            margin-bottom: 12px;
+        }
+        
+        .instruction-steps {
+            margin: 15px 0;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            background-color: var(--ios-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .step-text {
+            flex: 1;
+        }
+        
+        .instruction-tip {
+            background-color: rgba(255, 204, 0, 0.1);
+            border-left: 3px solid #FFCC00;
+            padding: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 15px;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .instruction-tip i {
+            color: #FFCC00;
+            margin-top: 2px;
+        }
+        
+        .instruction-btn {
+            background-color: var(--ios-primary);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .instruction-btn:active {
+            background-color: #0062cc;
+        }
+
+        /* 分數動畫效果 */
+        .score-animation {
+            position: fixed;
+            top: 120px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--ios-primary);
+            font-size: 32px;
+            font-weight: 800;
+            opacity: 0;
+            animation: scorePopup 1.5s ease-out forwards;
+            z-index: 100;
+            text-shadow: 0 0 10px rgba(0, 122, 255, 0.5);
+        }
+        
+        @keyframes scorePopup {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, 0);
+                font-size: 24px;
+            }
+            20% {
+                opacity: 1;
+                transform: translate(-50%, -50px);
+                font-size: 32px;
+            }
+            80% {
+                opacity: 1;
+                transform: translate(-50%, -80px);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -100px);
+            }
+        }
+        
+        /* 答案狀態提示標籤 */
+        .answer-status-label {
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--ios-primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateX(-50%) translateY(-5px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 5;
+        }
+        
+        .answer-btn.selected .answer-status-label {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .answer-btn.selected.correct .answer-status-label {
+            background-color: var(--ios-success);
+        }
+        
+        .answer-btn.selected.incorrect .answer-status-label {
+            background-color: var(--ios-danger);
+        }
+
+        .feedback-nutrients-container {
+            text-align: left;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            display: block !important; /* 強制顯示 */
+        }
+
+        .feedback-nutrient {
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--ios-text-secondary);
+            display: inline-block; /* 確保每個營養素正確顯示 */
+            margin: 3px; /* 增加間距 */
+        }
+
+        #feedbackNutrients {
+            display: flex; /* 使用彈性布局 */
+            flex-wrap: wrap; /* 允許換行 */
+            gap: 8px; /* 增加間距 */
+            margin-top: 10px; /* 增加上邊距 */
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div class="status-time" id="statusTime">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="nav-title">健康飲食分類</div>
+            <div class="nav-action"></div>
+        </div>
+        
+        <!-- 內容區域 -->
+        <div class="content-container">
+            <div class="game-container">
+                <!-- 遊戲頭部 -->
+                <div class="game-header">
+                    <div class="game-title">腎臟友善食物分類</div>
+                    <div class="game-subtitle">了解哪些食物適合腎臟病患者食用</div>
+                </div>
+                
+                <!-- 遊戲信息 -->
+                <div class="game-info">
+                    <div class="info-item">
+                        <div class="info-label">得分</div>
+                        <div class="info-value" id="score">0</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">進度</div>
+                        <div class="info-value"><span id="currentQuestion">1</span>/<span id="totalQuestions">10</span></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">時間</div>
+                        <div class="info-value" id="timer">15</div>
+                    </div>
+                </div>
+                
+                <!-- 食物展示區 -->
+                <div class="food-display-container">
+                    <div class="food-question-number">問題 <span id="questionNumber">1</span>/10</div>
+                    <div class="food-display-card" id="currentFoodCard">
+                        <div class="food-image-large" id="foodImage"></div>
+                        <div class="food-details-large">
+                            <div class="food-name-large" id="foodName">蘋果</div>
+                            <div class="food-description-large" id="foodDescription">新鮮水果，富含維生素</div>
+                            <div class="food-nutrients" id="foodNutrients">
+                                <span class="food-nutrient">鉀: 中</span>
+                                <span class="food-nutrient">磷: 低</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 倒數計時條 -->
+                    <div class="timer-bar-container">
+                        <div class="timer-bar" id="timerBar"></div>
+                    </div>
+                    
+                    <!-- 答案選擇按鈕 -->
+                    <div class="answer-buttons">
+                        <div class="answer-btn good" id="goodBtn">
+                            <div class="answer-status-label">正確答案</div>
+                            <div class="answer-icon">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="answer-text">適合食用</div>
+                            <div class="answer-result-mark"><i class="fas fa-check"></i></div>
+                        </div>
+                        <div class="answer-btn bad" id="badBtn">
+                            <div class="answer-status-label">正確答案</div>
+                            <div class="answer-icon">
+                                <i class="fas fa-ban"></i>
+                            </div>
+                            <div class="answer-text">需要限制</div>
+                            <div class="answer-result-mark"><i class="fas fa-times"></i></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 答案回饋 -->
+                    <div class="answer-feedback" id="answerFeedback">
+                        <div class="feedback-icon" id="feedbackIcon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="feedback-text" id="feedbackText">正確！</div>
+                        <div class="feedback-explanation" id="feedbackExplanation">
+                            蘋果的鉀含量為中等，磷含量低，適合腎臟病患者適量食用。
+                        </div>
+                        <div class="feedback-description-container">
+                            <h4>食物描述：</h4>
+                            <div id="feedbackDescription">新鮮水果，富含維生素</div>
+                        </div>
+                        <div class="feedback-nutrients-container">
+                            <h4>營養成分：</h4>
+                            <div id="feedbackNutrients"></div>
+                        </div>
+                        <button class="next-btn" id="nextQuestionBtn">
+                            <span>下一題</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 廣告區塊 -->
+                <div class="ad-container">
+                    <div class="ad-label">廣告</div>
+                    <div class="ad-content">
+                        <div class="ad-header">
+                            <div class="ad-icon">
+                                <i class="fas fa-capsules"></i>
+                            </div>
+                            <div class="ad-title">腎康寧 - 天然草本腎臟保健品</div>
+                        </div>
+                        <div class="ad-body">
+                            <div class="ad-image"></div>
+                            <div class="ad-text">
+                                <p>專為腎臟病患者設計的全天然草本配方，幫助維持腎功能健康。</p>
+                                <div class="ad-features">
+                                    <span><i class="fas fa-check"></i> 低磷低鉀</span>
+                                    <span><i class="fas fa-check"></i> 臨床實證</span>
+                                    <span><i class="fas fa-check"></i> 醫師推薦</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="ad-button" id="adButton">
+                            <span>了解更多</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 結果彈窗 -->
+        <div class="result-modal" id="resultModal">
+            <div class="result-content">
+                <div class="result-icon success" id="resultIcon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="result-title" id="resultTitle">做得好！</div>
+                <div class="result-score" id="resultScore">85</div>
+                <div class="result-message" id="resultMessage">您很了解腎臟友善食物！</div>
+                <div class="result-detail">
+                    <div class="detail-item">
+                        <div class="detail-label">正確分類</div>
+                        <div class="detail-value good" id="correctCount">8/10</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">用時</div>
+                        <div class="detail-value" id="usedTime">01:25</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">獲得積分</div>
+                        <div class="detail-value" id="earnedPoints">+150</div>
+                    </div>
+                </div>
+                <div class="result-buttons">
+                    <div class="result-btn secondary" id="backBtn">返回</div>
+                    <div class="result-btn primary" id="nextBtn">下一關</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <a href="main.html" class="tab-item">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </a>
+            <a href="game-mode.html" class="tab-item active">
+                <i class="fas fa-gamepad"></i>
+                <span>遊戲</span>
+            </a>
+            <a href="learning-resources.html" class="tab-item">
+                <i class="fas fa-book-open"></i>
+                <span>資料庫</span>
+            </a>
+            <a href="#" class="tab-item">
+                <i class="fas fa-trophy"></i>
+                <span>成就</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 遊戲說明彈窗 -->
+    <div class="instruction-modal" id="instructionModal">
+        <div class="instruction-content">
+            <div class="instruction-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="instruction-title">遊戲說明</div>
+            <div class="instruction-text">
+                <p>歡迎來到「腎臟友善食物分類」遊戲！</p>
+                <p>在這個遊戲中，您將看到不同的食物，需要判斷哪些食物適合腎臟病患者食用，哪些需要限制。</p>
+                
+                <div class="instruction-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-text">觀察顯示的食物圖片和名稱</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-text">在時間倒數結束前，選擇「適合食用」或「需要限制」</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-text">回答後會顯示正確答案和營養成分說明</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-text">答對獲得積分，回答速度越快分數越高</div>
+                    </div>
+                </div>
+                
+                <div class="instruction-tip">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>提示：注意食物的鉀、磷、鈉含量，這些是腎臟病患者需要控制的主要營養素。</span>
+                </div>
+            </div>
+            <div class="instruction-btn" id="startGameBtn">開始遊戲</div>
+        </div>
+    </div>
+</body>
+
+<script>
+    // 常量
+    const MAX_TIME = 15; // 每個問題的最大時間（秒）
+
+    // 食物數據庫
+    const foodDatabase = [
+        {
+            id: "food1",
+            name: "蘋果",
+            description: "新鮮水果，富含維生素",
+            nutrients: { "鉀": "中", "磷": "低" },
+            image: "images/food/apple.jpg",
+            category: "good", // 適合食用
+            explanation: "蘋果的鉀含量為中等，磷含量低，適合腎臟病患者適量食用。"
+        },
+        {
+            id: "food2",
+            name: "白米飯",
+            description: "主食，熱量來源",
+            nutrients: { "鉀": "低", "磷": "中" },
+            image: "images/food/rice.jpg",
+            category: "good", // 適合食用
+            explanation: "白米飯的鉀含量低，是適合腎臟病患者的主食選擇。"
+        },
+        {
+            id: "food3",
+            name: "香蕉",
+            description: "水果，富含鉀",
+            nutrients: { "鉀": "高", "磷": "中" },
+            image: "images/food/banana.jpg",
+            category: "bad", // 需要限制
+            explanation: "香蕉富含鉀，腎臟病患者應限制食用，避免血鉀升高。"
+        },
+        {
+            id: "food4",
+            name: "菠菜",
+            description: "綠葉蔬菜，富含鐵質",
+            nutrients: { "鉀": "高", "磷": "高", "鈉": "低" },
+            image: "images/food/spinach.jpg",
+            category: "bad", // 需要限制
+            explanation: "菠菜的鉀和磷含量都高，腎臟病患者應限制食用。"
+        },
+        {
+            id: "food5",
+            name: "白麵包",
+            description: "麥製品，烘焙食品",
+            nutrients: { "鉀": "低", "磷": "低", "鈉": "中" },
+            image: "images/food/bread.jpg",
+            category: "good", // 適合食用
+            explanation: "白麵包的鉀和磷含量都低，是腎臟病患者的良好選擇。"
+        },
+        {
+            id: "food6",
+            name: "巧克力",
+            description: "甜點，含可可成分",
+            nutrients: { "鉀": "高", "磷": "高" },
+            image: "images/food/chocolate.jpg",
+            category: "bad", // 需要限制
+            explanation: "巧克力中的鉀和磷含量都很高，腎臟病患者應避免食用。"
+        },
+        {
+            id: "food7",
+            name: "白蘿蔔",
+            description: "根莖類蔬菜",
+            nutrients: { "鉀": "低", "磷": "低", "鈉": "低" },
+            image: "images/food/radish.jpg",
+            category: "good", // 適合食用
+            explanation: "白蘿蔔的鉀、磷和鈉含量都低，是腎臟病患者的理想蔬菜選擇。"
+        },
+        {
+            id: "food8",
+            name: "起司",
+            description: "乳製品，含鈣質",
+            nutrients: { "鉀": "低", "磷": "高", "鈉": "高" },
+            image: "images/food/cheese.jpg",
+            category: "bad", // 需要限制
+            explanation: "起司的磷和鈉含量都高，腎臟病患者應限制食用。"
+        },
+        {
+            id: "food9",
+            name: "草莓",
+            description: "漿果類水果",
+            nutrients: { "鉀": "中", "磷": "低", "鈉": "低" },
+            image: "images/food/strawberry.jpg",
+            category: "good", // 適合食用
+            explanation: "草莓的磷和鈉含量低，鉀含量為中等，適合腎臟病患者適量食用。"
+        },
+        {
+            id: "food10",
+            name: "加工肉類",
+            description: "火腿、臘腸等",
+            nutrients: { "鉀": "中", "磷": "高", "鈉": "高" },
+            image: "images/food/processed-meat.jpg",
+            category: "bad", // 需要限制
+            explanation: "加工肉類的磷和鈉含量都高，腎臟病患者應限制食用。"
+        }
+    ];
+
+    // 遊戲狀態
+    let gameState = {
+        score: 0,
+        currentQuestionIndex: 0,
+        questions: [],
+        timeLeft: MAX_TIME, // 使用MAX_TIME常量
+        timerInterval: null,
+        questionTimer: null,
+        gameActive: true,
+        answers: [],
+        totalQuestions: 10
+    };
+
+    // DOM 元素
+    const scoreElement = document.getElementById('score');
+    const currentQuestionElement = document.getElementById('currentQuestion');
+    const totalQuestionsElement = document.getElementById('totalQuestions');
+    const timerElement = document.getElementById('timer');
+    const questionNumberElement = document.getElementById('questionNumber');
+    const foodImageElement = document.getElementById('foodImage');
+    const foodNameElement = document.getElementById('foodName');
+    const foodDescriptionElement = document.getElementById('foodDescription');
+    const foodNutrientsElement = document.getElementById('foodNutrients');
+    const timerBarElement = document.getElementById('timerBar');
+    const goodBtnElement = document.getElementById('goodBtn');
+    const badBtnElement = document.getElementById('badBtn');
+    const answerFeedbackElement = document.getElementById('answerFeedback');
+    const feedbackIconElement = document.getElementById('feedbackIcon');
+    const feedbackTextElement = document.getElementById('feedbackText');
+    const feedbackExplanationElement = document.getElementById('feedbackExplanation');
+    const feedbackNutrientsElement = document.getElementById('feedbackNutrients');
+    const feedbackDescriptionElement = document.getElementById('feedbackDescription');
+    const resultModal = document.getElementById('resultModal');
+    const resultIcon = document.getElementById('resultIcon');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultScore = document.getElementById('resultScore');
+    const resultMessage = document.getElementById('resultMessage');
+    const correctCountElement = document.getElementById('correctCount');
+    const usedTimeElement = document.getElementById('usedTime');
+    const earnedPointsElement = document.getElementById('earnedPoints');
+    const backBtn = document.getElementById('backBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const statusTimeElement = document.getElementById('statusTime');
+    const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+
+    // 初始化遊戲
+    function initGame() {
+        // 隱藏結果彈窗
+        resultModal.classList.remove('active');
+        
+        // 隱藏回饋
+        answerFeedbackElement.style.display = 'none';
+        
+        // 隱藏下一題按鈕
+        nextQuestionBtn.style.display = 'none';
+        
+        // 重置遊戲狀態
+        gameState = {
+            gameActive: true,
+            questions: shuffleArray(foodDatabase).slice(0, 10), // 隨機選10題
+            currentQuestionIndex: 0,
+            timeLeft: MAX_TIME,
+            score: 0,
+            timerInterval: null,
+            answers: []
+        };
+        
+        // 顯示第一題
+        displayQuestion();
+        
+        // 啟用按鈕
+        enableAnswerButtons();
+        
+        // 重置分數顯示
+        scoreElement.textContent = '0';
+    }
+
+    // 顯示當前問題
+    function displayQuestion() {
+        if (gameState.currentQuestionIndex >= gameState.questions.length) {
+            endGame();
+            return;
+        }
+        
+        // 清除按鈕樣式
+        goodBtnElement.classList.remove('selected', 'correct', 'incorrect');
+        badBtnElement.classList.remove('selected', 'correct', 'incorrect');
+        
+        const currentQuestion = gameState.questions[gameState.currentQuestionIndex];
+        
+        // 更新問題編號
+        questionNumberElement.textContent = gameState.currentQuestionIndex + 1;
+        currentQuestionElement.textContent = gameState.currentQuestionIndex + 1;
+        
+        // 更新食物信息 - 只顯示名稱和圖片，不顯示描述和營養成分
+        // 檢查圖片是否為顏色代碼
+        if (currentQuestion.image.startsWith('#')) {
+            foodImageElement.style.backgroundImage = 'none';
+            foodImageElement.style.backgroundColor = currentQuestion.image;
+        } else {
+            foodImageElement.style.backgroundImage = `url('${currentQuestion.image}')`;
+            foodImageElement.style.backgroundColor = 'transparent';
+        }
+        
+        foodNameElement.textContent = currentQuestion.name;
+        
+        // 隱藏描述和營養成分
+        foodDescriptionElement.style.display = 'none';
+        foodNutrientsElement.style.display = 'none';
+        
+        // 重置計時器
+        resetTimer();
+        
+        // 隱藏回饋元素
+        answerFeedbackElement.style.display = 'none';
+        
+        // 啟用按鈕
+        enableAnswerButtons();
+    }
+
+    // 重置問題計時器
+    function resetTimer() {
+        // 清除現有計時器
+        clearInterval(gameState.timerInterval);
+        
+        // 重置時間
+        gameState.timeLeft = MAX_TIME;
+        timerElement.textContent = gameState.timeLeft;
+        timerElement.style.color = 'var(--ios-text-primary)';
+        
+        // 重置計時條
+        timerBarElement.style.width = '100%';
+        
+        // 啟動新計時器
+        gameState.timerInterval = setInterval(() => {
+            gameState.timeLeft--;
+            timerElement.textContent = gameState.timeLeft;
+            
+            // 更新計時條
+            const percentage = (gameState.timeLeft / MAX_TIME) * 100;
+            timerBarElement.style.width = `${percentage}%`;
+            
+            // 剩餘時間少於5秒時，使計時器變紅
+            if (gameState.timeLeft <= 5) {
+                timerElement.style.color = 'var(--ios-danger)';
+                timerBarElement.style.backgroundColor = 'var(--ios-danger)';
+            }
+            
+            // 時間到
+            if (gameState.timeLeft <= 0) {
+                clearInterval(gameState.timerInterval);
+                handleTimeout();
+            }
+        }, 1000);
+    }
+
+    // 處理時間到的情況
+    function handleTimeout() {
+        // 禁用按鈕
+        disableAnswerButtons();
+        
+        // 記錄答案（視為錯誤）
+        const currentQuestion = gameState.questions[gameState.currentQuestionIndex];
+        gameState.answers.push({
+            question: currentQuestion,
+            userAnswer: 'timeout',
+            isCorrect: false
+        });
+        
+        // 添加視覺反饋 - 根據正確答案高亮對應按鈕
+        if (currentQuestion.category === 'good') {
+            goodBtnElement.classList.add('selected', 'correct');
+            badBtnElement.classList.add('not-selected');
+            // 更新狀態標籤
+            goodBtnElement.querySelector('.answer-status-label').textContent = '正確答案';
+        } else {
+            badBtnElement.classList.add('selected', 'correct');
+            goodBtnElement.classList.add('not-selected');
+            // 更新狀態標籤
+            badBtnElement.querySelector('.answer-status-label').textContent = '正確答案';
+        }
+        
+        // 播放反饋音效
+        playFeedbackSound('timeout');
+        
+        // 顯示正確答案
+        showCorrectAnswer();
+        
+        // 確保下一題按鈕顯示並可點擊
+        nextQuestionBtn.style.display = 'flex';
+        nextQuestionBtn.style.pointerEvents = 'auto';
+        nextQuestionBtn.style.opacity = '1';
+    }
+
+    // 處理用戶答案
+    function handleAnswer(answer) {
+        // 禁用按鈕
+        disableAnswerButtons();
+        
+        // 清除計時器
+        clearInterval(gameState.timerInterval);
+        
+        // 檢查答案是否正確
+        const currentQuestion = gameState.questions[gameState.currentQuestionIndex];
+        const isCorrect = answer === currentQuestion.category;
+        
+        // 添加視覺回饋到按鈕
+        if (answer === 'good') {
+            goodBtnElement.classList.add('selected');
+            goodBtnElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+            badBtnElement.classList.add('not-selected');
+            // 更新狀態標籤
+            goodBtnElement.querySelector('.answer-status-label').textContent = isCorrect ? '答對了！' : '答錯了！';
+        } else {
+            badBtnElement.classList.add('selected');
+            badBtnElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+            goodBtnElement.classList.add('not-selected');
+            // 更新狀態標籤
+            badBtnElement.querySelector('.answer-status-label').textContent = isCorrect ? '答對了！' : '答錯了！';
+        }
+        
+        // 如果答錯了，顯示正確答案
+        if (!isCorrect) {
+            if (currentQuestion.category === 'good') {
+                goodBtnElement.classList.add('correct');
+                goodBtnElement.querySelector('.answer-status-label').textContent = '正確答案';
+            } else {
+                badBtnElement.classList.add('correct');
+                badBtnElement.querySelector('.answer-status-label').textContent = '正確答案';
+            }
+        }
+        
+        // 播放反饋音效
+        if (isCorrect) {
+            playFeedbackSound('correct');
+        } else {
+            playFeedbackSound('incorrect');
+        }
+        
+        // 記錄答案
+        gameState.answers.push({
+            question: currentQuestion,
+            userAnswer: answer,
+            isCorrect: isCorrect
+        });
+        
+        // 更新分數
+        if (isCorrect) {
+            gameState.score += 10;
+            // 添加時間獎勵
+            gameState.score += Math.round(gameState.timeLeft / 3);
+            scoreElement.textContent = gameState.score;
+            
+            // 添加分數動畫
+            showScoreAnimation(10 + Math.round(gameState.timeLeft / 3));
+        }
+        
+        // 顯示回饋
+        showFeedback(isCorrect);
+        
+        // 確保下一題按鈕顯示並可點擊
+        nextQuestionBtn.style.display = 'flex';
+        nextQuestionBtn.style.pointerEvents = 'auto';
+        nextQuestionBtn.style.opacity = '1';
+    }
+
+    // 顯示回饋
+    function showFeedback(isCorrect) {
+        const currentQuestion = gameState.questions[gameState.currentQuestionIndex];
+        
+        // 設置回饋樣式
+        answerFeedbackElement.className = isCorrect ? 
+            'answer-feedback correct' : 
+            'answer-feedback incorrect';
+        
+        // 設置回饋圖標
+        feedbackIconElement.innerHTML = isCorrect ? 
+            '<i class="fas fa-check"></i>' : 
+            '<i class="fas fa-times"></i>';
+        
+        // 設置回饋文本
+        feedbackTextElement.textContent = isCorrect ? '答對了！' : '答錯了！';
+        
+        // 設置解釋
+        feedbackExplanationElement.textContent = currentQuestion.explanation;
+        
+        // 添加描述和營養成分到回饋中
+        feedbackDescriptionElement.textContent = currentQuestion.description;
+        
+        // 使用直接HTML設置營養成分，確保顯示
+        let nutrientsHTML = '';
+        Object.entries(currentQuestion.nutrients).forEach(([nutrient, level]) => {
+            nutrientsHTML += `<span class="feedback-nutrient">${nutrient}: ${level}</span>`;
+        });
+        feedbackNutrientsElement.innerHTML = nutrientsHTML;
+        
+        // 確保回饋元素顯示
+        answerFeedbackElement.style.display = 'block';
+        answerFeedbackElement.style.opacity = '1';
+        answerFeedbackElement.style.visibility = 'visible';
+        
+        // 確保下一題按鈕顯示
+        nextQuestionBtn.style.display = 'flex';
+    }
+
+    // 顯示正確答案
+    function showCorrectAnswer() {
+        const currentQuestion = gameState.questions[gameState.currentQuestionIndex];
+        
+        // 設置回饋樣式 - 使用紅色警告樣式
+        answerFeedbackElement.className = 'answer-feedback incorrect';
+        
+        // 設置回饋圖標
+        feedbackIconElement.innerHTML = '<i class="fas fa-clock"></i>';
+        
+        // 設置回饋文本
+        feedbackTextElement.textContent = '時間到！';
+        
+        // 設置解釋
+        feedbackExplanationElement.textContent = `正確答案是：${currentQuestion.category === 'good' ? '適合食用' : '需要限制'}。${currentQuestion.explanation}`;
+        
+        // 添加描述和營養成分到回饋中
+        feedbackDescriptionElement.textContent = currentQuestion.description;
+        
+        // 使用直接HTML設置營養成分，確保顯示
+        let nutrientsHTML = '';
+        Object.entries(currentQuestion.nutrients).forEach(([nutrient, level]) => {
+            nutrientsHTML += `<span class="feedback-nutrient">${nutrient}: ${level}</span>`;
+        });
+        feedbackNutrientsElement.innerHTML = nutrientsHTML;
+        
+        // 確保回饋元素顯示
+        answerFeedbackElement.style.display = 'block';
+        answerFeedbackElement.style.opacity = '1';
+        answerFeedbackElement.style.visibility = 'visible';
+        
+        // 確保下一題按鈕顯示
+        nextQuestionBtn.style.display = 'flex';
+    }
+
+    // 到下一題
+    function nextQuestion() {
+        // 清除按鈕樣式
+        goodBtnElement.classList.remove('selected', 'correct', 'incorrect', 'not-selected');
+        badBtnElement.classList.remove('selected', 'correct', 'incorrect', 'not-selected');
+        
+        // 重置狀態標籤
+        goodBtnElement.querySelector('.answer-status-label').textContent = '';
+        badBtnElement.querySelector('.answer-status-label').textContent = '';
+        
+        // 隱藏回饋
+        answerFeedbackElement.style.display = 'none';
+        
+        // 隱藏下一題按鈕
+        nextQuestionBtn.style.display = 'none';
+        
+        gameState.currentQuestionIndex++;
+        
+        if (gameState.currentQuestionIndex < gameState.questions.length) {
+            displayQuestion();
+        } else {
+            endGame();
+        }
+    }
+
+    // 啟用答案按鈕
+    function enableAnswerButtons() {
+        goodBtnElement.style.pointerEvents = 'auto';
+        badBtnElement.style.pointerEvents = 'auto';
+        goodBtnElement.style.opacity = '1';
+        badBtnElement.style.opacity = '1';
+    }
+
+    // 禁用答案按鈕
+    function disableAnswerButtons() {
+        goodBtnElement.style.pointerEvents = 'none';
+        badBtnElement.style.pointerEvents = 'none';
+        goodBtnElement.style.opacity = '0.7';
+        badBtnElement.style.opacity = '0.7';
+    }
+
+    // 結束遊戲
+    function endGame() {
+        clearInterval(gameState.timerInterval);
+        gameState.gameActive = false;
+        
+        // 計算正確答案數量
+        const correctAnswers = gameState.answers.filter(answer => answer.isCorrect).length;
+        
+        // 顯示結果
+        showResults(correctAnswers, gameState.answers.length);
+    }
+
+    // 顯示結果
+    function showResults(correctCount, totalCount) {
+        const percentage = (correctCount / totalCount) * 100;
+        
+        // 根據得分設置不同消息
+        if (percentage >= 80) {
+            resultIcon.className = 'result-icon success';
+            resultIcon.innerHTML = '<i class="fas fa-trophy"></i>';
+            resultIcon.style.backgroundColor = 'rgba(0, 122, 255, 0.2)';
+            resultIcon.style.color = 'var(--ios-primary)';
+            resultTitle.textContent = '做得好！';
+            resultMessage.textContent = '您很了解腎臟友善食物！';
+            earnedPointsElement.textContent = `+${Math.round(gameState.score * 1.5)}`;
+        } else if (percentage >= 60) {
+            resultIcon.className = 'result-icon success';
+            resultIcon.innerHTML = '<i class="fas fa-star"></i>';
+            resultIcon.style.backgroundColor = 'rgba(0, 122, 255, 0.2)';
+            resultIcon.style.color = 'var(--ios-primary)';
+            resultTitle.textContent = '不錯！';
+            resultMessage.textContent = '您對腎臟飲食有一定了解。';
+            earnedPointsElement.textContent = `+${gameState.score}`;
+        } else {
+            resultIcon.className = 'result-icon error';
+            resultIcon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+            resultIcon.style.backgroundColor = 'rgba(255, 204, 0, 0.2)';
+            resultIcon.style.color = 'var(--ios-warning)';
+            resultTitle.textContent = '需要加強';
+            resultMessage.textContent = '您需要更多了解腎臟飲食知識。';
+            earnedPointsElement.textContent = `+${Math.round(gameState.score * 0.5)}`;
+        }
+        
+        // 更新結果詳情
+        resultScore.textContent = gameState.score;
+        correctCountElement.textContent = `${correctCount}/${totalCount}`;
+        correctCountElement.style.color = 'var(--ios-primary)';
+        usedTimeElement.textContent = '已完成';
+        
+        // 顯示彈窗
+        resultModal.classList.add('active');
+    }
+
+    // 更新狀態欄時間
+    function updateStatusTime() {
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        statusTimeElement.textContent = hours + ':' + minutes;
+    }
+
+    // 打亂數組
+    function shuffleArray(array) {
+        const newArray = [...array];
+        for (let i = newArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        }
+        return newArray;
+    }
+
+    // 事件監聽器
+    document.addEventListener('DOMContentLoaded', () => {
+        // 修改按鈕圖標，使用中性圖標代表選項類型
+        const goodIcon = goodBtnElement.querySelector('.answer-icon i');
+        const badIcon = badBtnElement.querySelector('.answer-icon i');
+        
+        if (goodIcon) {
+            goodIcon.className = 'fas fa-utensils'; // 使用餐具圖標表示「適合食用」
+        }
+        
+        if (badIcon) {
+            badIcon.className = 'fas fa-ban'; // 使用禁止圖標表示「需要限制」
+        }
+        
+        // 添加結果標記到答案按鈕
+        if (!goodBtnElement.querySelector('.answer-result-mark')) {
+            goodBtnElement.innerHTML += '<div class="answer-result-mark"><i class="fas fa-check"></i></div>';
+        }
+        
+        if (!badBtnElement.querySelector('.answer-result-mark')) {
+            badBtnElement.innerHTML += '<div class="answer-result-mark"><i class="fas fa-times"></i></div>';
+        }
+        
+        // 修改答案狀態標籤的顏色
+        const goodStatusLabel = goodBtnElement.querySelector('.answer-status-label');
+        const badStatusLabel = badBtnElement.querySelector('.answer-status-label');
+        
+        if (goodStatusLabel) {
+            goodStatusLabel.style.color = 'var(--ios-success)';
+            goodStatusLabel.textContent = '';
+        }
+        
+        if (badStatusLabel) {
+            badStatusLabel.style.color = 'var(--ios-error)';
+            badStatusLabel.textContent = '';
+        }
+        
+        // 添加下一題按鈕的事件監聽器
+        nextQuestionBtn.addEventListener('click', nextQuestion);
+        
+        // 答案按鈕的事件監聽器
+        goodBtnElement.addEventListener('click', () => handleAnswer('good'));
+        badBtnElement.addEventListener('click', () => handleAnswer('bad'));
+        
+        // 說明彈窗開始按鈕
+        document.getElementById('startGameBtn').addEventListener('click', () => {
+            document.getElementById('instructionModal').style.display = 'none';
+            initGame();
+        });
+        
+        // 結果按鈕
+        backBtn.addEventListener('click', () => {
+            resultModal.classList.remove('active');
+            window.location.href = 'game-mode.html';
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            resultModal.classList.remove('active');
+            initGame(); // 重新開始遊戲
+        });
+        
+        // 廣告按鈕點擊事件
+        const adButton = document.getElementById('adButton');
+        if (adButton) {
+            adButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 顯示廣告點擊效果
+                this.classList.add('clicked');
+                
+                // 模擬記錄廣告點擊
+                console.log('廣告點擊已記錄');
+                
+                // 顯示獎勵獲取提示
+                showAdRewardToast();
+                
+                // 提供額外獎勵分數
+                addAdRewardPoints(25);
+                
+                // 延遲後恢復按鈕樣式
+                setTimeout(() => {
+                    this.classList.remove('clicked');
+                }, 200);
+            });
+        }
+        
+        // 更新狀態欄時間
+        updateStatusTime();
+        setInterval(updateStatusTime, 60000); // 每分鐘更新一次
+        
+        // 初始顯示遊戲說明
+        showInstructions();
+    });
+    
+    // 顯示遊戲說明
+    function showInstructions() {
+        document.getElementById('instructionModal').style.display = 'flex';
+    }
+    
+    // 顯示廣告獎勵提示
+    function showAdRewardToast() {
+        // 創建提示元素
+        const toast = document.createElement('div');
+        toast.className = 'ad-reward-toast';
+        toast.innerHTML = `
+            <div class="toast-icon">
+                <i class="fas fa-gift"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">獲得廣告獎勵!</div>
+                <div class="toast-message">+25 積分已添加到您的帳戶</div>
+            </div>
+        `;
+        
+        // 添加到頁面
+        document.body.appendChild(toast);
+        
+        // 動畫顯示
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 100);
+        
+        // 定時移除
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 300);
+        }, 3000);
+    }
+    
+    // 添加廣告獎勵積分
+    function addAdRewardPoints(points) {
+        // 在這裡添加積分到用戶帳戶的邏輯
+        // 這裡只是簡單地更新當前遊戲分數
+        gameState.score += points;
+        scoreElement.textContent = gameState.score;
+        
+        // 在這個示例中僅顯示效果，實際應用中應該更新用戶總積分
+    }
+
+    // 播放反饋音效
+    function playFeedbackSound(type) {
+        // 未來可以添加實際的音效播放功能
+        console.log(`播放${type}音效`);
+    }
+    
+    // 顯示分數動畫
+    function showScoreAnimation(points) {
+        // 創建分數動畫元素
+        const scoreAnim = document.createElement('div');
+        scoreAnim.className = 'score-animation';
+        scoreAnim.textContent = `+${points}`;
+        
+        // 添加到頁面
+        document.querySelector('.game-container').appendChild(scoreAnim);
+        
+        // 動畫完成後移除
+        setTimeout(() => {
+            scoreAnim.remove();
+        }, 1500);
+    }
+</script>
+</html> 

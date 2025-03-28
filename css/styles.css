@@ -82,8 +82,9 @@ input, select, textarea {
 /* iPhone 模擬容器 */
 .iphone-container {
     width: 100%;
-    height: 100vh;
-    max-width: 414px;
+    height: 100%;
+    max-width: 430px;
+    max-height: 932px;
     margin: 0 auto;
     position: relative;
     display: flex;

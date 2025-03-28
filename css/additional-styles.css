@@ -5,6 +5,12 @@
     border-width: 3px;
 }
 
+.option-item.correct {
+    border-color: var(--success-color);
+    background-color: rgba(52, 199, 89, 0.15);
+    border-width: 3px;
+}
+
 .option-icon.incorrect-icon {
     color: var(--ios-danger);
     font-size: 28px !important; 
@@ -13,7 +19,20 @@
     animation: pulseError 0.5s ease-in-out;
 }
 
+.option-icon.correct-icon {
+    color: var(--success-color);
+    font-size: 28px !important;
+    font-weight: bold;
+    text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.7);
+    animation: pulseSuccess 0.5s ease-in-out;
+}
+
 @keyframes pulseError {
+    0%, 100% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(1.2); }
+}
+
+@keyframes pulseSuccess {
     0%, 100% { transform: translateY(-50%) scale(1); }
     50% { transform: translateY(-50%) scale(1.2); }
 }
@@ -35,8 +54,18 @@
     border-left: 5px solid var(--ios-danger);
 }
 
+.explanation-card.correct {
+    background-color: rgba(52, 199, 89, 0.1);
+    border-left: 5px solid var(--success-color);
+}
+
 .explanation-card.incorrect .explanation-title {
     color: var(--ios-danger);
+    font-weight: 700;
+}
+
+.explanation-card.correct .explanation-title {
+    color: var(--success-color);
     font-weight: 700;
 }
 
@@ -66,4 +95,77 @@
 
 .custom-x-icon::after {
     transform: rotate(-45deg);
+}
+
+/* 自訂 SF Symbols 風格的勾號圖標 */
+.custom-check-icon {
+    position: relative;
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-check-icon::before,
+.custom-check-icon::after {
+    content: '';
+    position: absolute;
+    background-color: var(--success-color);
+    border-radius: 2px;
+}
+
+.custom-check-icon::before {
+    width: 8px;
+    height: 3px;
+    transform: rotate(45deg) translate(0, 8px);
+    transform-origin: left center;
+    left: 6px;
+}
+
+.custom-check-icon::after {
+    width: 16px;
+    height: 3px;
+    transform: rotate(-45deg) translate(-2px, 4px);
+    transform-origin: left center;
+    left: 9px;
+}
+
+/* 按鈕樣式改用圖標而非紅綠色 */
+.btn-icon-only {
+    background-color: var(--gray-100);
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+}
+
+.btn-icon-only i {
+    font-size: 20px;
+}
+
+.answer-feedback {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 10px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.answer-feedback.visible {
+    opacity: 1;
+}
+
+.answer-feedback.correct {
+    color: var(--success-color);
+}
+
+.answer-feedback.incorrect {
+    color: var(--ios-danger);
 } 

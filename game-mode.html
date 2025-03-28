@@ -65,519 +65,535 @@
         .mode-card {
             background-color: white;
             border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
             position: relative;
-            overflow: hidden;
         }
 
         .mode-card:active {
             transform: scale(0.97);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-image {
+            width: 100%;
+            aspect-ratio: 1.2;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .mode-card:nth-child(1) .mode-image {
+            background-image: linear-gradient(rgba(0, 122, 255, 0.3), rgba(0, 122, 255, 0.7)), url('images/quiz-bg.jpg');
+        }
+
+        .mode-card:nth-child(2) .mode-image {
+            background-image: linear-gradient(rgba(255, 59, 48, 0.3), rgba(255, 59, 48, 0.7)), url('images/memory-bg.jpg');
+        }
+
+        .mode-card:nth-child(3) .mode-image {
+            background-image: linear-gradient(rgba(52, 199, 89, 0.3), rgba(52, 199, 89, 0.7)), url('images/puzzle-bg.jpg');
+        }
+
+        .mode-card:nth-child(4) .mode-image {
+            background-image: linear-gradient(rgba(255, 149, 0, 0.3), rgba(255, 149, 0, 0.7)), url('images/timer-bg.jpg');
         }
 
         .mode-icon {
-            font-size: 36px;
-            margin-bottom: 16px;
-            width: 80px;
-            height: 80px;
-            border-radius: 40px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--ios-primary);
+            font-size: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .classic-mode .mode-icon {
-            background-color: rgba(0, 122, 255, 0.15);
+        .mode-card:nth-child(1) .mode-icon {
             color: var(--ios-primary);
         }
 
-        .timer-mode .mode-icon {
-            background-color: rgba(255, 149, 0, 0.15);
-            color: var(--ios-warning);
-        }
-
-        .challenge-mode .mode-icon {
-            background-color: rgba(255, 59, 48, 0.15);
+        .mode-card:nth-child(2) .mode-icon {
             color: var(--ios-danger);
         }
 
-        .daily-mode .mode-icon {
-            background-color: rgba(52, 199, 89, 0.15);
+        .mode-card:nth-child(3) .mode-icon {
             color: var(--ios-success);
+        }
+
+        .mode-card:nth-child(4) .mode-icon {
+            color: var(--ios-warning);
+        }
+
+        .mode-content {
+            padding: 16px;
         }
 
         .mode-title {
             font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-weight: 700;
+            margin-bottom: 6px;
             color: var(--ios-text-primary);
         }
 
-        .mode-desc {
+        .mode-description {
             font-size: 14px;
             color: var(--ios-text-secondary);
-            margin-bottom: 16px;
             line-height: 1.4;
+            margin-bottom: 10px;
         }
 
-        .mode-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: var(--ios-danger);
-            color: white;
-            font-size: 12px;
-            padding: 4px 8px;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-
-        /* 關卡區塊 */
-        .levels-section {
-            margin-top: 30px;
-        }
-
-        .section-header {
+        .mode-meta {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--ios-text-primary);
-        }
-
-        .see-all {
-            font-size: 14px;
-            color: var(--ios-primary);
-            cursor: pointer;
-        }
-
-        .levels-grid {
-            display: flex;
-            overflow-x: auto;
-            padding: 4px 0;
-            margin: 0 -20px;
-            padding: 0 20px;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .level-card {
-            flex: 0 0 auto;
-            width: 120px;
-            margin-right: 16px;
-            scroll-snap-align: start;
-            background-color: white;
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-        }
-
-        .level-number {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--ios-primary);
-            margin-bottom: 12px;
-        }
-
-        .level-status {
             font-size: 12px;
-            color: var(--ios-text-secondary);
-            margin-top: 8px;
-        }
-
-        .level-stars {
-            display: flex;
-            margin-top: 8px;
-        }
-
-        .star {
-            color: #FFD700;
-            font-size: 16px;
-            margin: 0 2px;
-        }
-
-        .star.empty {
-            color: var(--ios-gray3);
-        }
-
-        .level-locked {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
+            color: var(--ios-text-tertiary);
         }
 
         /* 成就區塊 */
         .achievements-section {
-            margin-top: 30px;
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
-        .achievement-list {
-            background-color: white;
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--ios-text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: var(--ios-primary);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
         }
 
         .achievement-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--ios-gray5);
-        }
-
-        .achievement-item:last-child {
-            border-bottom: none;
+            text-align: center;
         }
 
         .achievement-icon {
-            width: 40px;
-            height: 40px;
-            background-color: var(--ios-gray6);
-            border-radius: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 16px;
-            color: var(--ios-text-secondary);
-            font-size: 20px;
+            margin-bottom: 8px;
+            font-size: 22px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-gray1);
         }
 
-        .achievement-unlocked .achievement-icon {
+        .achievement-item.unlocked .achievement-icon {
             background-color: rgba(52, 199, 89, 0.15);
             color: var(--ios-success);
         }
 
-        .achievement-details {
-            flex: 1;
-        }
-
         .achievement-name {
-            font-size: 16px;
+            font-size: 12px;
             font-weight: 600;
-            color: var(--ios-text-primary);
             margin-bottom: 4px;
-        }
-
-        .achievement-desc {
-            font-size: 14px;
-            color: var(--ios-text-secondary);
+            color: var(--ios-text-primary);
         }
 
         .achievement-progress {
-            margin-left: 16px;
-            font-size: 14px;
-            color: var(--ios-primary);
-            font-weight: 600;
+            font-size: 10px;
+            color: var(--ios-text-tertiary);
+            margin-bottom: 6px;
         }
 
-        /* 頁腳導航 */
-        .tab-bar {
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+        .achievement-bar {
+            width: 100%;
+            height: 4px;
+            background-color: var(--ios-gray5);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .achievement-fill {
+            height: 100%;
+            background-color: var(--ios-primary);
+            border-radius: 2px;
+        }
+
+        /* 排行榜區塊 */
+        .leaderboard-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .leaderboard-tabs {
             display: flex;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 83px;
-            border-top: 1px solid var(--ios-gray5);
-            z-index: 100;
+            gap: 10px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 5px;
         }
 
-        .tab-item {
-            flex: 1;
+        .leaderboard-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .leaderboard-tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .leaderboard-tab.active {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+
+        .leaderboard-list {
             display: flex;
             flex-direction: column;
+            gap: 12px;
+        }
+
+        .leaderboard-item {
+            display: flex;
             align-items: center;
-            justify-content: center;
-            color: var(--ios-gray1);
-            font-size: 10px;
-            padding: 8px 0;
-            transition: all 0.2s ease;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 12px;
+            background-color: var(--ios-gray6);
         }
 
-        .tab-item.active {
-            color: var(--ios-primary);
-        }
-
-        .tab-item i {
-            font-size: 22px;
-            margin-bottom: 4px;
-        }
-
-        /* 帶面罩區域 */
-        .coming-soon-mask {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.8);
+        .leaderboard-rank {
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+            background-color: var(--ios-gray3);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .leaderboard-item:nth-child(1) .leaderboard-rank {
+            background-color: gold;
+            color: var(--ios-text-primary);
+        }
+
+        .leaderboard-item:nth-child(2) .leaderboard-rank {
+            background-color: silver;
+            color: var(--ios-text-primary);
+        }
+
+        .leaderboard-item:nth-child(3) .leaderboard-rank {
+            background-color: #cd7f32;
+            color: white;
+        }
+
+        .leaderboard-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            background-color: var(--ios-gray4);
+            overflow: hidden;
+        }
+
+        .leaderboard-info {
+            flex: 1;
+        }
+
+        .leaderboard-name {
             font-size: 16px;
             font-weight: 600;
-            color: var(--ios-text-secondary);
+            color: var(--ios-text-primary);
+            margin-bottom: 2px;
         }
 
-        /* 動畫效果 */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .leaderboard-score {
+            font-size: 14px;
+            color: var(--ios-text-tertiary);
         }
 
-        .daily-mode {
-            animation: pulse 2s infinite;
+        .leaderboard-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            background-color: rgba(52, 199, 89, 0.1);
+            color: var(--ios-success);
+            font-size: 12px;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
-    <div class="content-container">
-        <!-- 頂部狀態欄 -->
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
         <div class="status-bar">
             <div class="status-time" id="statusTime">9:41</div>
             <div class="status-icons">
-                <div class="status-icon">
-                    <i class="fas fa-signal"></i>
-                </div>
-                <div class="status-icon">
-                    <i class="fas fa-wifi"></i>
-                </div>
-                <div class="status-icon">
-                    <i class="fas fa-battery-full"></i>
-                </div>
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
             </div>
         </div>
-
+        
         <!-- 導航欄 -->
         <div class="nav-bar">
             <div class="nav-back" onclick="history.back()">
                 <i class="fas fa-chevron-left"></i>
             </div>
-            <div class="nav-title">遊戲模式</div>
-            <div class="nav-back" style="visibility: hidden;"></div>
+            <div class="nav-title">趣味遊戲</div>
+            <div class="nav-action"></div>
         </div>
-
-        <!-- 遊戲主容器 -->
-        <div class="game-container">
-            <div class="game-header">
-                <div class="game-title">腎好康遊戲中心</div>
-                <div class="game-subtitle">透過有趣的方式學習腎臟照護知識</div>
-            </div>
-
-            <!-- 遊戲模式區塊 -->
-            <div class="mode-grid">
-                <!-- 經典模式 -->
-                <div class="mode-card classic-mode" onclick="navigateTo('quiz-selector.html')">
-                    <div class="mode-icon">
-                        <i class="fas fa-book-medical"></i>
-                    </div>
-                    <div class="mode-title">經典問答</div>
-                    <div class="mode-desc">選擇主題，回答洗腎照護知識問答</div>
+        
+        <!-- 內容區域 -->
+        <div class="content-container">
+            <div class="game-container">
+                <!-- 標題區塊 -->
+                <div class="game-header">
+                    <div class="game-title">腎臟健康遊戲</div>
+                    <div class="game-subtitle">從遊戲中學習腎臟保健知識</div>
                 </div>
-
-                <!-- 計時模式 -->
-                <div class="mode-card timer-mode" onclick="navigateTo('timer-challenge.html')">
-                    <div class="mode-icon">
-                        <i class="fas fa-hourglass-half"></i>
-                    </div>
-                    <div class="mode-title">計時挑戰</div>
-                    <div class="mode-desc">60秒內回答最多問題</div>
-                    <div class="mode-badge">新!</div>
+                
+                <!-- 遊戲模式 -->
+                <div class="mode-grid">
+                    <!-- 食物分類遊戲 -->
+                    <a href="food-sorting-game.html" class="mode-card">
+                        <div class="mode-image" style="background-image: linear-gradient(rgba(52, 199, 89, 0.3), rgba(52, 199, 89, 0.7)), url('images/food-sorting-bg.jpg');"></div>
+                        <div class="mode-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="mode-content">
+                            <div class="mode-title">健康飲食分類</div>
+                            <div class="mode-description">學習哪些食物適合腎臟病患者食用</div>
+                            <div class="mode-meta">
+                                <span>難度: 簡單</span>
+                                <span>實用指南</span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- 腎臟保健日常模擬 -->
+                    <a href="daily-routine-game.html" class="mode-card">
+                        <div class="mode-image" style="background-image: linear-gradient(rgba(175, 82, 222, 0.3), rgba(175, 82, 222, 0.7)), url('images/daily-routine-bg.jpg');"></div>
+                        <div class="mode-icon" style="color: var(--ios-purple);">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div class="mode-content">
+                            <div class="mode-title">保健日常模擬</div>
+                            <div class="mode-description">體驗腎臟病患者的日常生活</div>
+                            <div class="mode-meta">
+                                <span>難度: 中等</span>
+                                <span>生活模擬</span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- 問答遊戲 -->
+                    <a href="quiz-selector.html" class="mode-card">
+                        <div class="mode-image"></div>
+                        <div class="mode-icon">
+                            <i class="fas fa-question"></i>
+                        </div>
+                        <div class="mode-content">
+                            <div class="mode-title">問答挑戰</div>
+                            <div class="mode-description">測試您對腎臟疾病和透析治療的知識</div>
+                            <div class="mode-meta">
+                                <span>難度: 中等</span>
+                                <span>關卡: 5</span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- 記憶配對 -->
+                    <a href="memory-matching.html" class="mode-card">
+                        <div class="mode-image"></div>
+                        <div class="mode-icon">
+                            <i class="fas fa-clone"></i>
+                        </div>
+                        <div class="mode-content">
+                            <div class="mode-title">記憶配對</div>
+                            <div class="mode-description">找出配對的腎臟健康小知識卡片</div>
+                            <div class="mode-meta">
+                                <span>難度: 簡單</span>
+                                <span>新手友好</span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- 腎臟拼圖 -->
+                    <a href="kidney-puzzle.html" class="mode-card">
+                        <div class="mode-image"></div>
+                        <div class="mode-icon">
+                            <i class="fas fa-puzzle-piece"></i>
+                        </div>
+                        <div class="mode-content">
+                            <div class="mode-title">腎臟拼圖</div>
+                            <div class="mode-description">拼出腎臟結構，學習腎臟解剖知識</div>
+                            <div class="mode-meta">
+                                <span>難度: 多級別</span>
+                                <span>教育性</span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- 計時挑戰 -->
+                    <a href="timer-challenge.html" class="mode-card">
+                        <div class="mode-image"></div>
+                        <div class="mode-icon">
+                            <i class="fas fa-stopwatch"></i>
+                        </div>
+                        <div class="mode-content">
+                            <div class="mode-title">計時挑戰</div>
+                            <div class="mode-description">限時答題，挑戰您的腎臟知識反應速度</div>
+                            <div class="mode-meta">
+                                <span>難度: 高</span>
+                                <span>競技性</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-
-                <!-- 挑戰模式 -->
-                <div class="mode-card challenge-mode" onclick="showNotAvailable('超難挑戰')">
-                    <div class="mode-icon">
-                        <i class="fas fa-fire"></i>
+                
+                <!-- 成就區塊 -->
+                <div class="achievements-section">
+                    <div class="section-title">
+                        <i class="fas fa-trophy"></i>
+                        我的成就
                     </div>
-                    <div class="mode-title">超難挑戰</div>
-                    <div class="mode-desc">專業級別知識問答，考驗極限</div>
-                    <div class="coming-soon-mask">即將推出</div>
-                </div>
-
-                <!-- 每日挑戰 -->
-                <div class="mode-card daily-mode" onclick="startDailyChallenge()">
-                    <div class="mode-icon">
-                        <i class="fas fa-calendar-check"></i>
-                    </div>
-                    <div class="mode-title">每日挑戰</div>
-                    <div class="mode-desc">每日5道題目，連續登入獲獎勵</div>
-                </div>
-            </div>
-
-            <!-- 關卡區塊 -->
-            <div class="levels-section">
-                <div class="section-header">
-                    <div class="section-title">學習關卡</div>
-                    <div class="see-all" onclick="showAllLevels()">查看全部</div>
-                </div>
-                <div class="levels-grid">
-                    <!-- 關卡1 (已完成，三星) -->
-                    <div class="level-card" onclick="startLevel(1)">
-                        <div class="level-number">1</div>
-                        <div class="level-status">已完成</div>
-                        <div class="level-stars">
-                            <div class="star"><i class="fas fa-star"></i></div>
-                            <div class="star"><i class="fas fa-star"></i></div>
-                            <div class="star"><i class="fas fa-star"></i></div>
+                    <div class="achievements-grid">
+                        <div class="achievement-item unlocked">
+                            <div class="achievement-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="achievement-name">新手入門</div>
+                            <div class="achievement-progress">100%</div>
+                            <div class="achievement-bar">
+                                <div class="achievement-fill" style="width: 100%;"></div>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- 關卡2 (已完成，二星) -->
-                    <div class="level-card" onclick="startLevel(2)">
-                        <div class="level-number">2</div>
-                        <div class="level-status">已完成</div>
-                        <div class="level-stars">
-                            <div class="star"><i class="fas fa-star"></i></div>
-                            <div class="star"><i class="fas fa-star"></i></div>
-                            <div class="star empty"><i class="fas fa-star"></i></div>
+                        <div class="achievement-item unlocked">
+                            <div class="achievement-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="achievement-name">知識專家</div>
+                            <div class="achievement-progress">65%</div>
+                            <div class="achievement-bar">
+                                <div class="achievement-fill" style="width: 65%;"></div>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- 關卡3 (進行中) -->
-                    <div class="level-card" onclick="startLevel(3)">
-                        <div class="level-number">3</div>
-                        <div class="level-status">進行中</div>
-                        <div class="level-stars">
-                            <div class="star empty"><i class="fas fa-star"></i></div>
-                            <div class="star empty"><i class="fas fa-star"></i></div>
-                            <div class="star empty"><i class="fas fa-star"></i></div>
-                        </div>
-                    </div>
-
-                    <!-- 關卡4 (已解鎖) -->
-                    <div class="level-card" onclick="startLevel(4)">
-                        <div class="level-number">4</div>
-                        <div class="level-status">已解鎖</div>
-                        <div class="level-stars">
-                            <div class="star empty"><i class="fas fa-star"></i></div>
-                            <div class="star empty"><i class="fas fa-star"></i></div>
-                            <div class="star empty"><i class="fas fa-star"></i></div>
-                        </div>
-                    </div>
-
-                    <!-- 關卡5 (已解鎖) -->
-                    <div class="level-card" onclick="startLevel(5)">
-                        <div class="level-number">5</div>
-                        <div class="level-status">已解鎖</div>
-                        <div class="level-stars">
-                            <div class="star empty"><i class="fas fa-star"></i></div>
-                            <div class="star empty"><i class="fas fa-star"></i></div>
-                            <div class="star empty"><i class="fas fa-star"></i></div>
-                        </div>
-                    </div>
-
-                    <!-- 關卡6 (已鎖定) -->
-                    <div class="level-card">
-                        <div class="level-number">6</div>
-                        <div class="level-locked">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                    </div>
-
-                    <!-- 關卡7 (已鎖定) -->
-                    <div class="level-card">
-                        <div class="level-number">7</div>
-                        <div class="level-locked">
-                            <i class="fas fa-lock"></i>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <div class="achievement-name">遊戲達人</div>
+                            <div class="achievement-progress">30%</div>
+                            <div class="achievement-bar">
+                                <div class="achievement-fill" style="width: 30%;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- 成就區塊 -->
-            <div class="achievements-section">
-                <div class="section-header">
-                    <div class="section-title">我的成就</div>
-                    <div class="see-all" onclick="showAllAchievements()">查看全部</div>
-                </div>
-                <div class="achievement-list">
-                    <!-- 已解鎖成就 -->
-                    <div class="achievement-item achievement-unlocked">
-                        <div class="achievement-icon">
-                            <i class="fas fa-trophy"></i>
-                        </div>
-                        <div class="achievement-details">
-                            <div class="achievement-name">初學者</div>
-                            <div class="achievement-desc">完成第一個測驗</div>
-                        </div>
-                        <div class="achievement-progress">100%</div>
+                
+                <!-- 排行榜區塊 -->
+                <div class="leaderboard-section">
+                    <div class="section-title">
+                        <i class="fas fa-crown"></i>
+                        排行榜
                     </div>
-
-                    <!-- 進行中成就 -->
-                    <div class="achievement-item">
-                        <div class="achievement-icon">
-                            <i class="fas fa-fire"></i>
-                        </div>
-                        <div class="achievement-details">
-                            <div class="achievement-name">連勝達人</div>
-                            <div class="achievement-desc">連續答對10題</div>
-                        </div>
-                        <div class="achievement-progress">7/10</div>
+                    <div class="leaderboard-tabs">
+                        <div class="leaderboard-tab active">問答積分</div>
+                        <div class="leaderboard-tab">記憶配對</div>
+                        <div class="leaderboard-tab">腎臟拼圖</div>
+                        <div class="leaderboard-tab">計時挑戰</div>
                     </div>
-
-                    <!-- 進行中成就 -->
-                    <div class="achievement-item">
-                        <div class="achievement-icon">
-                            <i class="fas fa-calendar-alt"></i>
+                    <div class="leaderboard-list">
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank">1</div>
+                            <div class="leaderboard-avatar"></div>
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">王小明</div>
+                                <div class="leaderboard-score">2,450 分</div>
+                            </div>
+                            <div class="leaderboard-badge">高手</div>
                         </div>
-                        <div class="achievement-details">
-                            <div class="achievement-name">堅持不懈</div>
-                            <div class="achievement-desc">連續7天完成每日挑戰</div>
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank">2</div>
+                            <div class="leaderboard-avatar"></div>
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">陳大偉</div>
+                                <div class="leaderboard-score">2,280 分</div>
+                            </div>
+                            <div class="leaderboard-badge">高手</div>
                         </div>
-                        <div class="achievement-progress">3/7</div>
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank">3</div>
+                            <div class="leaderboard-avatar"></div>
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">林小花</div>
+                                <div class="leaderboard-score">2,150 分</div>
+                            </div>
+                            <div class="leaderboard-badge">專家</div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank">4</div>
+                            <div class="leaderboard-avatar"></div>
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">您</div>
+                                <div class="leaderboard-score">1,860 分</div>
+                            </div>
+                            <div class="leaderboard-badge">進階</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <!-- 底部標籤欄 -->
         <div class="tab-bar">
-            <div class="tab-item" onclick="navigateToMain()">
+            <a href="main.html" class="tab-item">
                 <i class="fas fa-home"></i>
                 <span>首頁</span>
-            </div>
-            <div class="tab-item active">
+            </a>
+            <a href="game-mode.html" class="tab-item active">
                 <i class="fas fa-gamepad"></i>
                 <span>遊戲</span>
-            </div>
-            <div class="tab-item" onclick="navigateTo('learning-resources.html')">
-                <i class="fas fa-book"></i>
-                <span>資源</span>
-            </div>
-            <div class="tab-item" onclick="navigateTo('profile.html')">
-                <i class="fas fa-user"></i>
-                <span>我的</span>
-            </div>
+            </a>
+            <a href="learning-resources.html" class="tab-item">
+                <i class="fas fa-book-open"></i>
+                <span>資料庫</span>
+            </a>
+            <a href="#" class="tab-item">
+                <i class="fas fa-trophy"></i>
+                <span>成就</span>
+            </a>
         </div>
     </div>
 
@@ -591,89 +607,21 @@
             document.getElementById('statusTime').textContent = hours + ':' + minutes;
         }
         
-        // 導航至指定頁面
-        function navigateTo(page) {
-            window.location.href = page;
-        }
-        
-        // 導航至主頁
-        function navigateToMain() {
-            window.location.href = 'main.html';
-        }
-        
-        // 顯示功能尚未可用提示
-        function showNotAvailable(feature) {
-            alert(`${feature}功能即將推出，敬請期待！`);
-        }
-        
-        // 開始每日挑戰
-        function startDailyChallenge() {
-            // 檢查是否已完成今日挑戰
-            const today = new Date().toDateString();
-            const lastChallenge = localStorage.getItem('lastDailyChallenge');
-            
-            if (lastChallenge === today) {
-                alert('您已完成今日挑戰！明天再來吧！');
-            } else {
-                // 導向每日挑戰頁面，實際應用中可以創建專門的每日挑戰頁面
-                // 這裡暫時使用普通測驗頁面模擬
-                localStorage.setItem('gameMode', 'daily');
-                navigateTo('quiz-page.html?mode=daily&count=5');
-            }
-        }
-        
-        // 開始關卡
-        function startLevel(level) {
-            // 存儲當前關卡信息
-            localStorage.setItem('currentLevel', level);
-            localStorage.setItem('gameMode', 'level');
-            
-            // 導航至關卡頁面，實際應用中可以根據關卡創建不同的題目集
-            navigateTo(`quiz-page.html?mode=level&level=${level}`);
-        }
-        
-        // 顯示所有關卡
-        function showAllLevels() {
-            alert('完整關卡列表即將推出！');
-        }
-        
-        // 顯示所有成就
-        function showAllAchievements() {
-            alert('完整成就列表即將推出！');
-        }
-        
-        // 頁面載入時執行
+        // 初始化
         document.addEventListener('DOMContentLoaded', function() {
-            // 更新狀態欄時間
             updateStatusTime();
             setInterval(updateStatusTime, 60000);
             
-            // 從本地儲存獲取遊戲進度
-            loadGameProgress();
+            // 標籤切換
+            const leaderboardTabs = document.querySelectorAll('.leaderboard-tab');
+            leaderboardTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    leaderboardTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    // 這裡可以添加切換排行榜數據的邏輯
+                });
+            });
         });
-        
-        // 載入遊戲進度
-        function loadGameProgress() {
-            // 這裡可以從 localStorage 或後端 API 獲取用戶進度
-            // 暫時使用模擬數據
-            const progress = {
-                levels: {
-                    1: { completed: true, stars: 3 },
-                    2: { completed: true, stars: 2 },
-                    3: { completed: false, stars: 0 },
-                    4: { completed: false, stars: 0 },
-                    5: { completed: false, stars: 0 }
-                },
-                achievements: {
-                    beginner: { completed: true, progress: 1, total: 1 },
-                    streak: { completed: false, progress: 7, total: 10 },
-                    daily: { completed: false, progress: 3, total: 7 }
-                }
-            };
-            
-            // 實際應用可以根據進度更新 UI
-            console.log('已載入遊戲進度', progress);
-        }
     </script>
 </body>
 </html> 

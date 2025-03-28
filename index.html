@@ -18,27 +18,30 @@
             overflow: hidden;
             background-color: #f2f2f7;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .container {
             position: relative;
             width: 100%;
             height: 100%;
-            max-width: 430px;
-            margin: 0 auto;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
         
         .phone-frame {
             position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 40px;
+            width: 430px; /* iPhone 16 Pro Max 寬度 */
+            height: 932px; /* iPhone 16 Pro Max 高度 */
+            border-radius: 55px; /* 更圓的邊角 */
             background-color: #111;
-            padding: 10px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -49,11 +52,11 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 25%;
-            height: 30px;
+            width: 160px; /* 動態島寬度 */
+            height: 36px; /* 動態島高度 */
             background-color: #111;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
             z-index: 10;
         }
         
@@ -61,7 +64,7 @@
             width: 100%;
             height: 100%;
             background-color: #fff;
-            border-radius: 30px;
+            border-radius: 45px; /* 更圓的內部邊角 */
             overflow: hidden;
             position: relative;
         }
@@ -72,14 +75,14 @@
             border: none;
         }
         
-        .phone-home-button {
+        .phone-home-indicator {
             position: absolute;
             bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
+            width: 140px;
             height: 5px;
-            background-color: #ccc;
+            background-color: #333;
             border-radius: 2.5px;
             z-index: 10;
         }
@@ -89,47 +92,58 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            gap: 10px;
+            gap: 15px;
+            margin-top: 20px;
         }
         
         .control-button {
-            padding: 8px 16px;
+            padding: 10px 20px;
             background-color: #007aff;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        
+        .control-button:hover {
+            background-color: #0069d9;
         }
         
         .control-button:active {
             background-color: #0062cc;
+            transform: scale(0.97);
         }
         
         /* 響應式調整 */
-        @media (max-width: 768px) {
-            .container {
+        @media (max-width: 450px) {
+            .phone-frame {
                 width: 100%;
                 height: 100%;
-                max-width: none;
-                border-radius: 0;
-            }
-            
-            .phone-frame {
                 border-radius: 0;
                 box-shadow: none;
+                padding: 0;
             }
             
             .phone-display {
                 border-radius: 0;
             }
             
-            .phone-notch, .phone-home-button {
+            .phone-notch, .phone-home-indicator {
                 display: none;
             }
             
             .control-panel {
                 display: none;
+            }
+        }
+        
+        @media (max-height: 932px) and (min-width: 451px) {
+            .phone-frame {
+                height: 95vh;
+                width: calc(95vh * 430 / 932);
             }
         }
     </style>
@@ -141,12 +155,12 @@
             <div class="phone-display">
                 <iframe src="main.html" class="app-iframe" id="app-iframe"></iframe>
             </div>
-            <div class="phone-home-button"></div>
+            <div class="phone-home-indicator"></div>
         </div>
         
         <div class="control-panel">
             <button class="control-button" onclick="loadPage('main.html')">首頁</button>
-            <button class="control-button" onclick="loadPage('quiz-selector.html')">遊戲</button>
+            <button class="control-button" onclick="loadPage('game-mode.html')">遊戲</button>
             <button class="control-button" onclick="loadPage('learning-resources.html')">資料庫</button>
         </div>
     </div>
@@ -163,17 +177,31 @@
             }
         });
         
-        // 對於行動裝置，自動切換到全屏模式
-        function checkMobile() {
-            if (window.innerWidth <= 768) {
-                document.querySelector('.container').classList.add('mobile-view');
-            } else {
-                document.querySelector('.container').classList.remove('mobile-view');
+        // 更新狀態欄時間
+        function updateTime() {
+            let iframe = document.getElementById('app-iframe');
+            if (iframe && iframe.contentWindow) {
+                try {
+                    let timeElement = iframe.contentWindow.document.getElementById('statusTime');
+                    if (timeElement) {
+                        const now = new Date();
+                        let hours = now.getHours();
+                        let minutes = now.getMinutes();
+                        minutes = minutes < 10 ? '0' + minutes : minutes;
+                        timeElement.textContent = hours + ':' + minutes;
+                    }
+                } catch (e) {
+                    // 可能跨域無法訪問
+                    console.log("無法更新iframe中的時間");
+                }
             }
         }
         
-        window.addEventListener('resize', checkMobile);
-        checkMobile();
+        // 每分鐘更新一次時間
+        setInterval(updateTime, 60000);
+        
+        // 頁面載入後立即更新一次
+        window.addEventListener('load', updateTime);
     </script>
 </body>
 </html> 

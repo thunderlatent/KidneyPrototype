@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 腎臟保健日常模擬</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --ios-primary: #007AFF;
+            --ios-success: #34C759;
+            --ios-warning: #FF9500;
+            --ios-danger: #FF3B30;
+            --ios-purple: #AF52DE;
+            --ios-gray1: #8E8E93;
+            --ios-gray2: #AEAEB2;
+            --ios-gray3: #C7C7CC;
+            --ios-gray4: #D1D1D6;
+            --ios-gray5: #E5E5EA;
+            --ios-gray6: #F2F2F7;
+            --ios-background: #F9F9F9;
+            --ios-text-primary: #000000;
+            --ios-text-secondary: #3C3C43;
+            --ios-text-tertiary: #8E8E93;
+        }
+
+        /* 遊戲容器樣式 */
+        .game-container {
+            padding: 20px;
+            max-width: 100%;
+            overflow-x: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 遊戲頭部信息 */
+        .game-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .game-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+            margin-bottom: 6px;
+        }
+
+        .game-subtitle {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 12px;
+        }
+
+        /* 角色狀態 */
+        .character-status {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .character-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            background-color: var(--ios-gray5);
+            margin-right: 16px;
+            background-size: cover;
+            background-position: center;
+            background-image: url('images/character-avatar.jpg');
+        }
+
+        .character-info {
+            flex: 1;
+        }
+
+        .character-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .character-description {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+        }
+
+        .status-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .status-bar-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .status-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin-right: 12px;
+        }
+
+        .health-icon {
+            background-color: rgba(52, 199, 89, 0.15);
+            color: var(--ios-success);
+        }
+
+        .hydration-icon {
+            background-color: rgba(0, 122, 255, 0.15);
+            color: var(--ios-primary);
+        }
+
+        .energy-icon {
+            background-color: rgba(255, 149, 0, 0.15);
+            color: var(--ios-warning);
+        }
+
+        .kidney-icon {
+            background-color: rgba(175, 82, 222, 0.15);
+            color: var(--ios-purple);
+        }
+
+        .status-bar-info {
+            flex: 1;
+        }
+
+        .status-bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .status-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+        }
+
+        .status-value {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+        }
+
+        .status-progress {
+            height: 8px;
+            background-color: var(--ios-gray5);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .status-fill {
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .health-fill {
+            background-color: var(--ios-success);
+        }
+
+        .hydration-fill {
+            background-color: var(--ios-primary);
+        }
+
+        .energy-fill {
+            background-color: var(--ios-warning);
+        }
+
+        .kidney-fill {
+            background-color: var(--ios-purple);
+        }
+
+        /* 時間控制 */
+        .time-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .time-display {
+            background-color: white;
+            border-radius: 16px;
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin: 0 16px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .time-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .time-btn:active {
+            background-color: var(--ios-gray5);
+            transform: scale(0.95);
+        }
+
+        /* 場景顯示 */
+        .scene-display {
+            background-color: white;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .scene-image {
+            width: 100%;
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .scene-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            color: white;
+        }
+
+        .scene-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .scene-description {
+            font-size: 14px;
+        }
+
+        .scene-content {
+            padding: 20px;
+        }
+
+        .scene-message {
+            font-size: 16px;
+            color: var(--ios-text-primary);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        /* 活動選項 */
+        .activity-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .activity-option {
+            background-color: var(--ios-gray6);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .activity-option:active {
+            background-color: var(--ios-gray5);
+            transform: scale(0.98);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--ios-primary);
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .activity-description {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+        }
+
+        /* 事件記錄 */
+        .event-log {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .event-log-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .event-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .event-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--ios-gray5);
+        }
+
+        .event-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .event-time {
+            font-size: 12px;
+            color: var(--ios-text-tertiary);
+            min-width: 50px;
+        }
+
+        .event-content {
+            flex: 1;
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            line-height: 1.4;
+        }
+
+        .event-impact {
+            display: inline-flex;
+            align-items: center;
+            font-size: 12px;
+            margin-left: 5px;
+            font-weight: 600;
+        }
+
+        .event-impact.positive {
+            color: var(--ios-success);
+        }
+
+        .event-impact.negative {
+            color: var(--ios-danger);
+        }
+
+        /* 結果彈窗 */
+        .result-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .result-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .result-content {
+            background-color: white;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 350px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .result-modal.active .result-content {
+            transform: translateY(0);
+        }
+
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .result-icon.success {
+            background-color: rgba(52, 199, 89, 0.2);
+            color: var(--ios-success);
+        }
+
+        .result-icon.warning {
+            background-color: rgba(255, 149, 0, 0.2);
+            color: var(--ios-warning);
+        }
+
+        .result-icon.error {
+            background-color: rgba(255, 59, 48, 0.2);
+            color: var(--ios-danger);
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--ios-text-primary);
+        }
+
+        .result-score {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--ios-primary);
+        }
+
+        .result-message {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .result-stats {
+            background-color: var(--ios-gray6);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .stat-label {
+            color: var(--ios-text-secondary);
+            text-align: left;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: var(--ios-text-primary);
+        }
+
+        .result-summary {
+            font-size: 14px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        .result-tip {
+            background-color: rgba(0, 122, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 20px;
+            text-align: left;
+            font-size: 14px;
+            color: var(--ios-primary);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .result-tip i {
+            margin-top: 2px;
+        }
+
+        .result-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .result-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .result-btn.primary {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+
+        .result-btn.secondary {
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+        }
+
+        /* 場景工具提示 */
+        .scene-tooltip {
+            position: absolute;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            max-width: 80%;
+            text-align: center;
+        }
+
+        .scene-tooltip.visible {
+            opacity: 1;
+        }
+
+        /* 動畫效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease;
+        }
+
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div class="status-time" id="statusTime">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="nav-title">腎臟保健日常</div>
+            <div class="nav-action"></div>
+        </div>
+        
+        <!-- 內容區域 -->
+        <div class="content-container">
+            <div class="game-container">
+                <!-- 遊戲頭部 -->
+                <div class="game-header">
+                    <div class="game-title">日常生活模擬</div>
+                    <div class="game-subtitle">體驗腎臟病患者的一天生活</div>
+                </div>
+                
+                <!-- 角色狀態 -->
+                <div class="character-status">
+                    <div class="status-header">
+                        <div class="character-avatar"></div>
+                        <div class="character-info">
+                            <div class="character-name">小明</div>
+                            <div class="character-description">初期腎病患者，需要謹慎管理生活習慣</div>
+                        </div>
+                    </div>
+                    <div class="status-bars">
+                        <!-- 健康狀態 -->
+                        <div class="status-bar-item">
+                            <div class="status-icon health-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="status-bar-info">
+                                <div class="status-bar-label">
+                                    <div class="status-name">健康</div>
+                                    <div class="status-value">75%</div>
+                                </div>
+                                <div class="status-progress">
+                                    <div class="status-fill health-fill" style="width: 75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 水合狀態 -->
+                        <div class="status-bar-item">
+                            <div class="status-icon hydration-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="status-bar-info">
+                                <div class="status-bar-label">
+                                    <div class="status-name">水分</div>
+                                    <div class="status-value">60%</div>
+                                </div>
+                                <div class="status-progress">
+                                    <div class="status-fill hydration-fill" style="width: 60%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 能量狀態 -->
+                        <div class="status-bar-item">
+                            <div class="status-icon energy-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="status-bar-info">
+                                <div class="status-bar-label">
+                                    <div class="status-name">能量</div>
+                                    <div class="status-value">80%</div>
+                                </div>
+                                <div class="status-progress">
+                                    <div class="status-fill energy-fill" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 腎臟功能 -->
+                        <div class="status-bar-item">
+                            <div class="status-icon kidney-icon">
+                                <i class="fas fa-kidneys"></i>
+                            </div>
+                            <div class="status-bar-info">
+                                <div class="status-bar-label">
+                                    <div class="status-name">腎功能</div>
+                                    <div class="status-value">70%</div>
+                                </div>
+                                <div class="status-progress">
+                                    <div class="status-fill kidney-fill" style="width: 70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 時間控制 -->
+                <div class="time-control">
+                    <div class="time-btn" id="timeBack">
+                        <i class="fas fa-chevron-left"></i>
+                    </div>
+                    <div class="time-display" id="timeDisplay">上午 8:00</div>
+                    <div class="time-btn" id="timeForward">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                
+                <!-- 場景顯示 -->
+                <div class="scene-display">
+                    <div class="scene-image" style="background-image: url('images/scenes/morning-home.jpg')">
+                        <div class="scene-overlay">
+                            <div class="scene-title">早晨 · 家裡</div>
+                            <div class="scene-description">新的一天開始了</div>
+                        </div>
+                        <div class="scene-tooltip" id="sceneTooltip"></div>
+                    </div>
+                    <div class="scene-content">
+                        <div class="scene-message">早上好！現在是早晨8點，你需要為這一天做好準備。你感覺有些口渴，也許應該先喝些水？</div>
+                        
+                        <!-- 活動選項 -->
+                        <div class="activity-options">
+                            <div class="activity-option" data-activity="drink_water">
+                                <div class="activity-icon">
+                                    <i class="fas fa-glass-water"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <div class="activity-title">喝水</div>
+                                    <div class="activity-description">控制飲水量，保持適當水分</div>
+                                </div>
+                            </div>
+                            
+                            <div class="activity-option" data-activity="take_medicine">
+                                <div class="activity-icon">
+                                    <i class="fas fa-pills"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <div class="activity-title">服藥</div>
+                                    <div class="activity-description">按醫囑服用藥物</div>
+                                </div>
+                            </div>
+                            
+                            <div class="activity-option" data-activity="prepare_breakfast">
+                                <div class="activity-icon">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <div class="activity-title">準備早餐</div>
+                                    <div class="activity-description">選擇健康的食物</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 事件記錄 -->
+                <div class="event-log">
+                    <div class="event-log-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        今日記錄
+                    </div>
+                    <div class="event-list" id="eventList">
+                        <div class="event-item">
+                            <div class="event-time">8:00</div>
+                            <div class="event-content">你醒來了，感覺有些口渴。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 結果彈窗 -->
+        <div class="result-modal" id="resultModal">
+            <div class="result-content">
+                <div class="result-icon success" id="resultIcon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="result-title" id="resultTitle">一天結束了！</div>
+                <div class="result-score" id="resultScore">85</div>
+                <div class="result-message" id="resultMessage">你很好地管理了自己的健康！</div>
+                
+                <div class="result-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">健康狀態</div>
+                        <div class="stat-value" id="finalHealth">75%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">水分平衡</div>
+                        <div class="stat-value" id="finalHydration">80%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">能量水平</div>
+                        <div class="stat-value" id="finalEnergy">65%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">腎臟功能</div>
+                        <div class="stat-value" id="finalKidney">72%</div>
+                    </div>
+                </div>
+                
+                <div class="result-summary" id="resultSummary">
+                    今天你做了許多有益健康的選擇：按時服藥、控制飲食鹽分和蛋白質、適量運動。這些習慣對維護腎臟功能很重要。
+                </div>
+                
+                <div class="result-tip">
+                    <i class="fas fa-lightbulb"></i>
+                    <div>記住定期監測血壓和進行腎功能檢查也是腎臟保健的重要部分。</div>
+                </div>
+                
+                <div class="result-buttons">
+                    <div class="result-btn secondary" id="backBtn">返回</div>
+                    <div class="result-btn primary" id="playAgainBtn">再玩一次</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <a href="main.html" class="tab-item">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </a>
+            <a href="game-mode.html" class="tab-item active">
+                <i class="fas fa-gamepad"></i>
+                <span>遊戲</span>
+            </a>
+            <a href="learning-resources.html" class="tab-item">
+                <i class="fas fa-book-open"></i>
+                <span>資料庫</span>
+            </a>
+            <a href="#" class="tab-item">
+                <i class="fas fa-trophy"></i>
+                <span>成就</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html> 

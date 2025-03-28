@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <title>腎好康 - 腎臟拼圖</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/additional-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --ios-primary: #007AFF;
+            --ios-success: #34C759;
+            --ios-warning: #FF9500;
+            --ios-danger: #FF3B30;
+            --ios-purple: #AF52DE;
+            --ios-gray1: #8E8E93;
+            --ios-gray2: #AEAEB2;
+            --ios-gray3: #C7C7CC;
+            --ios-gray4: #D1D1D6;
+            --ios-gray5: #E5E5EA;
+            --ios-gray6: #F2F2F7;
+            --ios-background: #F9F9F9;
+            --ios-text-primary: #000000;
+            --ios-text-secondary: #3C3C43;
+            --ios-text-tertiary: #8E8E93;
+        }
+
+        /* 遊戲容器樣式 */
+        .game-container {
+            padding: 20px;
+            max-width: 100%;
+            overflow-x: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 遊戲信息 */
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+        }
+
+        /* 難度選擇 */
+        .difficulty-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-secondary);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .difficulty-btn.active {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+
+        /* 拼圖容器 */
+        .puzzle-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .puzzle-grid {
+            display: grid;
+            width: 100%;
+            height: 100%;
+            gap: 2px;
+            background-color: var(--ios-gray5);
+            padding: 2px;
+            box-sizing: border-box;
+        }
+
+        .puzzle-piece {
+            background-size: cover;
+            background-position: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .puzzle-piece:active {
+            transform: scale(0.95);
+        }
+
+        .puzzle-piece.correct {
+            border: 2px solid var(--ios-success);
+            transform: scale(1);
+            cursor: default;
+        }
+
+        .placeholder {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        /* 遊戲控制 */
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .control-btn:active {
+            transform: scale(0.98);
+            background-color: var(--ios-gray5);
+        }
+
+        .control-btn.primary {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+
+        /* 腎臟知識卡片 */
+        .knowledge-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .knowledge-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ios-text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .knowledge-card-content {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--ios-text-secondary);
+        }
+
+        .knowledge-card-content p {
+            margin-bottom: 8px;
+        }
+
+        .knowledge-card-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 結果彈窗 */
+        .result-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .result-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .result-content {
+            background-color: white;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 350px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .result-modal.active .result-content {
+            transform: translateY(0);
+        }
+
+        .result-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--ios-primary), var(--ios-primary-light));
+            border-radius: 35px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--ios-text-primary);
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--ios-primary);
+            margin-bottom: 16px;
+        }
+
+        .result-message {
+            font-size: 16px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .result-rewards {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 24px;
+        }
+
+        .reward-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .reward-icon {
+            width: 48px;
+            height: 48px;
+            background-color: rgba(52, 199, 89, 0.1);
+            color: var(--ios-success);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .reward-label {
+            font-size: 12px;
+            color: var(--ios-text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .reward-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ios-text-primary);
+        }
+
+        .result-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .result-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            border: none;
+            font-size: 14px;
+        }
+
+        .result-btn.primary {
+            background-color: var(--ios-primary);
+            color: white;
+        }
+
+        .result-btn.secondary {
+            background-color: var(--ios-gray6);
+            color: var(--ios-text-primary);
+        }
+
+        /* 腎臟結構提示 */
+        .structure-tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            z-index: 10;
+            max-width: 150px;
+            text-align: center;
+            transform: translate(-50%, -100%);
+            margin-top: -10px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .structure-tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid rgba(0, 0, 0, 0.7);
+        }
+
+        /* 動畫效果 */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .game-container {
+            animation: fadein 0.5s;
+        }
+
+        .completed-puzzle {
+            animation: pulse 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 狀態欄 -->
+        <div class="status-bar">
+            <div class="status-time" id="statusTime">9:41</div>
+            <div class="status-icons">
+                <div class="status-icon">📶</div>
+                <div class="status-icon">📊</div>
+                <div class="status-icon">🔋</div>
+            </div>
+        </div>
+        
+        <!-- 導航欄 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="history.back()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="nav-title">腎臟拼圖</div>
+            <div class="nav-action"></div>
+        </div>
+        
+        <!-- 內容區域 -->
+        <div class="content-container">
+            <div class="game-container">
+                <!-- 遊戲信息 -->
+                <div class="game-info">
+                    <div class="info-item">
+                        <div class="info-label">移動次數</div>
+                        <div class="info-value" id="moves">0</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">時間</div>
+                        <div class="info-value" id="timer">05:00</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">進度</div>
+                        <div class="info-value" id="progress">0%</div>
+                    </div>
+                </div>
+                
+                <!-- 難度選擇 -->
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn active" data-size="3">簡單 (3×3)</button>
+                    <button class="difficulty-btn" data-size="4">中等 (4×4)</button>
+                    <button class="difficulty-btn" data-size="5">困難 (5×5)</button>
+                </div>
+                
+                <!-- 拼圖區域 -->
+                <div class="puzzle-container">
+                    <div class="puzzle-grid" id="puzzleGrid"></div>
+                    <div class="structure-tooltip" id="structureTooltip"></div>
+                </div>
+                
+                <!-- 遊戲控制 -->
+                <div class="game-controls">
+                    <button class="control-btn" id="hintBtn">
+                        <i class="fas fa-lightbulb"></i>
+                        提示
+                    </button>
+                    <button class="control-btn primary" id="restartBtn">
+                        <i class="fas fa-redo"></i>
+                        重新開始
+                    </button>
+                </div>
+                
+                <!-- 腎臟知識卡片 -->
+                <div class="knowledge-card">
+                    <div class="knowledge-card-title">
+                        <i class="fas fa-kidney" style="color: var(--ios-primary);"></i>
+                        腎臟解剖結構
+                    </div>
+                    <div class="knowledge-card-content">
+                        <p>1. <strong>腎皮質</strong>: 位於腎臟外側的淺層部分，含有大量腎小球和腎小管。</p>
+                        <p>2. <strong>腎髓質</strong>: 位於腎臟內側深層，由腎錐體組成，負責濃縮尿液。</p>
+                        <p>3. <strong>腎盂</strong>: 腎臟中央的集尿腔，收集腎小管排出的尿液。</p>
+                        <p>4. <strong>輸尿管</strong>: 連接腎盂和膀胱，將尿液從腎臟運送到膀胱。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 結果彈窗 -->
+        <div class="result-modal" id="resultModal">
+            <div class="result-content">
+                <div class="result-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="result-title">拼圖完成!</div>
+                <div class="result-score" id="finalScore">0</div>
+                <div class="result-message" id="resultMessage">恭喜您完成腎臟拼圖挑戰！</div>
+                <div class="result-rewards">
+                    <div class="reward-item">
+                        <div class="reward-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div class="reward-label">積分</div>
+                        <div class="reward-value" id="pointsReward">+150</div>
+                    </div>
+                    <div class="reward-item">
+                        <div class="reward-icon" style="background-color: rgba(0, 122, 255, 0.1); color: var(--ios-primary);">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="reward-label">知識</div>
+                        <div class="reward-value" id="knowledgeReward">+25</div>
+                    </div>
+                </div>
+                <div class="result-buttons">
+                    <button class="result-btn secondary" id="returnBtn">返回</button>
+                    <button class="result-btn primary" id="playAgainBtn">再玩一次</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部標籤欄 -->
+        <div class="tab-bar">
+            <a href="main.html" class="tab-item">
+                <i class="fas fa-home"></i>
+                <span>首頁</span>
+            </a>
+            <a href="game-mode.html" class="tab-item active">
+                <i class="fas fa-gamepad"></i>
+                <span>遊戲</span>
+            </a>
+            <a href="learning-resources.html" class="tab-item">
+                <i class="fas fa-book-open"></i>
+                <span>資料庫</span>
+            </a>
+            <a href="#" class="tab-item">
+                <i class="fas fa-trophy"></i>
+                <span>成就</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 遊戲變量
+        let boardSize = 3; // 初始為3x3拼圖
+        let pieces = [];
+        let emptyPosition = { row: boardSize - 1, col: boardSize - 1 };
+        let moves = 0;
+        let timer = 300;
+        let timerInterval = null;
+        let gameActive = true;
+        let pieceCorrectPositions = 0;
+
+        // 腎臟結構信息 - 用於提示和教育
+        const kidneyStructures = [
+            { id: 1, name: "腎皮質", description: "腎臟外層，含有過濾血液的腎小球" },
+            { id: 2, name: "腎髓質", description: "腎臟內層，含有集尿的腎錐體" },
+            { id: 3, name: "腎盂", description: "集尿腔，收集腎小管的尿液" },
+            { id: 4, name: "腎動脈", description: "將血液輸送到腎臟進行過濾" },
+            { id: 5, name: "腎靜脈", description: "將已過濾的血液帶離腎臟" },
+            { id: 6, name: "輸尿管", description: "將尿液從腎盂輸送到膀胱" },
+            { id: 7, name: "腎乳頭", description: "腎錐體末端，尿液從此流入腎盂" },
+            { id: 8, name: "腎柱", description: "分隔腎錐體的結構" },
+            { id: 9, name: "腎被膜", description: "覆蓋腎臟的保護膜" }
+        ];
+        
+        // DOM 元素
+        const puzzleGrid = document.getElementById('puzzleGrid');
+        const movesElement = document.getElementById('moves');
+        const timerElement = document.getElementById('timer');
+        const progressElement = document.getElementById('progress');
+        const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+        const hintBtn = document.getElementById('hintBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const resultModal = document.getElementById('resultModal');
+        const finalScoreElement = document.getElementById('finalScore');
+        const resultMessageElement = document.getElementById('resultMessage');
+        const pointsRewardElement = document.getElementById('pointsReward');
+        const knowledgeRewardElement = document.getElementById('knowledgeReward');
+        const returnBtn = document.getElementById('returnBtn');
+        const playAgainBtn = document.getElementById('playAgainBtn');
+        const structureTooltip = document.getElementById('structureTooltip');
+
+        // 更新狀態欄時間
+        function updateStatusTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('statusTime').textContent = hours + ':' + minutes;
+        }
+
+        // 初始化遊戲
+        function initGame() {
+            // 重置遊戲狀態
+            moves = 0;
+            timer = 300;
+            gameActive = true;
+            pieceCorrectPositions = 0;
+            
+            // 更新界面
+            movesElement.textContent = moves;
+            timerElement.textContent = formatTime(timer);
+            progressElement.textContent = '0%';
+            
+            // 建立拼圖板
+            buildPuzzleBoard();
+            
+            // 開始計時器
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // 建立拼圖板
+        function buildPuzzleBoard() {
+            puzzleGrid.innerHTML = '';
+            puzzleGrid.style.gridTemplateColumns = `repeat(${boardSize}, 1fr)`;
+            puzzleGrid.style.gridTemplateRows = `repeat(${boardSize}, 1fr)`;
+            
+            pieces = [];
+            
+            // 創建拼圖塊
+            for (let row = 0; row < boardSize; row++) {
+                for (let col = 0; col < boardSize; col++) {
+                    const pieceIndex = row * boardSize + col;
+                    const isLastPiece = (row === boardSize - 1 && col === boardSize - 1);
+                    
+                    const piece = document.createElement('div');
+                    piece.className = isLastPiece ? 'placeholder' : 'puzzle-piece';
+                    piece.dataset.row = row;
+                    piece.dataset.col = col;
+                    piece.dataset.index = pieceIndex;
+                    
+                    if (!isLastPiece) {
+                        // 設置背景圖片，根據當前位置裁剪顯示部分圖片
+                        piece.style.backgroundImage = 'url("images/kidney-anatomy.jpg")';
+                        const bgPosX = (col / (boardSize - 1)) * 100;
+                        const bgPosY = (row / (boardSize - 1)) * 100;
+                        piece.style.backgroundPosition = `${bgPosX}% ${bgPosY}%`;
+                        piece.style.backgroundSize = `${boardSize * 100}%`;
+                        
+                        // 添加點擊事件
+                        piece.addEventListener('click', () => movePiece(row, col));
+                        
+                        // 添加腎臟結構信息
+                        if (pieceIndex < kidneyStructures.length) {
+                            piece.dataset.structure = kidneyStructures[pieceIndex].id;
+                            piece.addEventListener('mouseenter', (e) => showStructureTooltip(e, kidneyStructures[pieceIndex]));
+                            piece.addEventListener('mouseleave', hideStructureTooltip);
+                            // 對於觸摸設備
+                            piece.addEventListener('touchstart', (e) => {
+                                e.preventDefault();
+                                if (pieceIndex < kidneyStructures.length) {
+                                    showStructureTooltip(e, kidneyStructures[pieceIndex]);
+                                    setTimeout(hideStructureTooltip, 1500);
+                                }
+                            });
+                        }
+                    }
+                    
+                    puzzleGrid.appendChild(piece);
+                    
+                    // 保存拼圖塊位置
+                    if (!isLastPiece) {
+                        pieces.push({
+                            element: piece,
+                            currentPos: { row, col },
+                            correctPos: { row, col }
+                        });
+                    }
+                }
+            }
+            
+            // 打亂拼圖
+            shufflePuzzle();
+        }
+
+        // 打亂拼圖
+        function shufflePuzzle() {
+            // 執行 100*boardSize 次隨機移動
+            const shuffleMoves = 100 * boardSize;
+            
+            for (let i = 0; i < shuffleMoves; i++) {
+                // 獲取可移動的塊
+                const validMoves = getValidMoves();
+                if (validMoves.length > 0) {
+                    // 隨機選擇一個有效移動
+                    const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+                    // 移動拼圖塊（不增加移動計數）
+                    swapWithEmpty(randomMove.row, randomMove.col, false);
+                }
+            }
+
+            // 重置空白位置
+            updateEmptyPosition();
+            
+            // 檢查正確位置
+            checkCorrectPositions();
+        }
+
+        // 獲取可移動的拼圖塊
+        function getValidMoves() {
+            const validMoves = [];
+            
+            // 檢查上下左右四個方向
+            const directions = [
+                { row: -1, col: 0 }, // 上
+                { row: 1, col: 0 },  // 下
+                { row: 0, col: -1 }, // 左
+                { row: 0, col: 1 }   // 右
+            ];
+            
+            for (const dir of directions) {
+                const newRow = emptyPosition.row + dir.row;
+                const newCol = emptyPosition.col + dir.col;
+                
+                // 確認位置在拼圖範圍內
+                if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize) {
+                    validMoves.push({ row: newRow, col: newCol });
+                }
+            }
+            
+            return validMoves;
+        }
+
+        // 更新空白位置
+        function updateEmptyPosition() {
+            const emptyPiece = document.querySelector('.placeholder');
+            if (emptyPiece) {
+                emptyPosition = {
+                    row: parseInt(emptyPiece.dataset.row),
+                    col: parseInt(emptyPiece.dataset.col)
+                };
+            }
+        }
+
+        // 移動拼圖塊
+        function movePiece(row, col) {
+            if (!gameActive) return;
+            
+            // 檢查是否與空白位置相鄰
+            const rowDiff = Math.abs(row - emptyPosition.row);
+            const colDiff = Math.abs(col - emptyPosition.col);
+            
+            if ((rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1)) {
+                // 交換位置
+                swapWithEmpty(row, col, true);
+                
+                // 增加移動次數
+                moves++;
+                movesElement.textContent = moves;
+                
+                // 檢查是否完成拼圖
+                checkCorrectPositions();
+                const isComplete = pieceCorrectPositions === (boardSize * boardSize - 1);
+                
+                if (isComplete) {
+                    gameComplete();
+                }
+            }
+        }
+
+        // 與空白位置交換
+        function swapWithEmpty(row, col, countMove = true) {
+            // 獲取要移動的拼圖塊
+            const pieceToMove = document.querySelector(`.puzzle-piece[data-row="${row}"][data-col="${col}"]`);
+            const emptyPiece = document.querySelector('.placeholder');
+            
+            if (!pieceToMove || !emptyPiece) return;
+            
+            // 交換數據屬性
+            const tempRow = pieceToMove.dataset.row;
+            const tempCol = pieceToMove.dataset.col;
+            
+            pieceToMove.dataset.row = emptyPiece.dataset.row;
+            pieceToMove.dataset.col = emptyPiece.dataset.col;
+            emptyPiece.dataset.row = tempRow;
+            emptyPiece.dataset.col = tempCol;
+            
+            // 更新空白位置
+            emptyPosition = { row: parseInt(tempRow), col: parseInt(tempCol) };
+            
+            // 更新拼圖塊對象的當前位置
+            for (const piece of pieces) {
+                if (piece.element === pieceToMove) {
+                    piece.currentPos = {
+                        row: parseInt(pieceToMove.dataset.row),
+                        col: parseInt(pieceToMove.dataset.col)
+                    };
+                    break;
+                }
+            }
+        }
+
+        // 檢查正確位置的拼圖塊數量
+        function checkCorrectPositions() {
+            pieceCorrectPositions = 0;
+            
+            for (const piece of pieces) {
+                const currentRow = parseInt(piece.element.dataset.row);
+                const currentCol = parseInt(piece.element.dataset.col);
+                
+                if (currentRow === piece.correctPos.row && currentCol === piece.correctPos.col) {
+                    pieceCorrectPositions++;
+                    piece.element.classList.add('correct');
+                } else {
+                    piece.element.classList.remove('correct');
+                }
+            }
+            
+            // 更新進度
+            const progress = Math.floor((pieceCorrectPositions / (boardSize * boardSize - 1)) * 100);
+            progressElement.textContent = `${progress}%`;
+        }
+
+        // 更新計時器
+        function updateTimer() {
+            if (!gameActive) return;
+            
+            timer--;
+            timerElement.textContent = formatTime(timer);
+            
+            if (timer <= 0) {
+                clearInterval(timerInterval);
+                gameOver();
+            }
+        }
+
+        // 格式化時間
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}`;
+        }
+
+        // 遊戲完成
+        function gameComplete() {
+            gameActive = false;
+            clearInterval(timerInterval);
+            
+            // 計算分數
+            const timeBonus = timer;
+            const movesScore = Math.max(0, 500 - (moves * 10));
+            const totalScore = timeBonus + movesScore;
+            
+            // 更新結果彈窗
+            finalScoreElement.textContent = totalScore;
+            
+            // 根據分數調整獎勵
+            pointsRewardElement.textContent = `+${Math.floor(totalScore / 2)}`;
+            
+            let message = '';
+            if (totalScore > 400) {
+                message = '太棒了！你是拼圖高手！';
+                knowledgeRewardElement.textContent = '+35';
+            } else if (totalScore > 200) {
+                message = '做得好！繼續練習！';
+                knowledgeRewardElement.textContent = '+25';
+            } else {
+                message = '恭喜完成！再接再厲！';
+                knowledgeRewardElement.textContent = '+15';
+            }
+            
+            resultMessageElement.textContent = message;
+            
+            // 顯示結果彈窗
+            resultModal.classList.add('active');
+        }
+
+        // 遊戲結束（時間耗盡）
+        function gameOver() {
+            gameActive = false;
+            
+            // 更新結果彈窗
+            finalScoreElement.textContent = '0';
+            resultMessageElement.textContent = '時間到！再試一次吧！';
+            pointsRewardElement.textContent = '+10';
+            knowledgeRewardElement.textContent = '+5';
+            
+            // 顯示結果彈窗
+            resultModal.classList.add('active');
+        }
+
+        // 提示功能
+        function showHint() {
+            if (!gameActive) return;
+            
+            // 暫停遊戲
+            gameActive = false;
+            clearInterval(timerInterval);
+            
+            // 顯示所有拼圖塊的正確位置
+            for (const piece of pieces) {
+                piece.element.classList.add('hint');
+                // 模擬移動到正確位置的視覺效果
+                const transform = `translate(${(piece.correctPos.col - piece.currentPos.col) * 100}%, ${(piece.correctPos.row - piece.currentPos.row) * 100}%)`;
+                piece.element.style.transform = transform;
+            }
+            
+            // 3秒後恢復
+            setTimeout(() => {
+                for (const piece of pieces) {
+                    piece.element.classList.remove('hint');
+                    piece.element.style.transform = '';
+                }
+                gameActive = true;
+                timerInterval = setInterval(updateTimer, 1000);
+            }, 3000);
+        }
+
+        // 顯示結構提示
+        function showStructureTooltip(event, structure) {
+            structureTooltip.textContent = `${structure.name}: ${structure.description}`;
+            structureTooltip.style.opacity = '1';
+            
+            // 計算位置
+            const rect = event.target.getBoundingClientRect();
+            const tooltipWidth = 150; // 假設寬度
+            
+            structureTooltip.style.left = rect.left + (rect.width / 2) + 'px';
+            structureTooltip.style.top = rect.top + 'px';
+        }
+
+        // 隱藏結構提示
+        function hideStructureTooltip() {
+            structureTooltip.style.opacity = '0';
+        }
+
+        // 難度選擇事件
+        difficultyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // 更新活動按鈕
+                difficultyButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 設置新的拼圖大小
+                boardSize = parseInt(this.dataset.size);
+                
+                // 重新初始化遊戲
+                initGame();
+            });
+        });
+
+        // 重新開始按鈕事件
+        restartBtn.addEventListener('click', initGame);
+
+        // 提示按鈕事件
+        hintBtn.addEventListener('click', showHint);
+
+        // 結果彈窗按鈕事件
+        returnBtn.addEventListener('click', function() {
+            resultModal.classList.remove('active');
+            // 返回遊戲選擇頁面
+            window.location.href = 'game-mode.html';
+        });
+
+        playAgainBtn.addEventListener('click', function() {
+            resultModal.classList.remove('active');
+            initGame();
+        });
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatusTime();
+            setInterval(updateStatusTime, 60000);
+            initGame();
+        });
+    </script>
+</body>
+</html> 
